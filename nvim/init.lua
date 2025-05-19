@@ -23,10 +23,6 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- Define text objects for entire buffer (ae and ie)
--- vim.keymap.set({'x', 'o'}, 'ae', ':<C-u>normal! ggVG<CR>', {silent = true})
--- vim.keymap.set({'x', 'o'}, 'ie', ':<C-u>normal! ggVG<CR>', {silent = true})
-
 -- Map CamelCaseMotion to leader key
 vim.g.camelcasemotion_key = '<leader>'
 
@@ -126,13 +122,17 @@ require("lazy").setup({
       end
     },
     {
-      {
         'echasnovski/mini.splitjoin',
         version = false,
         config = function()
           require('mini.splitjoin').setup()
         end
-      },
+    },
+    {
+      'echasnovski/mini.move', version = false ,
+        config = function ()
+          require('mini.move').setup()
+        end 
     }
   },
   -- Configure any other settings here. See the documentation for more details.
