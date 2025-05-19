@@ -131,8 +131,29 @@ require("lazy").setup({
     {
       'echasnovski/mini.move', version = false ,
         config = function ()
-          require('mini.move').setup()
-        end 
+        require('mini.move').setup({
+          -- Module mappings. Use `''` (empty string) to disable one.
+          mappings = {
+            -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
+            left = '<leader>h',
+            right = '<leader>l',
+            down = '<leader>j',
+            up = '<leader>k',
+
+            -- Move current line in Normal mode
+            line_left = '<leader>h',
+            line_right = '<leader>l',
+            line_down = '<leader>j',
+            line_up = '<leader>k',
+          },
+
+          -- Options which control moving behavior
+          options = {
+            -- Automatically reindent selection during linewise vertical move
+            reindent_linewise = true,
+          },
+        })
+        end
     }
   },
   -- Configure any other settings here. See the documentation for more details.
