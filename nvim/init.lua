@@ -46,10 +46,9 @@ local function map(mode, lhs, rhs)
   -- Toggle zen mode
   map('n', '<leader>z', 'workbench.action.toggleZenMode')
 
-  -- Hop word
   vim.keymap.set('n', '<leader><leader>w', ':HopWord<CR>', { silent = true })
-  -- Open outline in breadcrumb
   map('n', '<leader>.', 'breadcrumbs.focusAndSelect')
+  map('n', '<leader>o', 'outline.focus')
 end
 -- setup lazy.nvim
 require("lazy").setup({
