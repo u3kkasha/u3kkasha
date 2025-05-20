@@ -23,9 +23,6 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- Map CamelCaseMotion to leader key
-vim.g.camelcasemotion_key = '<leader>'
-
 if vim.g.vscode then
 -- VSCode-specific keymaps
 
@@ -63,9 +60,9 @@ require("lazy").setup({
       "chrisgrieser/nvim-spider",
       lazy = true,
       keys = {
-        { "w", "<cmd>lua require('spider').motion('w', { skipInsignificantPunctuation = false })<CR>", mode = { "n", "o", "x" } },
-        { "e", "<cmd>lua require('spider').motion('e')<CR>",                                           mode = { "n", "o", "x" } },
-        { "b", "<cmd>lua require('spider').motion('b')<CR>",                                           mode = { "n", "o", "x" } },
+        { "<leader>w", "<cmd>lua require('spider').motion('w', { skipInsignificantPunctuation= false })<CR>", mode = { "n", "o", "x" } },
+        { "<leader>e", "<cmd>lua require('spider').motion('e')<CR>",                                           mode = { "n", "o", "x" } },
+        { "<leader>b", "<cmd>lua require('spider').motion('b')<CR>",                                           mode = { "n", "o", "x" } },
       },
     },
     {
