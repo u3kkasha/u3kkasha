@@ -4,7 +4,7 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  local out      = vim.fn.system({ "git", "clone", "--filter = blob:none", "--branch = stable", lazyrepo, lazypath })
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
@@ -61,8 +61,8 @@ require("lazy").setup({
       lazy = true,
       keys = {
         { "<leader>w", "<cmd>lua require('spider').motion('w', { skipInsignificantPunctuation= false })<CR>", mode = { "n", "o", "x" } },
-        { "<leader>e", "<cmd>lua require('spider').motion('e')<CR>",                                           mode = { "n", "o", "x" } },
-        { "<leader>b", "<cmd>lua require('spider').motion('b')<CR>",                                           mode = { "n", "o", "x" } },
+        { "<leader>e", "<cmd>lua require('spider').motion('e')<CR>",                                          mode = { "n", "o", "x" } },
+        { "<leader>b", "<cmd>lua require('spider').motion('b')<CR>",                                          mode = { "n", "o", "x" } },
       },
     },
     {
@@ -82,7 +82,7 @@ require("lazy").setup({
     {
       "ggandor/leap.nvim",
       config = function()
-        vim.keymap.set({'n', 'x', 'o'}, 'S', '<Plug>(leap-anywhere)')
+        vim.keymap.set({ 'n', 'x', 'o' }, 'S', '<Plug>(leap-anywhere)')
       end
     },
     {
@@ -93,9 +93,9 @@ require("lazy").setup({
       cond = not not vim.g.vscode, "xiyaowong/fast-cursor-move.nvim"
     },
     {
-     'echasnovski/mini.operators',
+      'echasnovski/mini.operators',
       version = false,
-      config = function()
+      config  = function()
         require("mini.operators").setup()
       end,
     },
@@ -109,7 +109,7 @@ require("lazy").setup({
               local from = { line = 1, col = 1 }
               local to = {
                 line = vim.fn.line('$'),
-                col = math.max(vim.fn.getline('$'):len(), 1)
+                col  = math.max(vim.fn.getline('$'):len(), 1)
               }
               return { from = from, to = to }
             end
@@ -118,29 +118,36 @@ require("lazy").setup({
       end
     },
     {
-        'echasnovski/mini.splitjoin',
-        version = false,
-        config = function()
-          require('mini.splitjoin').setup()
-        end
+      'echasnovski/mini.splitjoin',
+      version = false,
+      config = function()
+        require('mini.splitjoin').setup()
+      end
     },
     {
-      'echasnovski/mini.move', version = false ,
-        config = function ()
+      'echasnovski/mini.align',
+      version = '*',
+      config  = function()
+        require('mini.align').setup()
+      end
+    },
+    {
+      'echasnovski/mini.move',
+      version = false,
+      config = function()
         require('mini.move').setup({
           -- Module mappings. Use `''` (empty string) to disable one.
           mappings = {
             -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
-            left = '<leader>h',
-            right = '<leader>l',
-            down = '<leader>j',
-            up = '<leader>k',
-
+            left       = '<leader>h',
+            right      = '<leader>l',
+            down       = '<leader>j',
+            up         = '<leader>k',
             -- Move current line in Normal mode
-            line_left = '<leader>h',
+            line_left  = '<leader>h',
             line_right = '<leader>l',
-            line_down = '<leader>j',
-            line_up = '<leader>k',
+            line_down  = '<leader>j',
+            line_up    = '<leader>k',
           },
 
           -- Options which control moving behavior
@@ -154,11 +161,9 @@ require("lazy").setup({
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
- install = {colorscheme = { "kanagawa" }},
+  install = { colorscheme = { "kanagawa" } },
   -- automatically chec for plugin updates
-  checker = {
-    enabled = true
-  }
+  checker = { enabled = true }
 })
 
 -- Highlight on yank
