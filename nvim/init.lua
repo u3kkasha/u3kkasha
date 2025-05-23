@@ -1,5 +1,4 @@
 -- بسم الله الرحمن الرحيم
-
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -50,6 +49,30 @@ end
 -- setup lazy.nvim
 require("lazy").setup({
   spec = {
+    {
+      "nvim-treesitter/nvim-treesitter",
+      build = ":TSUpdate",
+      event = { "BufReadPost", "BufNewFile" },
+      config = function()
+        local configs = require("nvim-treesitter.configs")
+        configs.setup({
+          highlight = { enable = false },
+          indent = { enable = true },
+          incremental_selection = {
+            enable = true,
+            keymaps = {
+              init_selection = "gnn", -- set to `false` to disable one of the mappings
+              node_incremental = "grn",
+              scope_incremental = "grc",
+              node_decremental = "grm",
+            },
+          }
+        })
+      end
+    },
+    {
+      'nvim-treesitter/nvim-treesitter-textobjects'
+    },
     {
       'vscode-neovim/vscode-multi-cursor.nvim',
       event = 'VeryLazy',
@@ -103,8 +126,16 @@ require("lazy").setup({
       'echasnovski/mini.ai',
       version = false,
       config = function()
+        local spec_treesitter = require('mini.ai').gen_spec.treesitter
         require('mini.ai').setup({
+          n_lines = 500,
           custom_textobjects = {
+            F = spec_treesitter({ a = '@function.outer', i = '@function.inner' }),
+            r = spec_treesitter({ a = '@return.outer', i = '@return.inner' }),
+            c = spec_treesitter({ a = '@class.outer', i = '@class.inner' }),
+            C = spec_treesitter({ a = '@comment.outer', i = '@comment.inner' }),
+            i = spec_treesitter({ a = '@conditional.outer', i = '@conditional.inner' }),
+            ["="] = spec_treesitter({ a = '@assignment.outer', i = '@assignment.rhs' }),
             g = function()
               local from = { line = 1, col = 1 }
               local to = {
@@ -156,7 +187,7 @@ require("lazy").setup({
             reindent_linewise = true,
           },
         })
-        end
+      end
     }
   },
   -- Configure any other settings here. See the documentation for more details.
@@ -172,3 +203,4 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank({ higroup = 'IncSearch', timeout = 500})
   end,
 })
+
