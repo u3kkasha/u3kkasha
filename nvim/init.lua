@@ -152,7 +152,11 @@ require("lazy").setup({
       'echasnovski/mini.splitjoin',
       version = false,
       config = function()
-        require('mini.splitjoin').setup()
+        require('mini.splitjoin').setup({
+          detect = {
+            separator = '[,;]'
+          }
+        })
       end
     },
     {
