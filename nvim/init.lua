@@ -61,10 +61,10 @@ require("lazy").setup({
           incremental_selection = {
             enable = true,
             keymaps = {
-              init_selection = "gnn", -- set to `false` to disable one of the mappings
-              node_incremental = "grn",
-              scope_incremental = "grc",
-              node_decremental = "grm",
+              init_selection    = "gnn", -- set to `false` to disable one of the mappings
+              node_decremental  = "gnx",
+              node_incremental  = "gna",
+              scope_incremental = "gns",
             },
           }
         })
@@ -110,7 +110,6 @@ require("lazy").setup({
     },
     {
       "tpope/vim-repeat",
-      event = "VeryLazy",
     },
     {
       cond = not not vim.g.vscode, "xiyaowong/fast-cursor-move.nvim"
