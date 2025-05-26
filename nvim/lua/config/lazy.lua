@@ -34,7 +34,7 @@ require("lazy").setup({
   checker = { enabled = true },
   -- automatically detect changes
   change_detection = {
-    enabled = false,
-    notify = false,
+    enabled = true,
+    notify = true,
   }
 })

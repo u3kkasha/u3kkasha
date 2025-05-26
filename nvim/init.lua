@@ -1,3 +1,3 @@
 require("config.lazy")
-require("core.vscode")
+require("core.keymaps")
 require("core.autocmds")
