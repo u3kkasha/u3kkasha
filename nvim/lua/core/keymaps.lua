@@ -14,6 +14,7 @@ if vim.g.vscode then
     map('n', 'zc', 'editor.fold')
     map('n', 'zo', 'editor.unfold')
 
+    map({'n', 'v'}, '<leader>c', "workbench.action.openQuickChat")
     map('n', '<leader>z', 'workbench.action.toggleZenMode')
     map('n', '<leader>.', 'breadcrumbs.focusAndSelect')
     map('n', '<leader>o', 'outline.focus')
