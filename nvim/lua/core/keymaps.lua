@@ -20,7 +20,3 @@ if vim.g.vscode then
     map('n', '<leader>o', 'outline.focus')
     map('n', '<leader>f', 'workbench.view.explorer')
 end
-
-vim.keymap.set('n', '<leader>n', 'o<Esc>', { noremap = true, silent = true });
-vim.keymap.set('n', '<leader>,', 'a,<Esc>', { noremap = true, silent = true });
-vim.keymap.set('n', '<leader>;', 'A;<Esc>', { noremap = true, silent = true });

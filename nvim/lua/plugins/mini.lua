@@ -31,15 +31,11 @@ return {
         opts = {
             mappings = {
                 -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
-                left       = '<leader>h',
-                right      = '<leader>l',
-                down       = '<leader>j',
-                up         = '<leader>k',
+                down       = ']e',
+                up         = '[e',
                 -- Move current line in Normal mode
-                line_left  = '<leader>h',
-                line_right = '<leader>l',
-                line_down  = '<leader>j',
-                line_up    = '<leader>k',
+                line_down  = ']e',
+                line_up    = '[e',
             },
 
             -- Options which control moving behavior
