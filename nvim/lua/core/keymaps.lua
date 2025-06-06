@@ -22,4 +22,11 @@ if vim.g.vscode then
     map('n', '<leader>.', 'breadcrumbs.focusAndSelect')
     map('n', '<leader>o', 'outline.focus')
     map('n', '<leader>f', 'workbench.view.explorer')
+
+    vim.keymap.set({ "n", "x" }, "<leader>r", function()
+        vscode.with_insert(function()
+            vscode.action("editor.action.refactor")
+        end)
+    end)
+
 end
