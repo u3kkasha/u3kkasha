@@ -13,6 +13,9 @@ if vim.g.vscode then
     map('n', 'za', 'editor.toggleFold')
     map('n', 'zc', 'editor.fold')
     map('n', 'zo', 'editor.unfold')
+    map('n', 'zj', 'editor.gotoNextFold')
+    map('n', 'zk', 'editor.gotoPreviousFold')
+    map('v', 'zf', 'editor.createFoldingRangeFromSelection')
 
     map({'n', 'v'}, '<leader>c', "workbench.action.openQuickChat")
     map('n', '<leader>z', 'workbench.action.toggleZenMode')
