@@ -5,6 +5,8 @@ if vim.g.vscode then
     local function map(mode, keybinding, actionCommand)
         vim.keymap.set(mode, keybinding, function() vscode.call(actionCommand) end, { silent = true, noremap = true })
     end
+
+    -- Folding
     map('n', 'zC', 'editor.foldRecursively')
     map('n', 'zM', 'editor.foldAll')
     map('n', 'zO', 'editor.unfoldRecursively')
@@ -21,13 +23,16 @@ if vim.g.vscode then
     map('n', '<leader>.', 'breadcrumbs.focusAndSelect')
     map('n', '<leader>o', 'outline.focus')
     map('n', '<leader>f', 'workbench.view.explorer')
-
     vim.keymap.set({ "n", "x" }, "<leader>r", function()
         vscode.with_insert(function()
             vscode.action("editor.action.refactor")
         end)
     end)
+    map({'n', 'v'}, '<leader>gr', 'git.revertSelectedRanges')
+    map({'n', 'v'}, '<leader>gs','git.stageSelectedRanges')
+    map({'n', 'v'}, '<leader>gS','git.unstageSelectedRanges')
 
+    -- Navigation
     map('n', ']h', "editor.action.dirtydiff.next")
     map('n', '[h', "editor.action.dirtydiff.previous")
     map('n', '[d', 'editor.action.marker.next')
