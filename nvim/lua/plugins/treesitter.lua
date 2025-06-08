@@ -6,35 +6,6 @@ return {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         event = { "BufReadPost", "BufNewFile" },
-        opts = {
-            highlight = { enable = false },
-            indent = { enable = true },
-            incremental_selection = {
-                enable = true,
-                keymaps = {
-                    init_selection    = "gnn",
-                    node_decremental  = "gnx",
-                    node_incremental  = "gna",
-                    scope_incremental = "gns",
-                },
-            },
-            move = {
-                enable = true,
-                set_jumps = true,
-                goto_next_start = {
-                    ["]m"] = "@function.outer",
-                },
-                goto_next_end = {
-                    ["]M"] = "@function.outer",
-                },
-                goto_previous_start = {
-                    ["[m"] = "@function.outer",
-                },
-                goto_previous_end = {
-                    ["[M"] = "@function.outer",
-                },
-            },
-        },
     },
     {
         'nvim-treesitter/nvim-treesitter-textobjects'
