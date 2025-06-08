@@ -1,5 +1,5 @@
 -- بسم الله الرحمن الرحيم
----@diagnostic disable: undefined-global
+
 return {
     {
         'echasnovski/mini.surround',

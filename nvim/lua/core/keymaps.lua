@@ -1,5 +1,4 @@
 -- بسم الله الرحمن الرحيم
----@diagnostic disable: undefined-global
 
 if vim.g.vscode then
     local vscode = require('vscode')

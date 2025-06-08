@@ -1,5 +1,4 @@
 -- بسم الله الرحمن الرحيم
----@diagnostic disable: undefined-global
 
 return {
     "ggandor/leap.nvim",

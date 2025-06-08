@@ -1,5 +1,4 @@
 -- بسم الله الرحمن الرحيم
----@diagnostic disable: undefined-global
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd('TextYankPost', {
