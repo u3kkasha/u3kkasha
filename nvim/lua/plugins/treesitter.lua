@@ -43,8 +43,9 @@ return {
         'echasnovski/mini.ai',
         version = false,
         config = function()
-            local spec_treesitter = require('mini.ai').gen_spec.treesitter
-            require('mini.ai').setup({
+            local miniai = require('mini.ai')
+            local spec_treesitter = miniai.gen_spec.treesitter
+            miniai.setup({
                 custom_textobjects = {
                     A = spec_treesitter({ a = '@attribute.outer', i = '@attribute.inner' }),
                     C = spec_treesitter({ a = '@class.outer', i = '@class.inner' }),
@@ -70,6 +71,19 @@ return {
                     end
                 }
             })
+            local map_nextlast_motion = function(lhs, side, search_method)
+                local rhs = function()
+                    miniai.move_cursor(side, 'a', vim.fn.getcharstr(),
+                        { search_method = search_method, n_times = vim.v.count1 })
+                end
+                local desc = 'Go to ' .. side .. ' side of ' .. search_method .. ' textobject'
+                vim.keymap.set({ 'n', 'x', 'o' }, lhs, rhs, { desc = desc })
+            end
+
+            map_nextlast_motion('g[n', 'left', 'next')
+            map_nextlast_motion('g]n', 'right', 'next')
+            map_nextlast_motion('g[l', 'left', 'prev')
+            map_nextlast_motion('g]l', 'right', 'prev')
         end
     }
 }
