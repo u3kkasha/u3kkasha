@@ -45,6 +45,7 @@ return {
                     ["="] = spec_treesitter({ a = '@assignment.outer', i = '@assignment.inner' }),
                     ["~"] = spec_treesitter({ a = '@assignment.lhs', i = '@assignment.rhs' }),
                     ['@'] = spec_treesitter({ a = '@regex.outer', i = '@regex.innner' }),
+                    a = miniai.gen_spec.argument({ separator = '[,;]' }),
                     c = spec_treesitter({ a = '@comment.outer', i = '@comment.inner' }),
                     f = spec_treesitter({ a = '@call.outer', i = '@call.inner' }),
                     i = spec_treesitter({ a = '@conditional.outer', i = '@conditional.inner' }),
