@@ -18,7 +18,8 @@ if vim.g.vscode then
     map('n', 'zk', 'editor.gotoPreviousFold')
     map('v', 'zf', 'editor.createFoldingRangeFromSelection')
 
-    map({'n', 'v'}, '<leader>c', "workbench.action.openQuickChat")
+    map('n', '<leader>c', "workbench.action.openQuickChat")
+    map({'n', 'v'}, '<leader>i', "inlineChat.start")
     map('n', '<leader>z', 'workbench.action.toggleZenMode')
     map('n', '<leader>.', 'breadcrumbs.focusAndSelect')
     map('n', '<leader>o', 'outline.focus')
