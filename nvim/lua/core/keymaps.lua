@@ -29,9 +29,7 @@ if vim.g.vscode then
             vscode.action("editor.action.refactor")
         end)
     end)
-    map({'n', 'v'}, '<leader>gr', 'git.revertSelectedRanges')
-    map({'n', 'v'}, '<leader>gs','git.stageSelectedRanges')
-    map({'n', 'v'}, '<leader>gS','git.unstageSelectedRanges')
+    map({'n', 'v'}, '<leader>ss', 'git.stageSelectedRanges')
 
     -- Navigation
     map('n', ']h', "editor.action.dirtydiff.next")
