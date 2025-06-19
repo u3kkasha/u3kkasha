@@ -36,6 +36,6 @@ if vim.g.vscode then
     -- Navigation
     map('n', ']h', "editor.action.dirtydiff.next")
     map('n', '[h', "editor.action.dirtydiff.previous")
-    map('n', '[d', 'editor.action.marker.next')
-    map('n', ']d', 'editor.action.marker.prev')
+    map('n', '[d', 'editor.action.marker.prev')
+    map('n', ']d', 'editor.action.marker.next')
 end
