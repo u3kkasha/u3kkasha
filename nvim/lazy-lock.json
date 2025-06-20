@@ -5,6 +5,7 @@
   "leap.nvim": { "branch": "main", "commit": "10c14af4ddfb34dbd7721f0bfb2b4d91f0558907" },
   "mini.ai": { "branch": "main", "commit": "d172ada7b0281044a06cb9a625a862553c457b6f" },
   "mini.align": { "branch": "main", "commit": "969bdcdf9b88e30bda9cb8ad6f56afed208778ad" },
+  "mini.icons": { "branch": "main", "commit": "94848dad1589a199f876539bd79befb0c5e3abf0" },
   "mini.move": { "branch": "main", "commit": "f471ecb98395781827ef1dffee61afe1af0ace29" },
   "mini.operators": { "branch": "main", "commit": "2df4df029be367adfc781a8a1b5e8067d2d979df" },
   "mini.splitjoin": { "branch": "main", "commit": "70240d5d3881ff1b2b1d7902450f98a6fa303800" },
@@ -12,5 +13,6 @@
   "nvim-spider": { "branch": "main", "commit": "d4bdc45eac425e77108f068bd0706ff3ac20be7f" },
   "nvim-treesitter": { "branch": "master", "commit": "42fc28ba918343ebfd5565147a42a26580579482" },
   "nvim-treesitter-textobjects": { "branch": "master", "commit": "89ebe73cd2836db80a22d9748999ace0241917a5" },
+  "oil.nvim": { "branch": "master", "commit": "08c2bce8b00fd780fb7999dbffdf7cd174e896fb" },
   "vscode-multi-cursor.nvim": { "branch": "main", "commit": "210d64a6d190383a81b8dcdf8779d357006f3a69" }
 }
