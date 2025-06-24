@@ -22,6 +22,7 @@ local openOil = vscode.to_op(function(ctx)
     vim.keymap.set("n", "-", openOil, { expr = true })
 
     -- Folding
+    map('n', '[z', 'editor.gotoParentFold')
     map('n', 'zC', 'editor.foldRecursively')
     map('n', 'zM', 'editor.foldAll')
     map('n', 'zO', 'editor.unfoldRecursively')
