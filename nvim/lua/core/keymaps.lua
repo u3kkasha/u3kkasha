@@ -7,12 +7,18 @@ if vim.g.vscode then
     end
 
 local openOil = vscode.to_op(function(ctx)
-    local filename = require('vscode').eval('return vscode.window.activeTextEditor.document.fileName')
-    require('vscode').eval(
-        "return await vscode.window.createTerminal({ name: `oil`, shellPath: `powershell`, shellArgs: ['nvim', args.path], location: { viewColumn: 'beside' } })",
-        { args = { path = filename .. '\\..' } }
+    vscode.eval_async(
+        [[
+            return await vscode.window.createTerminal({
+            name: `oil`,
+            shellPath: `powershell`,
+            shellArgs: ['nvim', args.path],
+            location: { viewColumn: -2 }
+            })
+        ]],
+        { args = { path = vscode.eval('return vscode.window.activeTextEditor.document.fileName') .. '\\..' } }
     )
-end)
+    end)
     vim.keymap.set("n", "-", openOil, { expr = true })
 
     -- Folding
