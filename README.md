@@ -5,7 +5,7 @@ I'm Ukasha and I'm passionate about Functional Programming and Software Architec
 I'm particularly smitten with diving deep into:
 
 * **Functional Programming (FP):** 🚀 That elegant dance of pure functions and immutable data just gets me! It's like writing code with a sprinkle of magic! ✨
-* **NeoVim:** 💻 My beloved text editor! It's all about speed, customization, and making coding a pure joy. Once you go NeoVim, you never look back! 🛠️
+* **VSCode-NeoVim:** 💻 My beloved text editor! It's all about speed, customization, and making coding a pure joy. Once you go NeoVim, you never look back! 🛠️
 * **NixOS:** 🐧 This declarative approach to system configuration? Absolutely fascinating! It's like having a superpower for managing environments. 💪
 * **Software Architecture:** 🏗️ I love thinking about the big picture, designing systems that are robust, scalable, and a joy to work with. It's like being the architect of the digital world! 🗺️
 * **Clean Code:** 🧼 Writing code that's not just functional but also beautiful and easy to understand? That's the sweet spot! It's like crafting elegant poetry for machines. ✍️
