@@ -51,8 +51,8 @@ local openOil = vscode.to_op(function(ctx)
     -- Navigation
     map('n', '[h', "editor.action.dirtydiff.previous")
     map('n', ']h', "editor.action.dirtydiff.next")
-    map('n', '[h', 'chatEditor.action.navigatePrevious')
-    map('n', ']h', 'chatEditor.action.navigateNext')
+    map('n', '[H', 'chatEditor.action.navigatePrevious')
+    map('n', ']H', 'chatEditor.action.navigateNext')
     map('n', '[d', 'editor.action.marker.prev')
     map('n', ']d', 'editor.action.marker.next')
 end
