@@ -35,6 +35,8 @@ local openOil = vscode.to_op(function(ctx)
     map('v', 'zf', 'editor.createFoldingRangeFromSelection')
 
     -- Actions
+    map('n', '<leader>m', "bookmarks.toggleLabeled")
+    map('n', "<leader>'", 'bookmarks.listFromAllFiles')
     map('n', '<leader>c', "workbench.action.openQuickChat")
     map({'n', 'v'}, '<leader>i', "inlineChat.start")
     map('n', '<leader>.', 'breadcrumbs.focusAndSelect')
@@ -54,4 +56,6 @@ local openOil = vscode.to_op(function(ctx)
     map('n', ']H', 'chatEditor.action.navigateNext')
     map('n', '[d', 'editor.action.marker.prev')
     map('n', ']d', 'editor.action.marker.next')
+    map('n', '[b', 'bookmarks.jumpToPrevious')
+    map('n', 'b]', 'bookmarks.jumpToNext')
 end
