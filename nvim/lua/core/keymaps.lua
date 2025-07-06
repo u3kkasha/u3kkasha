@@ -6,7 +6,7 @@ if vim.g.vscode then
         vim.keymap.set(mode, keybinding, function() vscode.call(actionCommand) end, { silent = true, noremap = true })
     end
 
-local openOil = vscode.to_op(function(ctx)
+    local openOil = vscode.to_op(function(ctx)
     vscode.eval_async(
         [[
             return await vscode.window.createTerminal({
@@ -38,6 +38,9 @@ local openOil = vscode.to_op(function(ctx)
     map('n', '<leader>m', "bookmarks.toggleLabeled")
     map('n', "<leader>'", 'bookmarks.listFromAllFiles')
     map('n', '<leader>c', "workbench.action.openQuickChat")
+    map('n', '<leader>g?', 'editor.action.inlineSuggest.trigger')
+    map('n', '<leader>g/', 'editor.action.inlineSuggest.commit')
+    map('n', '<leader>g.', 'editor.action.inlineSuggest.dismiss')
     map({'n', 'v'}, '<leader>i', "inlineChat.start")
     map('n', '<leader>.', 'breadcrumbs.focusAndSelect')
     map('n', '<leader>o', 'outline.focus')
