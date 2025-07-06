@@ -56,6 +56,4 @@ local openOil = vscode.to_op(function(ctx)
     map('n', ']H', 'chatEditor.action.navigateNext')
     map('n', '[d', 'editor.action.marker.prev')
     map('n', ']d', 'editor.action.marker.next')
-    map('n', '[b', 'bookmarks.jumpToPrevious')
-    map('n', 'b]', 'bookmarks.jumpToNext')
 end
