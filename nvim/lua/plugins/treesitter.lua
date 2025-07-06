@@ -3,8 +3,22 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
+        branch = 'master',
+        lazy = false,
         build = ":TSUpdate",
-        event = { "BufReadPost", "BufNewFile" },
+        config = function()
+            require('nvim-treesitter.configs').setup({
+                incremental_selection = {
+                    enable = true,
+                    keymaps = {
+                        init_selection = "gnn",
+                        node_incremental = "ga",
+                        scope_incremental = "gis",
+                        node_decremental = "gA",
+                    },
+                },
+            })
+        end,
     },
     {
         'nvim-treesitter/nvim-treesitter-textobjects'
