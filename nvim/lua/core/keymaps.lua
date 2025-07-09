@@ -10,9 +10,9 @@ if vim.g.vscode then
     vscode.eval_async(
         [[
             return await vscode.window.createTerminal({
-            name: `oil`,
+            name: `yazi`,
             shellPath: `powershell`,
-            shellArgs: ['nvim', args.path],
+            shellArgs: ['yazi', args.path],
             location: { viewColumn: -2 }
             })
         ]],
