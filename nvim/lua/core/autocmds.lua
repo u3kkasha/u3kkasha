@@ -12,5 +12,3 @@ vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 vim.api.nvim_set_hl(0, "TermNormal", { bg = "none" })
 vim.api.nvim_set_hl(0, "TermNormalNC", { bg = "none" })
--- Set fillchars for a cleaner look
-vim.opt.fillchars:append({ eob = " " })
