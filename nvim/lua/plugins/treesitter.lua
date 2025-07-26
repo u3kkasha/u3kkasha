@@ -12,9 +12,9 @@ return {
                     enable = true,
                     keymaps = {
                         init_selection = "gnn",
-                        node_incremental = "ga",
+                        node_incremental = "gna",
                         scope_incremental = "gis",
-                        node_decremental = "gA",
+                        node_decremental = "gnA",
                     },
                 },
             })
