@@ -40,6 +40,7 @@ if vim.g.vscode then
     map('n', '<leader>c', "workbench.action.openQuickChat")
     map('n', 'g?', 'editor.action.inlineSuggest.trigger')
     map('n', '<tab>', 'editor.action.inlineSuggest.commit')
+    map('n', '<s-tab>', 'editor.action.inlineSuggest.hide')
     map({'n', 'v'}, '<leader>i', "inlineChat.start")
     map('n', '<leader>.', 'breadcrumbs.focusAndSelect')
     map('n', '<leader>o', 'outline.focus')
