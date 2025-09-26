@@ -39,6 +39,7 @@ if vim.g.vscode then
     map('n', "<leader>'", 'bookmarks.listFromAllFiles')
     map('n', '<leader>c', "workbench.action.openQuickChat")
     map('n', 'g?', 'editor.action.inlineSuggest.trigger')
+    map('n', '<leader>g', 'magit.status')
     map('n', '<tab>', 'editor.action.inlineSuggest.commit')
     map('n', '<s-tab>', 'editor.action.inlineSuggest.hide')
     map({'n', 'v'}, '<leader>i', "inlineChat.start")
