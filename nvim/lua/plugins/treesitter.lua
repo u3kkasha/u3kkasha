@@ -59,8 +59,8 @@ return {
 
             map_nextlast_motion('g[n', 'left', 'next')
             map_nextlast_motion('g]n', 'right', 'next')
-            map_nextlast_motion('g[l', 'left', 'prev')
-            map_nextlast_motion('g]l', 'right', 'prev')
+            map_nextlast_motion('g[p', 'left', 'prev')
+            map_nextlast_motion('g]p', 'right', 'prev')
         end
     }
 }
