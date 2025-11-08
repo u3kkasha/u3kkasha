@@ -12,7 +12,7 @@ return {
         branch = 'main',
     },
     {
-        'echasnovski/mini.ai',
+        'nvim-mini/mini.ai',
         version = false,
         config = function()
             local miniai = require('mini.ai')

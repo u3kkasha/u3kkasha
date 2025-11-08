@@ -2,17 +2,17 @@
 
 return {
     {
-        'echasnovski/mini.surround',
+        'nvim-mini/mini.surround',
         version = "*",
         opts = {}
     },
     {
-        'echasnovski/mini.operators',
+        'nvim-mini/mini.operators',
         version = "*",
         opts = {}
     },
     {
-        'echasnovski/mini.splitjoin',
+        'nvim-mini/mini.splitjoin',
         version = "*",
         opts = {
             detect = {
@@ -21,12 +21,12 @@ return {
         },
     },
     {
-        'echasnovski/mini.align',
+        'nvim-mini/mini.align',
         version = '*',
         opts = {},
     },
     {
-        'echasnovski/mini.move',
+        'nvim-mini/mini.move',
         version = false,
         opts = {
             mappings = {
