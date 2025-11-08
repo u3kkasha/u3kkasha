@@ -3,50 +3,19 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter",
-        branch = 'master',
+        branch = 'main',
         lazy = false,
         build = ":TSUpdate",
-        config = function()
-            require('nvim-treesitter.configs').setup({
-                incremental_selection = {
-                    enable = true,
-                    keymaps = {
-                        init_selection = "gnn",
-                        node_incremental = "gna",
-                        scope_incremental = "gis",
-                        node_decremental = "gnA",
-                    },
-                },
-            })
-        end,
     },
     {
-        'nvim-treesitter/nvim-treesitter-textobjects'
+        'nvim-treesitter/nvim-treesitter-textobjects',
+        branch = 'main',
     },
     {
         'echasnovski/mini.ai',
         version = false,
         config = function()
-            -- ; moves to next one for g[] commands and , moves to previous one
             local miniai = require('mini.ai')
-
-            local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
-            local move_cursor = miniai.move_cursor
-            miniai.move_cursor = function(side, ai_type, id, opts)
-                local function repeatable_move_cursor(inopts)
-                    local new_opts = vim.tbl_extend('force', opts, {
-                        search_method = inopts.forward and 'next' or 'prev'
-                    })
-                    move_cursor(side, ai_type, id, new_opts)
-                end
-                ts_repeat_move.set_last_move(
-                    repeatable_move_cursor,
-                    { forward = opts.search_method ~= 'prev' and opts.search_method ~= 'cover_or_prev' }
-                )
-                move_cursor(side, ai_type, id, opts)
-            end
-            vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
-            vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
 
             -- define treesitter textobjects
             local spec_treesitter = miniai.gen_spec.treesitter
