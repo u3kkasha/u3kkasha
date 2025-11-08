@@ -47,7 +47,7 @@ return {
                 }
             })
 
-            -- add n for next and p for previous for g[] commands
+            -- add n for next and l for previous for g[] commands
             local map_nextlast_motion = function(lhs, side, search_method)
                 local rhs = function()
                     miniai.move_cursor(side, 'a', vim.fn.getcharstr(),
@@ -59,8 +59,8 @@ return {
 
             map_nextlast_motion('g[n', 'left', 'next')
             map_nextlast_motion('g]n', 'right', 'next')
-            map_nextlast_motion('g[p', 'left', 'prev')
-            map_nextlast_motion('g]p', 'right', 'prev')
+            map_nextlast_motion('g[l', 'left', 'prev')
+            map_nextlast_motion('g]l', 'right', 'prev')
         end
     }
 }
