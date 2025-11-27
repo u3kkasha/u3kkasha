@@ -36,6 +36,15 @@ return {
                     p = spec_treesitter({ a = '@block.outer', i = '@block.inner' }),
                     r = spec_treesitter({ a = '@return.outer', i = '@return.inner' }),
                     s = spec_treesitter({ a = '@statement.outer', i = '@scopename.inner' }),
+                    e = {
+                         {
+                            "%f[%a]%l+%d*",
+                            "%f[%w]%d+",
+                            "%f[%u]%u%f[%A]%d*",
+                            "%f[%u]%u%l+%d*",
+                            "%f[%u]%u%u+%d*",
+                          },
+                    },
                     g = function()
                         local from = { line = 1, col = 1 }
                         local to = {
@@ -43,7 +52,7 @@ return {
                             col  = math.max(vim.fn.getline('$'):len(), 1)
                         }
                         return { from = from, to = to }
-                    end
+                        end
                 }
             })
 
