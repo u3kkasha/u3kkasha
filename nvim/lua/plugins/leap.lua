@@ -3,6 +3,6 @@
 return {
     "ggandor/leap.nvim",
     config = function()
-        vim.keymap.set({ 'n' }, 'S', '<Plug>(leap-anywhere)')
+        vim.keymap.set({ 'n' }, '<leader>s', '<Plug>(leap-anywhere)')
     end
 }
