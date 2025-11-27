@@ -29,3 +29,22 @@ source 'C:\Users\USER\argc-completions\tmp\argc-completions.nu'
 # television
 mkdir ($nu.data-dir | path join "vendor/autoload")
 tv init nu | save -f ($nu.data-dir | path join "vendor/autoload/tv.nu")
+
+# Delete all git branches except the current one and those specified
+#
+# This command identifies all local branches and deletes them, preserving
+# only the current branch and any additional branches provided as arguments.
+def "git-delete-except" [
+    ...keep: string # Branches to keep
+]: nothing -> list<string> {
+    let current: string = (git branch --show-current | str trim)
+    let protected: list<string> = ($keep | append $current | uniq)
+    
+    git branch --format "%(refname:short)" 
+    | lines 
+    | str trim 
+    | where ($it not-in $protected) 
+    | each {|branch| 
+        git branch -D $branch 
+    }
+}
