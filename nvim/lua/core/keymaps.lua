@@ -60,4 +60,14 @@ if vim.g.vscode then
     map('n', ']H', 'chatEditor.action.navigateNext')
     map('n', '[d', 'editor.action.marker.prev')
     map('n', ']d', 'editor.action.marker.next')
+    
+    -- Harpoon
+    map('n', '<leader>ba', 'jumplist.addCurrent')
+    map('n', '<leader>bd', 'jumplist.deleteCurrent')
+    map('n', '<leader>bp', 'jumplist.open')
+    for i = 1, 9 do
+        map('n', '<leader>b' .. i, 'jumplist.jump' .. i)
+    end
+    map('n', ']b', 'jumplist.cycleLeft')
+    map('n', '[b', 'jumplist.cycleRight')
 end
