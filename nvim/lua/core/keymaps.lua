@@ -45,7 +45,7 @@ if vim.g.vscode then
     map({'n', 'v'}, '<leader>i', "inlineChat.start")
     map('n', '<leader>.', 'breadcrumbs.focusAndSelect')
     map('n', '<leader>o', 'outline.focus')
-    map('n', '<leader>f', 'workbench.view.explorer')
+    map('n', '<leader>f', 'workbench.files.action.showActiveFileInExplorer')
     vim.keymap.set({ "n", "x" }, "<leader>r", function()
         vscode.with_insert(function()
             vscode.action("editor.action.refactor")
