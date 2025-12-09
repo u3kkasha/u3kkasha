@@ -22,3 +22,15 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = '*',
   command = 'set formatoptions-=cro',
 })
+
+-- Auto update plugins on startup
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = augroup,
+  callback = function()
+     if require("lazy").update then
+       require("lazy").update({ show = false })
+     else
+       require("lazy").sync({ show = false })
+     end
+  end,
+})
