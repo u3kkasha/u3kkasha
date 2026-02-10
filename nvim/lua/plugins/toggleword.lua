@@ -27,10 +27,8 @@ return {
             { "active", "passive" },
             { "manual", "automatic" },
             
-            -- TypeScript/JavaScript variable declarations
-            { "const", "let" },
-            { "let", "var" },
-            { "var", "const" },
+            -- TypeScript/JavaScript variable declarations (cyclical)
+            { "const", "let", "var" },
             
             -- TypeScript/JavaScript/Python common types and keywords
             { "null", "undefined" },  -- JavaScript/TypeScript
