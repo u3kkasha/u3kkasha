@@ -23,7 +23,7 @@ return {
             { "online", "offline" },
             { "local", "remote" },
             { "master", "slave" },
-            { "primary", "replica" },
+            { "primary", "secondary" },
             { "active", "passive" },
             { "manual", "automatic" },
             
