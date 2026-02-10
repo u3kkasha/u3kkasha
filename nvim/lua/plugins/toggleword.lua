@@ -60,7 +60,7 @@ return {
             -- Environment toggles
             { "prod", "dev" },
             { "production", "development" },
-            { "test", "prod" },
+            { "testing", "production" },
         }
     }
 }
