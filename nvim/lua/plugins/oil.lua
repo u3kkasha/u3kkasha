@@ -4,9 +4,6 @@ return {
     'stevearc/oil.nvim',
     cond = not vim.g.vscode,
     lazy = false,
-    keys = {
-        { '-', '<CMD>Oil<CR>', desc = 'Open parent directory', mode = 'n' },
-    },
     opts = {
         -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
         default_file_explorer = true,
@@ -17,4 +14,8 @@ return {
             show_hidden = true,
         },
     },
+    config = function(_, opts)
+        require('oil').setup(opts)
+        vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+    end,
 }
