@@ -6,21 +6,6 @@ if vim.g.vscode then
         vim.keymap.set(mode, keybinding, function() vscode.call(actionCommand) end, { silent = true, noremap = true })
     end
 
-    local openOil = vscode.to_op(function(ctx)
-    vscode.eval_async(
-        [[
-            return await vscode.window.createTerminal({
-            name: `yazi`,
-            shellPath: `powershell`,
-            shellArgs: ['yazi', args.path],
-            location: { viewColumn: -2 }
-            })
-        ]],
-        { args = { path = vscode.eval('return vscode.window.activeTextEditor.document.fileName') .. '\\..' } }
-    )
-    end)
-    vim.keymap.set("n", "-", openOil, { expr = true })
-
     -- Folding
     map('n', '[z', 'editor.gotoParentFold')
     map('n', 'zC', 'editor.foldRecursively')
