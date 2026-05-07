@@ -45,7 +45,7 @@
           treefmtConfig.config.build.wrapper
           pkgs.statix
           pkgs.deadnix
-          pkgs.nodePackages.prettier
+          pkgs.prettier
         ];
       };
     };

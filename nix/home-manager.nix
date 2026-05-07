@@ -25,6 +25,7 @@ in
     ./modules/home/carapace.nix
     ./modules/home/yazi.nix
     ./modules/home/television.nix
+    ./modules/home/ripgrep.nix
   ];
 
   home.stateVersion = "25.11";
