@@ -21,6 +21,7 @@ in
     ./modules/home/direnv.nix
     ./modules/home/oh-my-posh.nix
     ./modules/home/bash.nix
+    ./modules/home/nushell.nix
     ./modules/home/carapace.nix
     ./modules/home/yazi.nix
   ];

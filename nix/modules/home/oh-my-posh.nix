@@ -5,5 +5,6 @@
     enable = true;
     useTheme = theme.posh;
     enableBashIntegration = true;
+    enableNushellIntegration = true;
   };
 }

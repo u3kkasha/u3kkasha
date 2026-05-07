@@ -8,7 +8,15 @@
     gemini-cli
     helix
     uv
+    nushell
   ];
+
+  environment.shells = with pkgs; [ nushell ];
+
+  users.users.nixos = {
+    isNormalUser = true;
+    shell = pkgs.nushell;
+  };
 
   programs.nix-ld.enable = true;
   nixpkgs.config.allowUnfree = true;

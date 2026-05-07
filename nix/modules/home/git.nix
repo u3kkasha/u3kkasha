@@ -3,6 +3,11 @@
 {
   programs.git = {
     enable = true;
+    userName = "Fida Waseque Choudhury";
+    userEmail = "fida.waseque@gmail.com";
+    extraConfig = {
+      init.defaultBranch = "main";
+    };
   };
 
   programs.gh = {
