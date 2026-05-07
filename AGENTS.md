@@ -24,6 +24,20 @@ To apply the configuration, run:
 sudo nixos-rebuild switch --flake ./nix#nixos
 ```
 
+### Formatting and Linting
+
+To format the entire repository:
+
+```bash
+nix fmt
+```
+
+To check for formatting and linting issues:
+
+```bash
+nix flake check
+```
+
 ## Code Style
 
 - Use Nix flakes for dependency management.
