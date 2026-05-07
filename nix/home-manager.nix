@@ -24,6 +24,7 @@ in
     ./modules/home/nushell.nix
     ./modules/home/carapace.nix
     ./modules/home/yazi.nix
+    ./modules/home/television.nix
   ];
 
   home.stateVersion = "25.11";
