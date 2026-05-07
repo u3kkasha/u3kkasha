@@ -1,4 +1,6 @@
-# NixOS Dotfiles
+# AGENTS.md
+
+This repository contains NixOS and Home Manager configuration files.
 
 ## Architecture
 
@@ -12,7 +14,7 @@ This project uses a modular NixOS configuration based on Flakes and Home Manager
 - `nix/modules/`: System-level modules (WSL, System, Home Manager integration).
 - `nix/modules/home/`: User-level Home Manager modules (Helix, Zellij, Git).
 
-## Workflows
+## Workflow Commands
 
 ### Applying Changes
 
@@ -20,3 +22,10 @@ To apply the configuration, run:
 ```bash
 sudo nixos-rebuild switch --flake ./nix#nixos
 ```
+
+## Code Style
+
+- Use Nix flakes for dependency management.
+- Modularize configuration into logical units under `nix/modules`.
+- Use `home-manager` for user-level configuration.
+- Follow the existing commit message style: `type(scope): description`.
