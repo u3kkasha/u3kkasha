@@ -1,6 +1,19 @@
 { config, pkgs, ... }:
 
+let
+  theme = {
+    name = "mocha";
+    helix = "catppuccin_mocha";
+    zellij = "catppuccin-mocha";
+    bat = "Catppuccin Mocha";
+    yazi = "catppuccin-mocha";
+    posh = "catppuccin_mocha";
+    lazygit = "mocha";
+  };
+in
 {
+  _module.args.theme = theme;
+
   imports = [
     ./modules/home/helix.nix
     ./modules/home/zellij.nix

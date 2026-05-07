@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, theme, ... }:
 
 {
   programs.oh-my-posh = {
     enable = true;
-    useTheme = "catppuccin_mocha";
+    useTheme = theme.posh;
     enableBashIntegration = true;
   };
 }

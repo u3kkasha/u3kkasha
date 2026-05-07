@@ -1,10 +1,10 @@
-{ config, pkgs, ... }:
+{ config, pkgs, theme, ... }:
 
 {
   programs.zellij = {
     enable = true;
     settings = {
-      theme = "catppuccin-mocha";
+      theme = theme.zellij;
       default_layout = "compact";
       pane_frames = false;
     };

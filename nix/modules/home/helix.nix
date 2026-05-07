@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, theme, ... }:
 
 {
   programs.helix = {
@@ -13,7 +13,7 @@
       prettier
     ];
     settings = {
-      theme = "catppuccin_mocha";
+      theme = theme.helix;
       editor = {
         true-color = true;
         line-number = "relative";

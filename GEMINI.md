@@ -18,5 +18,5 @@ This project uses a modular NixOS configuration based on Flakes and Home Manager
 
 To apply the configuration, run:
 ```bash
-sudo nixos-rebuild switch --flake .#nixos
+sudo nixos-rebuild switch --flake ./nix#nixos
 ```
