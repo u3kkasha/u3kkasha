@@ -12,6 +12,25 @@
         sort_reverse = true;
       };
     };
+    keymap = {
+      manager.prepend_keymap = [
+        {
+          on = [ "G" ];
+          run = "shell 'lazygit' --block";
+          desc = "Open lazygit";
+        }
+        {
+          on = [ "C-f" ];
+          run = "filter";
+          desc = "Filter files";
+        }
+        {
+          on = [ "F" ];
+          run = "shell 'fzf-search' --block";
+          desc = "FZF search";
+        }
+      ];
+    };
   };
 
   programs.lazygit = {
@@ -28,7 +47,26 @@
     };
   };
 
+  programs.zoxide = {
+    enable = true;
+    enableBashIntegration = true;
+  };
+
+  programs.bat = {
+    enable = true;
+    config = {
+      theme = "TwoDark";
+    };
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableBashIntegration = true;
+  };
+
   home.packages = with pkgs; [
-    delta # Recommended for lazygit paging
+    delta
+    ripgrep
+    fd
   ];
 }
