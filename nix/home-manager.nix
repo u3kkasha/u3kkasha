@@ -9,6 +9,7 @@
     ./modules/home/oh-my-posh.nix
     ./modules/home/bash.nix
     ./modules/home/carapace.nix
+    ./modules/home/yazi.nix
   ];
 
   home.stateVersion = "25.11";
