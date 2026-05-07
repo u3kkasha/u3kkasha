@@ -9,10 +9,9 @@
 
 {
   imports = [
-    # include NixOS-WSL modules
-    <nixos-wsl/modules>
-    <home-manager/nixos>
   ];
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   wsl.enable = true;
   wsl.defaultUser = "nixos";
