@@ -1,4 +1,4 @@
-{ config, pkgs, theme, ... }:
+{ pkgs, theme, ... }:
 
 {
   programs.helix = {
@@ -36,8 +36,21 @@
           enable = true;
         };
         statusline = {
-          left = ["mode" "spinner" "file-name" "read-only-indicator" "file-modification-indicator"];
-          right = ["diagnostics" "selections" "position" "file-encoding" "file-line-ending" "file-type"];
+          left = [
+            "mode"
+            "spinner"
+            "file-name"
+            "read-only-indicator"
+            "file-modification-indicator"
+          ];
+          right = [
+            "diagnostics"
+            "selections"
+            "position"
+            "file-encoding"
+            "file-line-ending"
+            "file-type"
+          ];
           mode.normal = "NORMAL";
           mode.insert = "INSERT";
           mode.select = "SELECT";

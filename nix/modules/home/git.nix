@@ -1,4 +1,4 @@
-{ config, pkgs, theme, ... }:
+_:
 
 {
   programs.git = {
@@ -22,7 +22,10 @@
     enable = true;
     settings = {
       gui.theme = {
-        activeBorderColor = [ "#89b4fa" "bold" ];
+        activeBorderColor = [
+          "#89b4fa"
+          "bold"
+        ];
         inactiveBorderColor = [ "#a6adc8" ];
         optionsTextColor = [ "#89b4fa" ];
         selectedLineBgColor = [ "#313244" ];
