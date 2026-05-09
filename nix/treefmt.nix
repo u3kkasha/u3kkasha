@@ -1,6 +1,6 @@
 _: {
   # Used to find the project root
-  projectRootFile = "LICENSE";
+  projectRootFile = "flake.nix";
 
   # Nix
   # Format Nix files
