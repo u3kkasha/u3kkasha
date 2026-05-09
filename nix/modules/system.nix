@@ -12,6 +12,7 @@
     helix
     uv
     nushell
+    mdr
   ];
 
   environment.shells = with pkgs; [ nushell ];
