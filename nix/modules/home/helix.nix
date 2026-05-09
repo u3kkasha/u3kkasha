@@ -11,6 +11,7 @@
       pyright
       vscode-langservers-extracted
       prettier
+      roslyn-ls
     ];
     settings = {
       theme = theme.helix;
@@ -70,7 +71,16 @@
             ];
           };
         }
+        {
+          name = "c-sharp";
+          language-servers = [ "roslyn" ];
+        }
       ];
+      language-server = {
+        roslyn = {
+          command = "Microsoft.CodeAnalysis.LanguageServer";
+        };
+      };
     };
   };
 }

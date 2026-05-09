@@ -13,6 +13,7 @@
     uv
     nushell
     mdr
+    dotnet-sdk_10
   ];
 
   environment.shells = with pkgs; [ nushell ];
