@@ -227,22 +227,6 @@
           sort_by = "mtime";
           sort_reverse = true;
         };
-        opener = {
-          edit = [
-            {
-              run = ''hx "$@"'';
-              block = true;
-            }
-          ];
-        };
-        open = {
-          rules = [
-            {
-              name = "*";
-              use = "edit";
-            }
-          ];
-        };
       };
     };
   };
