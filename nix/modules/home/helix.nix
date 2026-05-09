@@ -19,6 +19,9 @@
         line-number = "relative";
         cursorline = true;
         color-modes = true;
+        file-picker = {
+          hidden = false;
+        };
         cursor-shape = {
           insert = "bar";
           normal = "block";
