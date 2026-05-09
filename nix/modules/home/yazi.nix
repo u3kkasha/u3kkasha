@@ -227,6 +227,20 @@
         sort_reverse = true;
       };
     };
+    settings = {
+      manager = {
+        prepend_keymap = [
+          {
+            on = [
+              "g"
+              "i"
+            ];
+            run = "shell lazygit --block";
+            desc = "Open lazygit";
+          }
+        ];
+      };
+    };
   };
 
   programs.zoxide = {
@@ -259,5 +273,6 @@
     resvg
     imagemagick
     wl-clipboard
+    lazygit
   ];
 }
