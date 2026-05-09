@@ -221,24 +221,28 @@
       ]
     '';
     settings = {
-      manager = {
-        show_hidden = true;
-        sort_by = "mtime";
-        sort_reverse = true;
-      };
-    };
-    settings = {
-      manager = {
-        prepend_keymap = [
-          {
-            on = [
-              "g"
-              "i"
-            ];
-            run = "shell lazygit --block";
-            desc = "Open lazygit";
-          }
-        ];
+      yazi = {
+        manager = {
+          show_hidden = true;
+          sort_by = "mtime";
+          sort_reverse = true;
+        };
+        opener = {
+          edit = [
+            {
+              run = ''hx "$@"'';
+              block = true;
+            }
+          ];
+        };
+        open = {
+          rules = [
+            {
+              name = "*";
+              use = "edit";
+            }
+          ];
+        };
       };
     };
   };
