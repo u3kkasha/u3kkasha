@@ -26,6 +26,7 @@ in
     ./modules/home/yazi.nix
     ./modules/home/television.nix
     ./modules/home/ripgrep.nix
+    ./modules/home/zoxide.nix
   ];
 
   home.stateVersion = "25.11";
