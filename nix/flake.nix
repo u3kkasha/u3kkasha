@@ -21,12 +21,14 @@
     }:
     let
       system = "x86_64-linux";
+      username = "nixos";
       pkgs = nixpkgs.legacyPackages.${system};
       treefmtConfig = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
     in
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit username; };
         modules = [
           nixos-wsl.nixosModules.default
           home-manager.nixosModules.home-manager

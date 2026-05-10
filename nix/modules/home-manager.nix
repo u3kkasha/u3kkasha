@@ -1,8 +1,9 @@
-_:
+{ username, ... }:
 
 {
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "backup";
-  home-manager.users.nixos = import ../home-manager.nix;
+  home-manager.extraSpecialArgs = { inherit username; };
+  home-manager.users.${username} = import ../home-manager.nix;
 }

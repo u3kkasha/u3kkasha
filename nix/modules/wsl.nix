@@ -1,6 +1,6 @@
-_:
+{ username, ... }:
 
 {
   wsl.enable = true;
-  wsl.defaultUser = "nixos";
+  wsl.defaultUser = username;
 }
