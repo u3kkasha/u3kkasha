@@ -22,7 +22,7 @@ in
   };
 
   home.shellAliases = {
-    rebuild = "nh os switch";
+    rebuild = "nh os switch --diff always";
   };
 
   programs.nix-index.enable = true;
@@ -38,8 +38,7 @@ in
     ./modules/home/carapace.nix
     ./modules/home/yazi.nix
     ./modules/home/television.nix
-    ./modules/home/ripgrep.nix
-    ./modules/home/zoxide.nix
+    ./modules/home/utils.nix
   ];
 
   home.stateVersion = "25.11";

@@ -1,4 +1,4 @@
-{ pkgs, theme, ... }:
+{ pkgs, ... }:
 
 {
   programs.yazi = {
@@ -231,36 +231,12 @@
     };
   };
 
-  programs.zoxide = {
-    enable = true;
-    enableBashIntegration = true;
-    enableNushellIntegration = true;
-  };
-
-  programs.bat = {
-    enable = true;
-    config = {
-      theme = theme.bat;
-    };
-  };
-
-  programs.fzf = {
-    enable = true;
-    enableBashIntegration = true;
-  };
-
   home.packages = with pkgs; [
-    delta
-    ripgrep
-    fd
-    file
     ffmpeg
     p7zip
-    jq
     poppler-utils
     resvg
     imagemagick
-    wl-clipboard
     lazygit
   ];
 }
