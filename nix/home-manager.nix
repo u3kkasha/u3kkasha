@@ -1,4 +1,4 @@
-_:
+{ username, config, ... }:
 
 let
   theme = {
@@ -13,6 +13,19 @@ let
 in
 {
   _module.args.theme = theme;
+
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
+
+  home.sessionVariables = {
+    NH_FLAKE = "${config.home.homeDirectory}/.dotfiles/nix";
+  };
+
+  home.shellAliases = {
+    rebuild = "nh os switch";
+  };
+
+  programs.nix-index.enable = true;
 
   imports = [
     ./modules/home/helix.nix

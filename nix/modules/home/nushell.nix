@@ -1,4 +1,4 @@
-_:
+{ config, ... }:
 
 {
   programs.nushell = {
@@ -7,8 +7,10 @@ _:
       show_banner = false;
       edit_mode = "vi";
     };
-    shellAliases = {
-      rebuild = "sudo nixos-rebuild switch --flake ($env.HOME + '/.dotfiles/nix#nixos')";
-    };
+    extraConfig = ''
+      load-env {
+        NH_FLAKE: "${config.home.homeDirectory}/.dotfiles/nix"
+      }
+    '';
   };
 }
