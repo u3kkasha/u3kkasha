@@ -25,6 +25,7 @@ To apply the configuration, run:
 ```bash
 sudo nixos-rebuild switch --flake ./nix#nixos
 ```
+
 Or use the `rebuild` alias in the shell.
 
 ### Formatting and Linting
