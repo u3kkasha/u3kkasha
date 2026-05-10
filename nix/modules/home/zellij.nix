@@ -1,4 +1,4 @@
-{ theme, ... }:
+{ pkgs, theme, ... }:
 
 {
   programs.zellij = {
@@ -7,6 +7,7 @@
       theme = theme.zellij;
       default_layout = "compact";
       pane_frames = false;
+      default_shell = "${pkgs.nushell}/bin/nu";
     };
   };
 }
