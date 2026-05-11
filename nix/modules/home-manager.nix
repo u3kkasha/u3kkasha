@@ -8,7 +8,7 @@
   home-manager.users.${username} = {
     imports = [
       ../home-manager.nix
-      nix-index-database.hmModules.nix-index
+      nix-index-database.homeModules.nix-index
     ];
   };
 }
