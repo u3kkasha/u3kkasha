@@ -6,6 +6,8 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -16,6 +18,7 @@
       nixpkgs,
       nixos-wsl,
       home-manager,
+      nix-index-database,
       treefmt-nix,
       ...
     }:
@@ -28,7 +31,9 @@
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit username; };
+        specialArgs = {
+          inherit username nix-index-database;
+        };
         modules = [
           nixos-wsl.nixosModules.default
           home-manager.nixosModules.home-manager

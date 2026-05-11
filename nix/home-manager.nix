@@ -26,6 +26,7 @@ in
   };
 
   programs.nix-index.enable = true;
+  programs.nix-index-database.comma.enable = true;
 
   imports = [
     ./modules/home/helix.nix
