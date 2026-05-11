@@ -14,14 +14,9 @@ _:
     };
   };
 
-  programs.delta = {
-    enable = true;
-    enableGitIntegration = false;
-  };
-
   programs.difftastic = {
     enable = true;
-    git.enable = false;
+    git.enable = true;
     options = {
       background = "dark";
       display = "side-by-side";
@@ -54,17 +49,14 @@ _:
         };
         showIcons = true;
         sidePanelWidth = 0.3333;
-        mainPanelSplitMode = "vertical";
+        mainPanelSplitMode = "horizontal";
       };
       git = {
         pagers = [
           {
-            colorArg = "always";
-            pager = "delta --dark --paging=always";
-            useExternalDiff = true; # This enables the use of externalDiffCommand
+            externalDiffCommand = "difft --color=always --background=dark --display=side-by-side";
           }
         ];
-        externalDiffCommand = "difft --color=always --background=dark --display=side-by-side";
       };
     };
   };
