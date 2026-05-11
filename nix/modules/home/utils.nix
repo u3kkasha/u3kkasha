@@ -29,7 +29,6 @@
 
   home.packages = with pkgs; [
     nvd
-    delta
     ripgrep
     fd
     file

@@ -237,6 +237,5 @@
     poppler-utils
     resvg
     imagemagick
-    lazygit
   ];
 }
