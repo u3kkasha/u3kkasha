@@ -23,29 +23,24 @@ This project uses a modular NixOS configuration based on Flakes and Home Manager
 
 ## Workflow Commands
 
-### Applying Changes
+This project uses `go-task` (Taskfile) to manage maintenance tasks.
 
-To apply the configuration, run:
+### Core Tasks
+
+- `task fmt`: Format the entire repository.
+- `task check`: Check for formatting and linting issues.
+- `task apply`: Apply the configuration (rebuild).
+- `task clean`: Perform garbage collection and cleanup.
+
+### Legacy Commands (Manual)
+
+To apply the configuration manually:
 
 ```bash
 sudo nixos-rebuild switch --flake ./nix#nixos
 ```
 
 Or use the `rebuild` alias in the shell.
-
-### Formatting and Linting
-
-To format the entire repository:
-
-```bash
-nix fmt
-```
-
-To check for formatting and linting issues:
-
-```bash
-nix flake check
-```
 
 ## Code Style
 

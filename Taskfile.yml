@@ -1,0 +1,38 @@
+version: '3'
+
+vars:
+  FLAKE: ./nix
+
+tasks:
+  fmt:
+    desc: Format all Nix files
+    cmds:
+      - nix fmt
+
+  check:
+    desc: Check flake for errors and formatting
+    cmds:
+      - nix flake check {{.FLAKE}}
+
+  apply:
+    desc: Apply system configuration
+    cmds:
+      - nh os switch --diff always {{.FLAKE}}
+    preconditions:
+      - sh: command -v nh
+        msg: "nh is not installed"
+
+  clean:
+    desc: Perform garbage collection and cleanup
+    cmds:
+      - nh clean all
+      - nix-collect-garbage -d
+      - sudo nix-collect-garbage -d
+    preconditions:
+      - sh: command -v nh
+        msg: "nh is not installed"
+
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list

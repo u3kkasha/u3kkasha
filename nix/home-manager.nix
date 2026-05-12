@@ -39,6 +39,7 @@ in
     ./modules/home/carapace.nix
     ./modules/home/yazi.nix
     ./modules/home/television.nix
+    ./modules/home/go-task.nix
     ./modules/home/utils.nix
   ];
 

@@ -10,7 +10,7 @@ This repository contains a modular NixOS and Home Manager configuration specific
 - **Home Manager**: Integrated as a NixOS module, configured via `nix/home-manager.nix`.
 - **Direnv Support**: Enabled globally via `nix/modules/home/direnv.nix` with `nix-direnv` for optimized performance and GC protection.
 - **Shells**: Supports Bash and Nushell with proper integrations for all tools.
-- **Maintenance**: A `cleanup` command is provided for garbage collection. It is implemented as a Bash alias and a Nushell function to ensure it doesn't run automatically on shell launch.
+- **Maintenance**: Task management is centralized via `go-task` (`Taskfile.yml`). A `task clean` command is provided for garbage collection, consolidating previous Bash aliases and Nushell functions into a single, shell-agnostic interface.
 
 ## Key Decisions
 
