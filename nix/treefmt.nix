@@ -10,7 +10,13 @@ _: {
   # Remove unused Nix code
   programs.deadnix.enable = true;
 
-  # Markdown
-  # Format Markdown files
+  # Markdown, YAML, and JSON
+  # Format documentation and config files
   programs.prettier.enable = true;
+  programs.prettier.includes = [
+    "*.md"
+    "*.yaml"
+    "*.yml"
+    "*.json"
+  ];
 }

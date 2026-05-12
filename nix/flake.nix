@@ -53,6 +53,7 @@
           pkgs.statix
           pkgs.deadnix
           pkgs.prettier
+          pkgs.gitleaks
         ];
       };
     };
