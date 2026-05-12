@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: determinate-systems/nix-installer-action@v14
-      - uses: determinate-systems/magic-nix-cache-action@v8
-      - uses: determinate-systems/update-flake-lock@v24
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - uses: DeterminateSystems/update-flake-lock@v24
         with:
           flake-directory: nix
           pr-title: "chore(nix): update flake.lock"

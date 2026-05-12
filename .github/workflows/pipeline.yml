@@ -32,8 +32,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: determinate-systems/nix-installer-action@v14
-      - uses: determinate-systems/magic-nix-cache-action@v8
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
 
       - name: Flake Check & Formatting
         run: nix flake check ./nix
