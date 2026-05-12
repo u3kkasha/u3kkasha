@@ -13,8 +13,13 @@ This project uses a modular NixOS configuration based on Flakes and Home Manager
 - `nix/home-manager.nix`: Main Home Manager configuration entry point.
 - `nix/modules/`: System-level modules (WSL, System, Home Manager integration).
 - `nix/modules/home/`: User-level Home Manager modules (Helix, Zellij, Git).
+- `nix/pkgs/`: Custom package definitions (e.g., `aspire-cli`).
 - `nix/AGENTS.md`: This file.
 - `nix/CONTEXT.md`: Project context and key decisions.
+
+## Binary Caching
+
+- **Cachix**: Used for binary caching to speed up local and CI builds. The cache is named `u3kkasha`. CI builds push to this cache automatically.
 
 ## Configuration Management
 
