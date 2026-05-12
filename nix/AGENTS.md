@@ -19,7 +19,7 @@ This project uses a modular NixOS configuration based on Flakes and Home Manager
 
 ## Binary Caching
 
-- **Cachix**: Used for binary caching to speed up local and CI builds. The cache is named `u3kkasha`. CI builds push to this cache automatically.
+- **Cachix**: Used for binary caching to speed up CI builds. The cache is named `u3kkasha`. CI builds push to this cache automatically. Local configuration is avoided to keep the system lean.
 
 ## Configuration Management
 

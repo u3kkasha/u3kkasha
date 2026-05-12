@@ -10,11 +10,6 @@ in
       "flakes"
     ];
     auto-optimise-store = true;
-    trusted-users = [
-      "root"
-      "@wheel"
-      "${username}"
-    ];
   };
 
   nix.gc = {
@@ -36,7 +31,6 @@ in
     nh
     nix-index
     comma
-    cachix
   ];
 
   environment.shells = with pkgs; [ nushell ];
