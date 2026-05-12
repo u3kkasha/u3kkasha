@@ -31,6 +31,7 @@ in
     nh
     nix-index
     comma
+    devenv
   ];
 
   environment.shells = with pkgs; [ nushell ];
