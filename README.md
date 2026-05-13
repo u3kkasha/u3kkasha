@@ -23,6 +23,14 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
       <br />C#
     </td>
     <td align="center" width="96">
+      <img src="https://skillicons.dev/icons?i=ts" width="48" height="48" alt="TypeScript" />
+      <br />TypeScript
+    </td>
+    <td align="center" width="96">
+      <img src="https://skillicons.dev/icons?i=nestjs" width="48" height="48" alt="NestJS" />
+      <br />NestJS
+    </td>
+    <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=python" width="48" height="48" alt="Python" />
       <br />Python
     </td>
@@ -30,6 +38,8 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
       <img src="https://skillicons.dev/icons?i=postgres" width="48" height="48" alt="Postgres" />
       <br />PostgreSQL
     </td>
+  </tr>
+  <tr>
     <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=graphql" width="48" height="48" alt="GraphQL" />
       <br />GraphQL
@@ -47,16 +57,8 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
 <table>
   <tr>
     <td align="center" width="96">
-      <img src="https://skillicons.dev/icons?i=ts" width="48" height="48" alt="TypeScript" />
-      <br />TypeScript
-    </td>
-    <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=bun" width="48" height="48" alt="Bun" />
       <br />Bun
-    </td>
-    <td align="center" width="96">
-      <img src="https://skillicons.dev/icons?i=nestjs" width="48" height="48" alt="NestJS" />
-      <br />NestJS
     </td>
     <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=nuxtjs" width="48" height="48" alt="Nuxt" />
@@ -85,8 +87,8 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
       <br />Nix Flakes
     </td>
     <td align="center" width="96">
-      <img src="https://skillicons.dev/icons?i=linux" width="48" height="48" alt="Linux" />
-      <br />NixOS
+      <img src="https://skillicons.dev/icons?i=kali" width="48" height="48" alt="Kali Linux" />
+      <br />Kali Linux
     </td>
     <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=githubactions" width="48" height="48" alt="GitHub Actions" />
