@@ -4,8 +4,8 @@
   <img src="https://komarev.com/ghpvc/?username=u3kkasha&color=blueviolet&style=flat-square" alt="u3kkasha" />
 </p>
 
-### 🚀 Software Engineer & Systems Architect
-Software engineer focused on **Functional Programming**, **Systems Configuration**, and **Cloud-Native Scalable Architecture**. I specialize in building declarative, reproducible environments and resilient, maintainable systems.
+### 🚀 Integrations Manager & Systems Architect
+I am a software engineer and **Integrations Manager** at **PixelShadow**, specializing in **Functional Programming**, **Systems Configuration**, and **Cloud-Native Scalable Architecture**. I thrive at the intersection of AI-driven solutions and resilient system design.
 
 ---
 
@@ -52,16 +52,25 @@ Software engineer focused on **Functional Programming**, **Systems Configuration
       <br />Linux
     </td>
     <td align="center" width="96">
-      <img src="https://skillicons.dev/icons?i=bash" width="48" height="48" alt="Bash" />
-      <br />Shell
+      <img src="https://skillicons.dev/icons?i=mongodb" width="48" height="48" alt="MongoDB" />
+      <br />MongoDB
     </td>
   </tr>
 </table>
 
-**Specialized In:**
-- **OS:** NixOS (Daily Driver), WSL
-- **Workflow:** Helix, Zellij, Nushell, .NET Aspire
-- **Containerization:** Podman, Docker
+**Expertise:**
+- **Current Role:** Integrations Manager at PixelShadow.
+- **OS:** NixOS (Daily Driver), WSL.
+- **Workflow:** Helix, Zellij, Nushell, .NET Aspire.
+- **Containerization:** Podman, Docker.
+
+---
+
+### 🌟 Open Source & Contributions
+I am an active contributor to the open-source community, focusing on tools that improve developer experience and functional patterns:
+- **MongoDB for VS Code:** Contributing to UI enhancements and query result visualizations.
+- **Expression:** Enhancing functional programming primitives in Python.
+- **NixOS Configuration:** Maintaining a modular, reproducible dotfiles environment.
 
 ---
 
@@ -75,23 +84,18 @@ Software engineer focused on **Functional Programming**, **Systems Configuration
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=u3kkasha&theme=radical&hide_border=true" alt="GitHub Streak" />
 </p>
 
-<p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=u3kkasha&theme=radical&no-bg=true&margin-w=15" alt="GitHub Trophies" />
-</p>
-
 ---
 
 ### 🎯 Current Focus
 - 🛠️ Refining reproducible **NixOS** and Home Manager environments.
 - 🏗️ Building resilient architectures with **.NET Aspire**.
 - 🧩 Exploring advanced functional patterns and type-safe systems.
-- ☁️ Mastering high-performance cloud-native implementations.
 
 ---
 
 ### 🤝 Connect with Me
 <p align="left">
-  <a href="https://linkedin.com/in/fida-waseque-choudhury" target="_blank">
+  <a href="https://linkedin.com/in/u3kkasha" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
   </a>
   <a href="mailto:fida.waseque@gmail.com">
