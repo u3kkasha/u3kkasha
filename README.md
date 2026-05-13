@@ -48,6 +48,10 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
       <img src="https://skillicons.dev/icons?i=mongodb" width="48" height="48" alt="MongoDB" />
       <br />MongoDB
     </td>
+    <td align="center" width="96">
+      <img src="https://skillicons.dev/icons?i=fastapi" width="48" height="48" alt="FastAPI" />
+      <br />FastAPI
+    </td>
   </tr>
 </table>
 
