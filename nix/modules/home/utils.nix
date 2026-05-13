@@ -27,6 +27,10 @@
     icons = "auto";
   };
 
+  programs.uv = {
+    enable = true;
+  };
+
   home.packages = with pkgs; [
     nvd
     ripgrep
@@ -34,5 +38,6 @@
     file
     jq
     wl-clipboard
+    nodejs_22
   ];
 }
