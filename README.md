@@ -99,26 +99,6 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
 
 ---
 
-### 🌟 Open Source & Contributions
-I am an active contributor to tools that enhance developer experience and functional patterns:
-- **MongoDB for VS Code:** Contributing to UI enhancements and query result visualizations.
-- **Expression:** Enhancing functional programming primitives in Python.
-- **NixOS Configuration:** Maintaining a modular, reproducible dotfiles environment using Flakes and Home Manager.
-
----
-
-### 📊 GitHub Activity & Stats
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=u3kkasha&show_icons=true&theme=radical&hide_border=true&count_private=true" alt="GitHub Stats" />
-</p>
-
-<p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=u3kkasha&theme=radical&hide_border=true" alt="GitHub Streak" />
-</p>
-
----
-
 ### 🤝 Connect with Me
 <p align="left">
   <a href="https://linkedin.com/in/u3kkasha" target="_blank">
