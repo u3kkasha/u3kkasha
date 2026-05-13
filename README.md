@@ -16,7 +16,7 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
   <tr>
     <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=dotnet" width="48" height="48" alt="Dotnet" />
-      <br />.NET 10
+      <br />.NET
     </td>
     <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=cs" width="48" height="48" alt="C#" />
@@ -84,7 +84,7 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
   <tr>
     <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=nix" width="48" height="48" alt="Nix" />
-      <br />Nix Flakes
+      <br />Nix
     </td>
     <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=kali" width="48" height="48" alt="Kali Linux" />
