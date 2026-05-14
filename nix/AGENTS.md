@@ -42,16 +42,19 @@ This project uses `go-task` (Taskfile) to manage maintenance tasks.
 To apply the configuration manually:
 
 #### WSL
+
 ```bash
 sudo nixos-rebuild switch --flake ./nix#nixos-wsl
 ```
 
 #### Bare-metal NixOS
+
 ```bash
 sudo nixos-rebuild switch --flake ./nix#nixos
 ```
 
 #### Standalone Linux (e.g. Kali)
+
 ```bash
 home-manager switch --flake ./nix#ukasha@linux
 ```

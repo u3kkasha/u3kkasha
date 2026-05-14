@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 {
   # This module manages the gemini-cli settings and MCP servers.

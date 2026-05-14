@@ -13,6 +13,7 @@ vars:
 tasks:
   fmt:
     desc: Format all Nix files
+    dir: nix
     cmds:
       - nix fmt
 
