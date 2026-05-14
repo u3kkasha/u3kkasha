@@ -48,5 +48,6 @@ in
     nh
     devenv
     aspire-cli
+    doppler
   ];
 }

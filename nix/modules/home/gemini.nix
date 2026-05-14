@@ -1,36 +1,85 @@
 { ... }:
 
 {
-  # This module manages the gemini-cli configuration.
-  # You can add more settings here as you discover them.
-  
-  home.file.".config/gemini-cli/config.yaml" = {
-    text = ''
-      # Gemini CLI Configuration
-      # Automatically managed by Home Manager
-      
-      # Example structure (adjust based on your actual config needs):
-      # model: gemini-1.5-pro-latest
-      # temperature: 0.7
-    '';
-    # set force = true if you want to overwrite manual changes every time you rebuild
-    force = false; 
-  };
+  # This module manages the gemini-cli settings and MCP servers.
+  # Sensitive keys (like CONTEXT7_API_KEY) should be set via environment variables
+  # or added to a local-only file.
 
-  # MCP Servers Configuration
-  # This is usually a JSON file where you define your servers.
-  # Note: You'll need to update the paths to point to where your MCP server binaries are.
-  home.file.".config/gemini-cli/mcp_servers.json" = {
+  home.file.".gemini/settings.json" = {
     text = ''
       {
+        "context": {
+          "fileName": ["AGENTS.md", "CONTEXT.md", "GEMINI.md"]
+        },
+        "general": {
+          "preferredEditor": "hx"
+        },
         "mcpServers": {
-          "example-server": {
-            "command": "node",
-            "args": ["/path/to/server/index.js"]
+          "aspire": {
+            "args": ["agent", "mcp"],
+            "command": "aspire"
+          },
+          "context7": {
+            "httpUrl": "https://mcp.context7.com/mcp",
+            "headers": {
+              "Accept": "application/json, text/event-stream"
+            }
+          },
+          "microsoft learn": {
+            "httpUrl": "https://learn.microsoft.com/api/mcp"
+          },
+          "nixos": {
+            "args": ["mcp-nixos"],
+            "command": "uvx"
+          },
+          "nuget": {
+            "args": ["run", "-i", "--rm", "ghcr.io/dimonsmart/nugetmcpserver:latest"],
+            "command": "podman"
+          },
+          "nuxt-ui": {
+            "httpUrl": "https://ui.nuxt.com/mcp"
+          },
+          "playwright": {
+            "args": [
+              "run",
+              "-i",
+              "--rm",
+              "--init",
+              "-v",
+              "$PWD:/data:Z",
+              "--pull=always",
+              "mcr.microsoft.com/playwright/mcp",
+              "--allow-unrestricted-file-access"
+            ],
+            "command": "podman"
+          },
+          "serena": {
+            "args": [
+              "run",
+              "github:oraios/serena",
+              "--",
+              "start-mcp-server",
+              "--project-from-cwd",
+              "--context",
+              "ide",
+              "--open-web-dashboard",
+              "false"
+            ],
+            "command": "nix"
+          }
+        },
+        "security": {
+          "auth": {
+            "selectedType": "oauth-personal"
           }
         }
       }
     '';
+    # Setting force = true ensures your MCP servers are always synced from this file
+    force = true;
+  };
+}
+ always synced from this file
     force = false;
   };
 }
