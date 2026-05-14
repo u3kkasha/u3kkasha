@@ -7,4 +7,6 @@
     ../../modules/podman.nix
     ../../modules/home-manager.nix
   ];
+
+  networking.hostName = "nixos-wsl";
 }

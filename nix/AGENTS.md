@@ -43,7 +43,7 @@ To apply the configuration manually:
 
 #### WSL
 ```bash
-sudo nixos-rebuild switch --flake ./nix#wsl
+sudo nixos-rebuild switch --flake ./nix#nixos-wsl
 ```
 
 #### Bare-metal NixOS

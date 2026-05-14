@@ -35,7 +35,7 @@
     {
       nixosConfigurations = {
         # NixOS WSL
-        wsl = nixpkgs.lib.nixosSystem {
+        nixos-wsl = nixpkgs.lib.nixosSystem {
           inherit system specialArgs;
           modules = [
             nixos-wsl.nixosModules.default

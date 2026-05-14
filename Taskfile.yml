@@ -2,6 +2,13 @@ version: '3'
 
 vars:
   FLAKE: ./nix
+  HOST:
+    sh: |
+      if uname -r | grep -qi microsoft; then
+        echo nixos-wsl
+      else
+        hostname
+      fi
 
 tasks:
   fmt:
@@ -17,7 +24,7 @@ tasks:
   apply:
     desc: Apply system configuration
     cmds:
-      - nh os switch --diff always {{.FLAKE}}
+      - nh os switch --diff always {{.FLAKE}} -H {{.HOST}}
     preconditions:
       - sh: command -v nh
         msg: "nh is not installed"
