@@ -22,7 +22,6 @@ in
   };
 
   home.shellAliases = {
-    rebuild = "nh os switch --diff always";
   };
 
   programs.nix-index.enable = true;
