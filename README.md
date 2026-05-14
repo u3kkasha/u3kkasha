@@ -35,11 +35,15 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
       <br />Python
     </td>
     <td align="center" width="96">
-      <img src="https://skillicons.dev/icons?i=postgres" width="48" height="48" alt="Postgres" />
-      <br />PostgreSQL
+      <img src="https://skillicons.dev/icons?i=fastapi" width="48" height="48" alt="FastAPI" />
+      <br />FastAPI
     </td>
   </tr>
   <tr>
+    <td align="center" width="96">
+      <img src="https://skillicons.dev/icons?i=postgres" width="48" height="48" alt="Postgres" />
+      <br />PostgreSQL
+    </td>
     <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=graphql" width="48" height="48" alt="GraphQL" />
       <br />GraphQL
@@ -47,10 +51,6 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
     <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=mongodb" width="48" height="48" alt="MongoDB" />
       <br />MongoDB
-    </td>
-    <td align="center" width="96">
-      <img src="https://skillicons.dev/icons?i=fastapi" width="48" height="48" alt="FastAPI" />
-      <br />FastAPI
     </td>
   </tr>
 </table>
