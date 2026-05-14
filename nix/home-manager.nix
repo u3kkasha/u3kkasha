@@ -32,7 +32,6 @@ in
     ./modules/home/helix.nix
     ./modules/home/zellij.nix
     ./modules/home/git.nix
-    ./modules/home/direnv.nix
     ./modules/home/oh-my-posh.nix
     ./modules/home/bash.nix
     ./modules/home/nushell.nix
@@ -41,6 +40,7 @@ in
     ./modules/home/television.nix
     ./modules/home/go-task.nix
     ./modules/home/utils.nix
+    ./modules/home/gemini.nix
   ];
 
   home.stateVersion = "25.11";

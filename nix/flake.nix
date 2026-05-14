@@ -1,5 +1,5 @@
 {
-  description = "NixOS WSL Flake";
+  description = "Multi-System Nix Flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -24,21 +24,50 @@
     }:
     let
       system = "x86_64-linux";
-      username = "nixos";
+      username = "ukasha";
       pkgs = nixpkgs.legacyPackages.${system};
       treefmtConfig = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+
+      specialArgs = {
+        inherit username nix-index-database;
+      };
     in
     {
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit username nix-index-database;
+      nixosConfigurations = {
+        # NixOS WSL
+        wsl = nixpkgs.lib.nixosSystem {
+          inherit system specialArgs;
+          modules = [
+            nixos-wsl.nixosModules.default
+            home-manager.nixosModules.home-manager
+            ./hosts/wsl/configuration.nix
+          ];
         };
-        modules = [
-          nixos-wsl.nixosModules.default
-          home-manager.nixosModules.home-manager
-          ./configuration.nix
-        ];
+        # Bare-metal NixOS
+        nixos = nixpkgs.lib.nixosSystem {
+          inherit system specialArgs;
+          modules = [
+            home-manager.nixosModules.home-manager
+            ./hosts/nixos/configuration.nix
+          ];
+        };
+        # VM configuration
+        vm = nixpkgs.lib.nixosSystem {
+          inherit system specialArgs;
+          modules = [
+            home-manager.nixosModules.home-manager
+            ./hosts/vm/configuration.nix
+          ];
+        };
+      };
+
+      homeConfigurations = {
+        # Standalone Home Manager for standard Linux (e.g. Kali)
+        "${username}@linux" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = specialArgs;
+          modules = [ ./hosts/linux/home.nix ];
+        };
       };
 
       # Use 'nix fmt' to format the whole repository

@@ -9,11 +9,11 @@ This project uses a modular NixOS configuration based on Flakes and Home Manager
 ### Structure
 
 - `nix/flake.nix`: Entry point for the Nix configuration.
-- `nix/configuration.nix`: Main system configuration entry point.
-- `nix/home-manager.nix`: Main Home Manager configuration entry point.
-- `nix/modules/`: System-level modules (WSL, System, Home Manager integration).
-- `nix/modules/home/`: User-level Home Manager modules (Helix, Zellij, Git).
-- `nix/pkgs/`: Custom package definitions (e.g., `aspire-cli`).
+- `nix/home-manager.nix`: Shared Home Manager configuration.
+- `nix/hosts/`: Host-specific configurations (WSL, NixOS, VM, Linux).
+- `nix/modules/`: Shared system-level modules.
+- `nix/modules/home/`: Shared user-level Home Manager modules.
+- `nix/pkgs/`: Custom package definitions.
 - `nix/AGENTS.md`: This file.
 - `nix/CONTEXT.md`: Project context and key decisions.
 
@@ -41,8 +41,19 @@ This project uses `go-task` (Taskfile) to manage maintenance tasks.
 
 To apply the configuration manually:
 
+#### WSL
+```bash
+sudo nixos-rebuild switch --flake ./nix#wsl
+```
+
+#### Bare-metal NixOS
 ```bash
 sudo nixos-rebuild switch --flake ./nix#nixos
+```
+
+#### Standalone Linux (e.g. Kali)
+```bash
+home-manager switch --flake ./nix#ukasha@linux
 ```
 
 Or use the `rebuild` alias in the shell.
