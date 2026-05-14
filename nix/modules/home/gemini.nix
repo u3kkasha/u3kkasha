@@ -22,6 +22,7 @@
           "context7": {
             "httpUrl": "https://mcp.context7.com/mcp",
             "headers": {
+              "CONTEXT7_API_KEY": "$CONTEXT7_API_KEY",
               "Accept": "application/json, text/event-stream"
             }
           },
@@ -77,9 +78,5 @@
     '';
     # Setting force = true ensures your MCP servers are always synced from this file
     force = true;
-  };
-}
- always synced from this file
-    force = false;
   };
 }
