@@ -1,8 +1,9 @@
-{ nix-index-database, ... }:
+{ inputs, ... }:
 
 {
   imports = [
     ../../home-manager.nix
-    nix-index-database.homeModules.nix-index
+    inputs.nix-index-database.homeModules.nix-index
+    inputs.catppuccin.homeModules.catppuccin
   ];
 }
