@@ -39,9 +39,9 @@
       nixosConfigurations = {
         # NixOS WSL
         nixos-wsl = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
           inherit specialArgs;
           modules = [
+            { nixpkgs.hostPlatform = "x86_64-linux"; }
             nixos-wsl.nixosModules.default
             home-manager.nixosModules.home-manager
             ./hosts/wsl/configuration.nix
@@ -49,18 +49,18 @@
         };
         # Bare-metal NixOS
         nixos = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
           inherit specialArgs;
           modules = [
+            { nixpkgs.hostPlatform = "x86_64-linux"; }
             home-manager.nixosModules.home-manager
             ./hosts/nixos/configuration.nix
           ];
         };
         # VM configuration
         vm = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
           inherit specialArgs;
           modules = [
+            { nixpkgs.hostPlatform = "x86_64-linux"; }
             home-manager.nixosModules.home-manager
             ./hosts/vm/configuration.nix
           ];
@@ -158,10 +158,16 @@
         apply = {
           type = "app";
           program = "${self.packages.${system}.apply}/bin/apply";
+          meta = {
+            description = "Apply the NixOS/Home Manager configuration";
+          };
         };
         clean = {
           type = "app";
           program = "${self.packages.${system}.clean}/bin/clean";
+          meta = {
+            description = "Clean up Nix store and generations";
+          };
         };
       });
 

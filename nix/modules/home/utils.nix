@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }:
 
 let
-  aspire-cli = inputs.self.packages.${pkgs.system}.aspire-cli;
+  aspire-cli = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.aspire-cli;
 in
 {
   programs.bat = {
