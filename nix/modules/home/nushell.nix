@@ -14,10 +14,6 @@ _:
           load-env (doppler secrets download --format json | from json)
         }
       }
-
-      def cleanup [] {
-        nix run .#clean
-      }
     '';
   };
 }

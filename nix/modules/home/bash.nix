@@ -2,9 +2,7 @@
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    shellAliases = {
-      cleanup = "nix run .#clean";
-    };
+    shellAliases = { };
     bashrcExtra = ''
       # Load Doppler secrets if logged in
       if [ -f ~/.doppler/config.yaml ]; then
