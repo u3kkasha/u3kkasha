@@ -1,7 +1,7 @@
 version: "3"
 
 vars:
-  FLAKE: ./nix
+  FLAKE: .
   HOST:
     sh: |
       if uname -r | grep -qi microsoft; then
@@ -13,7 +13,6 @@ vars:
 tasks:
   fmt:
     desc: Format all Nix files
-    dir: nix
     cmds:
       - nix fmt
 
