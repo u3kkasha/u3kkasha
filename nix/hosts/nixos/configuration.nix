@@ -8,5 +8,7 @@
     ../../modules/home-manager.nix
   ];
 
+  networking.hostName = "nixos";
+
   # Bare-metal specific configuration could go here
 }

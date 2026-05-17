@@ -24,18 +24,19 @@ This project uses a modular NixOS configuration based on Flakes and Home Manager
 ## Configuration Management
 
 - **Read-Only Files**: Most configuration files in `.config` (e.g., `lazygit/config.yml`) are managed by Home Manager and are symlinked to the Nix store. These files are **read-only**.
-- **Modifying Config**: Do not attempt to modify these files directly or allow applications to "auto-migrate" them. All changes must be made in the corresponding Nix module (e.g., `modules/home/git.nix`) and applied via `task apply`.
+- **Modifying Config**: Do not attempt to modify these files directly or allow applications to "auto-migrate" them. All changes must be made in the corresponding Nix module (e.g., `modules/home/git.nix`) and applied via `nix run .#apply`.
 
 ## Workflow Commands
 
-This project uses `go-task` (Taskfile) to manage maintenance tasks.
+This project uses **Nix Flake Apps** to manage maintenance tasks. This ensures tasks are hermetic and don't require external task runners to be installed globally.
 
 ### Core Tasks
 
-- `task fmt`: Format the entire repository.
-- `task check`: Check for formatting and linting issues.
-- `task apply`: Apply the configuration (rebuild).
-- `task clean`: Perform garbage collection and cleanup.
+- `nix fmt`: Format the entire repository.
+- `nix flake check`: Check for formatting and linting issues.
+- `nix run .#apply`: Apply the configuration (rebuild).
+- `nix run .#clean`: Perform garbage collection and cleanup.
+- `nix run .#test-actions`: Test GitHub Actions locally.
 
 ### Legacy Commands (Manual)
 

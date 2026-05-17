@@ -7,6 +7,8 @@
     ../../modules/home-manager.nix
   ];
 
+  networking.hostName = "vm";
+
   # VM specific configuration
   services.qemuGuest.enable = true;
 

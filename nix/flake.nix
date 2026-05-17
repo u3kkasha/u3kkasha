@@ -76,8 +76,56 @@
       checks.${system}.formatting = treefmtConfig.config.build.check self;
 
       # Custom packages
-      packages.${system} = {
+      packages.${system} = rec {
         aspire-cli = pkgs.callPackage ./pkgs/aspire-cli.nix { };
+
+        # Maintenance scripts
+        apply = pkgs.writeShellApplication {
+          name = "apply";
+          runtimeInputs = [ pkgs.nh ];
+          text = ''
+            HOST=$(hostname)
+            echo "Applying configuration for host: $HOST"
+            nh os switch --diff always . -H "$HOST" "$@"
+          '';
+        };
+
+        clean = pkgs.writeShellApplication {
+          name = "clean";
+          runtimeInputs = [ pkgs.nh ];
+          text = ''
+            echo "Cleaning up Nix store and generations..."
+            nh clean all
+            nix-collect-garbage -d
+            sudo nix-collect-garbage -d
+          '';
+        };
+
+        test-actions = pkgs.writeShellApplication {
+          name = "test-actions";
+          runtimeInputs = [ pkgs.act ];
+          text = ''
+            export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
+            echo "Testing GitHub Actions locally..."
+            act -W .. -j verify --remote-name origin --container-options "--privileged --userns=host" "$@"
+          '';
+        };
+      };
+
+      # Flake apps for easy execution
+      apps.${system} = {
+        apply = {
+          type = "app";
+          program = "${self.packages.${system}.apply}/bin/apply";
+        };
+        clean = {
+          type = "app";
+          program = "${self.packages.${system}.clean}/bin/clean";
+        };
+        test-actions = {
+          type = "app";
+          program = "${self.packages.${system}.test-actions}/bin/test-actions";
+        };
       };
 
       # Development shell with formatting and linting tools
