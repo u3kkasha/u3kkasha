@@ -1,6 +1,8 @@
 {
   username,
   inputs,
+  systemStateVersion,
+  homeStateVersion,
   ...
 }:
 
@@ -9,13 +11,16 @@
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "backup";
   home-manager.extraSpecialArgs = {
-    inherit username inputs;
+    inherit
+      username
+      inputs
+      systemStateVersion
+      homeStateVersion
+      ;
   };
   home-manager.users.${username} = {
     imports = [
-      ../home-manager.nix
-      inputs.nix-index-database.homeModules.nix-index
-      inputs.catppuccin.homeModules.catppuccin
+      ./home/default.nix
     ];
   };
 }

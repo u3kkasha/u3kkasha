@@ -1,4 +1,9 @@
-{ pkgs, username, ... }:
+{
+  pkgs,
+  username,
+  systemStateVersion,
+  ...
+}:
 
 {
   nix.settings = {
@@ -15,7 +20,7 @@
     options = "--delete-older-than 7d";
   };
 
-  system.stateVersion = "25.11";
+  system.stateVersion = systemStateVersion;
 
   environment.systemPackages = with pkgs; [
     nushell
