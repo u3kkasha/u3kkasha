@@ -3,7 +3,7 @@
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      cleanup = "nh clean all; nix-collect-garbage -d; sudo nix-collect-garbage -d";
+      cleanup = "nix run .#clean";
     };
     bashrcExtra = ''
       # Load Doppler secrets if logged in

@@ -23,10 +23,13 @@
       ...
     }@inputs:
     let
-      system = "x86_64-linux";
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+      forEachSystem = f: nixpkgs.lib.genAttrs supportedSystems f;
+
       username = "ukasha";
-      pkgs = nixpkgs.legacyPackages.${system};
-      treefmtConfig = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
 
       specialArgs = {
         inherit inputs username;
@@ -36,7 +39,8 @@
       nixosConfigurations = {
         # NixOS WSL
         nixos-wsl = nixpkgs.lib.nixosSystem {
-          inherit system specialArgs;
+          system = "x86_64-linux";
+          inherit specialArgs;
           modules = [
             nixos-wsl.nixosModules.default
             home-manager.nixosModules.home-manager
@@ -45,7 +49,8 @@
         };
         # Bare-metal NixOS
         nixos = nixpkgs.lib.nixosSystem {
-          inherit system specialArgs;
+          system = "x86_64-linux";
+          inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
             ./hosts/nixos/configuration.nix
@@ -53,7 +58,8 @@
         };
         # VM configuration
         vm = nixpkgs.lib.nixosSystem {
-          inherit system specialArgs;
+          system = "x86_64-linux";
+          inherit specialArgs;
           modules = [
             home-manager.nixosModules.home-manager
             ./hosts/vm/configuration.nix
@@ -64,56 +70,100 @@
       homeConfigurations = {
         # Standalone Home Manager for standard Linux (e.g. Kali)
         "${username}@linux" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
           extraSpecialArgs = specialArgs;
           modules = [ ./hosts/linux/home.nix ];
         };
       };
 
       # Use 'nix fmt' to format the whole repository
-      formatter.${system} = treefmtConfig.config.build.wrapper;
+      formatter = forEachSystem (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          treefmtConfig = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+        in
+        treefmtConfig.config.build.wrapper
+      );
+
       # Use 'nix flake check' to verify formatting
-      checks.${system}.formatting = treefmtConfig.config.build.check self;
+      checks = forEachSystem (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          treefmtConfig = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+        in
+        {
+          formatting = treefmtConfig.config.build.check self;
+        }
+      );
 
       # Custom packages
-      packages.${system} = rec {
-        aspire-cli = pkgs.callPackage ./pkgs/aspire-cli.nix { };
+      packages = forEachSystem (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          aspire-cli = pkgs.callPackage ./pkgs/aspire-cli.nix { };
 
-        # Maintenance scripts
-        apply = pkgs.writeShellApplication {
-          name = "apply";
-          runtimeInputs = [ pkgs.nh ];
-          text = ''
-            HOST=$(hostname)
-            echo "Applying configuration for host: $HOST"
-            nh os switch --diff always . -H "$HOST" "$@"
-          '';
-        };
+          # Maintenance scripts
+          apply = pkgs.writeShellApplication {
+            name = "apply";
+            runtimeInputs = [
+              pkgs.nh
+              pkgs.nvd
+              pkgs.hostname
+              pkgs.jq
+            ];
+            text = ''
+              HOST=$(hostname)
 
-        clean = pkgs.writeShellApplication {
-          name = "clean";
-          runtimeInputs = [ pkgs.nh ];
-          text = ''
-            echo "Cleaning up Nix store and generations..."
-            nh clean all
-            nix-collect-garbage -d
-            sudo nix-collect-garbage -d
-          '';
-        };
+              echo "Applying configuration for host: $HOST"
+              if [ -e /etc/NIXOS ]; then
+                # NixOS system
+                CURRENT_GEN=$(readlink -f /run/current-system)
+                nh os switch --diff always . -H "$HOST" "$@"
+                nvd diff "$CURRENT_GEN" /run/current-system
+              else
+                # Standalone Home Manager
+                # Assuming the configuration name matches username@hostname or username@linux
+                CONF_NAME="${username}@$HOST"
+                # Fallback to username@linux if specific host config doesn't exist
+                if ! nix flake show . --json | jq -e ".homeConfigurations.\"$CONF_NAME\"" > /dev/null; then
+                  CONF_NAME="${username}@linux"
+                fi
+                
+                CURRENT_GEN=$(readlink -f ~/.local/state/nix/profiles/home-manager)
+                nh home switch --diff always . -H "$CONF_NAME" "$@"
+                nvd diff "$CURRENT_GEN" ~/.local/state/nix/profiles/home-manager
+              fi
+            '';
+          };
 
-        test-actions = pkgs.writeShellApplication {
-          name = "test-actions";
-          runtimeInputs = [ pkgs.act ];
-          text = ''
-            export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
-            echo "Testing GitHub Actions locally..."
-            act -W .. -j verify --remote-name origin --container-options "--privileged --userns=host" "$@"
-          '';
-        };
-      };
+          clean = pkgs.writeShellApplication {
+            name = "clean";
+            runtimeInputs = [ pkgs.nh ];
+            text = ''
+              echo "Cleaning up Nix store and generations..."
+              nh clean all "$@"
+            '';
+          };
+
+          test-actions = pkgs.writeShellApplication {
+            name = "test-actions";
+            runtimeInputs = [ pkgs.act ];
+            text = ''
+              export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
+              echo "Testing GitHub Actions locally..."
+              act -W .. -j verify --remote-name origin --container-options "--privileged --userns=host" "$@"
+            '';
+          };
+        }
+      );
 
       # Flake apps for easy execution
-      apps.${system} = {
+      apps = forEachSystem (system: {
         apply = {
           type = "app";
           program = "${self.packages.${system}.apply}/bin/apply";
@@ -126,18 +176,27 @@
           type = "app";
           program = "${self.packages.${system}.test-actions}/bin/test-actions";
         };
-      };
+      });
 
       # Development shell with formatting and linting tools
-      devShells.${system}.default = pkgs.mkShell {
-        buildInputs = [
-          treefmtConfig.config.build.wrapper
-          pkgs.statix
-          pkgs.deadnix
-          pkgs.prettier
-          pkgs.gitleaks
-          pkgs.act
-        ];
-      };
+      devShells = forEachSystem (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          treefmtConfig = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+        in
+        {
+          default = pkgs.mkShell {
+            buildInputs = [
+              treefmtConfig.config.build.wrapper
+              pkgs.statix
+              pkgs.deadnix
+              pkgs.prettier
+              pkgs.gitleaks
+              pkgs.act
+            ];
+          };
+        }
+      );
     };
 }

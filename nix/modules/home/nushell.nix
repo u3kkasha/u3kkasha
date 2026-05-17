@@ -16,9 +16,7 @@ _:
       }
 
       def cleanup [] {
-        nh clean all
-        nix-collect-garbage -d
-        sudo nix-collect-garbage -d
+        nix run .#clean
       }
     '';
   };

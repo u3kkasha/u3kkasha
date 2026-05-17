@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 let
-  aspire-cli = pkgs.callPackage ../../pkgs/aspire-cli.nix { };
+  aspire-cli = inputs.self.packages.${pkgs.system}.aspire-cli;
 in
 {
   programs.bat = {

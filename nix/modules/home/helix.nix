@@ -6,7 +6,7 @@
     defaultEditor = true;
     extraPackages = with pkgs; [
       nil
-      nixpkgs-fmt
+      nixfmt
       bash-language-server
       pyright
       vscode-langservers-extracted
