@@ -36,7 +36,6 @@ This project uses **Nix Flake Apps** to manage maintenance tasks. This ensures t
 - `nix flake check`: Check for formatting and linting issues.
 - `nix run .#apply`: Apply the configuration (rebuild).
 - `nix run .#clean`: Perform garbage collection and cleanup.
-- `nix run .#test-actions`: Test GitHub Actions locally.
 
 ### Legacy Commands (Manual)
 

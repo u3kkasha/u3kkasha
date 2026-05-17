@@ -150,15 +150,6 @@
             '';
           };
 
-          test-actions = pkgs.writeShellApplication {
-            name = "test-actions";
-            runtimeInputs = [ pkgs.act ];
-            text = ''
-              export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
-              echo "Testing GitHub Actions locally..."
-              act -W .. -j verify --remote-name origin --container-options "--privileged --userns=host" "$@"
-            '';
-          };
         }
       );
 
@@ -171,10 +162,6 @@
         clean = {
           type = "app";
           program = "${self.packages.${system}.clean}/bin/clean";
-        };
-        test-actions = {
-          type = "app";
-          program = "${self.packages.${system}.test-actions}/bin/test-actions";
         };
       });
 
@@ -193,7 +180,6 @@
               pkgs.deadnix
               pkgs.prettier
               pkgs.gitleaks
-              pkgs.act
             ];
           };
         }
