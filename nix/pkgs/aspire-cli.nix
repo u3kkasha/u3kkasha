@@ -1,31 +1,45 @@
-{ pkgs }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  icu,
+  openssl,
+  zlib,
+}:
 
-pkgs.stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "aspire-cli";
-  version = "13.3.0";
-  src = pkgs.fetchurl {
-    url = "https://aka.ms/dotnet/9/aspire/ga/daily/aspire-cli-linux-x64.tar.gz";
-    sha256 = "1l2df2h4psy42j9pyg8fhanxfahs25vn0gvpa0n7binz18z3szpp";
+  version = "13.3.3-preview.1.26264.13";
+
+  src = fetchurl {
+    url = "https://ci.dot.net/public/aspire/${version}/aspire-cli-linux-x64-13.3.3.tar.gz";
+    sha256 = "sha256-qUAcCiyRSWQRM34HvJnDUtkjfhHr+FW1tjmwI/jyvJI=";
   };
+
   nativeBuildInputs = [
-    pkgs.autoPatchelfHook
-    pkgs.makeWrapper
+    autoPatchelfHook
+    makeWrapper
   ];
-  buildInputs = with pkgs; [
+
+  buildInputs = [
     stdenv.cc.cc.lib
     zlib
     icu
     openssl
   ];
+
   sourceRoot = ".";
+
   installPhase = ''
     mkdir -p $out/bin
     cp aspire $out/bin/
     wrapProgram $out/bin/aspire \
       --prefix LD_LIBRARY_PATH : ${
-        pkgs.lib.makeLibraryPath [
-          pkgs.icu
-          pkgs.openssl
+        lib.makeLibraryPath [
+          icu
+          openssl
         ]
       }
   '';

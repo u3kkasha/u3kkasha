@@ -1,4 +1,4 @@
-{ pkgs, theme, ... }:
+{ pkgs, ... }:
 
 let
   aspire-cli = pkgs.callPackage ../../pkgs/aspire-cli.nix { };
@@ -6,9 +6,6 @@ in
 {
   programs.bat = {
     enable = true;
-    config = {
-      theme = theme.bat;
-    };
   };
 
   programs.fzf = {

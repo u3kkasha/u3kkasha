@@ -10,6 +10,7 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+    catppuccin.url = "github:catppuccin/nix";
   };
 
   outputs =
@@ -18,10 +19,9 @@
       nixpkgs,
       nixos-wsl,
       home-manager,
-      nix-index-database,
       treefmt-nix,
       ...
-    }:
+    }@inputs:
     let
       system = "x86_64-linux";
       username = "ukasha";
@@ -29,7 +29,7 @@
       treefmtConfig = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
 
       specialArgs = {
-        inherit username nix-index-database;
+        inherit inputs username;
       };
     in
     {
@@ -74,6 +74,11 @@
       formatter.${system} = treefmtConfig.config.build.wrapper;
       # Use 'nix flake check' to verify formatting
       checks.${system}.formatting = treefmtConfig.config.build.check self;
+
+      # Custom packages
+      packages.${system} = {
+        aspire-cli = pkgs.callPackage ./pkgs/aspire-cli.nix { };
+      };
 
       # Development shell with formatting and linting tools
       devShells.${system}.default = pkgs.mkShell {

@@ -1,4 +1,4 @@
-{ pkgs, theme, ... }:
+{ pkgs, ... }:
 
 {
   programs.helix = {
@@ -14,7 +14,6 @@
       roslyn-ls
     ];
     settings = {
-      theme = theme.helix;
       editor = {
         true-color = true;
         line-number = "relative";

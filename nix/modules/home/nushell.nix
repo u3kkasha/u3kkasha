@@ -1,4 +1,4 @@
-{ config, ... }:
+_:
 
 {
   programs.nushell = {
@@ -8,10 +8,6 @@
       edit_mode = "vi";
     };
     extraConfig = ''
-      load-env {
-        NH_FLAKE: "${config.home.homeDirectory}/.dotfiles/nix"
-      }
-
       # Load Doppler secrets if logged in
       try {
         if ("~/.doppler/config.yaml" | path exists) {
