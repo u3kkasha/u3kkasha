@@ -71,7 +71,7 @@ _:
 
       # Export GitHub token from gh if available
       if (which gh | is-not-empty) {
-          $env.GITHUB_TOKEN = (do { ^gh auth token } | complete | get -i stdout | str trim)
+          $env.GITHUB_TOKEN = (do { ^gh auth token } | complete | get -o stdout | str trim)
       }
     '';
   };
