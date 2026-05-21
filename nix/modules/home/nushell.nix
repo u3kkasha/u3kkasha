@@ -3,6 +3,10 @@ _:
 {
   programs.nushell = {
     enable = true;
+    environmentVariables = {
+      EDITOR = "hx";
+      VISUAL = "hx";
+    };
     settings = {
       show_banner = false;
       edit_mode = "vi";

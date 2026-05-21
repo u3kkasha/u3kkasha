@@ -30,8 +30,6 @@
 
   home.sessionVariables = {
     NH_FLAKE = "${config.home.homeDirectory}/.dotfiles/nix";
-    EDITOR = "hx";
-    VISUAL = "hx";
   };
 
   programs.nix-index.enable = true;
