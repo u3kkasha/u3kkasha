@@ -12,6 +12,11 @@
       "flakes"
     ];
     auto-optimise-store = true;
+    trusted-users = [
+      "root"
+      "@wheel"
+      username
+    ];
   };
 
   nix.gc = {
@@ -31,7 +36,10 @@
   users.users.${username} = {
     isNormalUser = true;
     shell = pkgs.nushell;
-    extraGroups = [ "podman" ];
+    extraGroups = [
+      "wheel"
+      "podman"
+    ];
   };
 
   programs.nix-ld.enable = true;
