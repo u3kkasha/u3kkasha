@@ -9,14 +9,15 @@ This repository contains a modular NixOS and Home Manager configuration specific
 - **NixOS Configuration**: Located in `configuration.nix` (within host-specific directories), manages system-level settings and modules.
 - **Home Manager**: Integrated as a NixOS module, configured via `home-manager.nix`.
 - **Shells**: Supports Bash and Nushell with proper integrations for all tools.
-- **Environment Management**: Moved from `direnv` to `devenv` for project-specific developer environments.
+- **Environment Management**: Moved from `devenv` to `direnv` with `nix-direnv` for seamless project-specific developer environments.
 - **Maintenance**: Maintenance tasks are centralized as native Nix Flake Apps (e.g., `nix run .#apply`). This ensures that tools like `nh` are available hermetically and removes the need for an external task runner like `go-task`.
 - **Binary Caching**: Cachix is integrated into CI (GitHub Actions) to speed up build verification. Local builds do not push to the cache to keep the environment lean.
 
 ## Key Decisions
 
 - **Global Shell Setup**: Common tools and shell configurations are managed at the user level through Home Manager.
-- **Transition to Devenv**: `direnv` has been removed in favor of `devenv` to provide more robust and reproducible developer shells.
+- **Flox Integration**: Added `flox` as a flake input and integrated it into the user environment with dedicated binary cache settings for optimized performance. Support for `direnv` auto-activation via `use flox` has been added to the global `direnvrc`.
+- **Transition to Direnv**: `devenv` has been replaced by `direnv` and `nix-direnv` to provide a more lightweight and standard way to activate developer shells.
 - **Modularity**: Configuration is split into system-level (`modules/`) and user-level (`modules/home/`) modules for better maintainability.
 - **Host-Specific Entry Points**: Introduced a `hosts/` directory to support diverse environments (WSL, NixOS, VM, and standard Linux).
 - **Nushell Functions**: Multi-step maintenance commands in Nushell are defined as `def` functions instead of aliases to prevent accidental execution during shell initialization.

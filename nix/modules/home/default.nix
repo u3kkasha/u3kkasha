@@ -13,6 +13,7 @@
 
     ./bash.nix
     ./cli.nix
+    ./direnv.nix
     ./gemini.nix
     ./git.nix
     ./helix.nix

@@ -43,8 +43,8 @@ in
     mdr
     dotnet-sdk_10
     nh
-    devenv
     aspire-cli
     doppler
+    inputs.flox.packages.${pkgs.system}.default
   ];
 }
