@@ -2,6 +2,7 @@
 
 let
   aspire-cli = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.aspire-cli;
+  antigravity-cli = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.antigravity-cli;
 in
 {
   programs.bat = {
@@ -44,7 +45,7 @@ in
     dotnet-sdk_10
     nh
     aspire-cli
+    antigravity-cli
     doppler
-    inputs.flox.packages.${pkgs.system}.default
   ];
 }

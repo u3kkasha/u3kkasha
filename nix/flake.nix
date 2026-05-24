@@ -11,12 +11,15 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     catppuccin.url = "github:catppuccin/nix";
-    flox.url = "github:flox/flox/latest";
+    devshell.url = "github:numtide/devshell";
+    devshell.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
-    extra-substituters = [ "https://cache.flox.dev" ];
-    extra-trusted-public-keys = [ "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs=" ];
+    extra-substituters = [ "https://nix-community.cachix.org" ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
   };
 
   outputs =
@@ -26,6 +29,7 @@
       nixos-wsl,
       home-manager,
       treefmt-nix,
+      devshell,
       ...
     }@inputs:
     let
@@ -47,6 +51,14 @@
           homeStateVersion
           ;
       };
+
+      pkgsFor =
+        system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+          overlays = [ devshell.overlays.default ];
+        };
     in
     {
       nixosConfigurations = {
@@ -83,7 +95,7 @@
       homeConfigurations = {
         # Standalone Home Manager for standard Linux (e.g. Kali)
         "${username}@linux" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          pkgs = pkgsFor "x86_64-linux";
           extraSpecialArgs = specialArgs;
           modules = [ ./hosts/linux/home.nix ];
         };
@@ -93,7 +105,7 @@
       formatter = forEachSystem (
         system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = pkgsFor system;
           treefmtConfig = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         in
         treefmtConfig.config.build.wrapper
@@ -103,7 +115,7 @@
       checks = forEachSystem (
         system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = pkgsFor system;
           treefmtConfig = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         in
         {
@@ -115,10 +127,11 @@
       packages = forEachSystem (
         system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = pkgsFor system;
         in
         {
           aspire-cli = pkgs.callPackage ./pkgs/aspire-cli.nix { };
+          antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli.nix { };
 
           # Maintenance scripts
           apply = pkgs.writeShellApplication {
@@ -199,17 +212,38 @@
       devShells = forEachSystem (
         system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = pkgsFor system;
           treefmtConfig = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         in
         {
-          default = pkgs.mkShell {
-            buildInputs = [
+          default = pkgs.devshell.mkShell {
+            name = "nix-dotfiles";
+            packages = [
               treefmtConfig.config.build.wrapper
               pkgs.statix
               pkgs.deadnix
               pkgs.prettier
               pkgs.gitleaks
+            ];
+            commands = [
+              {
+                name = "apply";
+                category = "maintenance";
+                help = "Apply the NixOS/Home Manager configuration";
+                command = "nix run .#apply";
+              }
+              {
+                name = "clean";
+                category = "maintenance";
+                help = "Clean up Nix store and generations";
+                command = "nix run .#clean";
+              }
+              {
+                name = "fmt";
+                category = "maintenance";
+                help = "Format the codebase";
+                command = "nix fmt";
+              }
             ];
           };
         }

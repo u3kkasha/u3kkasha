@@ -26,6 +26,12 @@ _:
               "Accept": "application/json, text/event-stream"
             }
           },
+          "github": {
+            "httpUrl": "https://api.githubcopilot.com/mcp/",
+            "headers": {
+              "Authorization": "Bearer $GITHUB_TOKEN"
+            }
+          },
           "microsoft learn": {
             "httpUrl": "https://learn.microsoft.com/api/mcp"
           },

@@ -16,7 +16,7 @@ This repository contains a modular NixOS and Home Manager configuration specific
 ## Key Decisions
 
 - **Global Shell Setup**: Common tools and shell configurations are managed at the user level through Home Manager.
-- **Flox Integration**: Added `flox` as a flake input and integrated it into the user environment with dedicated binary cache settings for optimized performance. Support for `direnv` auto-activation via `use flox` has been added to the global `direnvrc`.
+- **Devshell Integration**: Added `devshell` as a flake input and integrated it into the `devShells` output. This provides a rich interactive shell with built-in commands for project maintenance. Support for `direnv` auto-activation via `use flake` ensures seamless environment entry.
 - **Transition to Direnv**: `devenv` has been replaced by `direnv` and `nix-direnv` to provide a more lightweight and standard way to activate developer shells.
 - **Modularity**: Configuration is split into system-level (`modules/`) and user-level (`modules/home/`) modules for better maintainability.
 - **Host-Specific Entry Points**: Introduced a `hosts/` directory to support diverse environments (WSL, NixOS, VM, and standard Linux).
