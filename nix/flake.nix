@@ -122,6 +122,15 @@
         in
         {
           formatting = treefmtConfig.config.build.check self;
+          gitleaks =
+            pkgs.runCommand "gitleaks"
+              {
+                nativeBuildInputs = [ pkgs.gitleaks ];
+              }
+              ''
+                gitleaks detect --source ${self} --verbose --no-git
+                touch $out
+              '';
         }
       );
 
