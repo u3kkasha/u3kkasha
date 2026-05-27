@@ -131,7 +131,6 @@
         in
         {
           aspire-cli = pkgs.callPackage ./pkgs/aspire-cli.nix { };
-          antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli.nix { };
 
           # Maintenance scripts
           apply = pkgs.writeShellApplication {
