@@ -33,7 +33,7 @@ This project uses **Nix Flake Apps** to manage maintenance tasks. This ensures t
 ### Core Tasks
 
 - `nix fmt`: Format the entire repository.
-- `nix flake check`: Check for formatting and linting issues.
+- `nix flake check`: Check for formatting, linting issues, and secret leaks (via gitleaks).
 - `nix run .#apply`: Apply the configuration (rebuild).
 - `nix run .#clean`: Perform garbage collection and cleanup.
 
