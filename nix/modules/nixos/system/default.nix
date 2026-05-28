@@ -55,5 +55,11 @@ in
 
     programs.nix-ld.enable = true;
     nixpkgs.config.allowUnfree = true;
+
+    home-manager = {
+      useGlobalPkgs = true;
+      useUserPackages = true;
+      backupFileExtension = "backup";
+    };
   };
 }

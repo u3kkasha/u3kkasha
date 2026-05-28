@@ -7,5 +7,7 @@
     wsl.enable = true;
   };
 
+  snowfallorg.users.ukasha.home.enable = true;
+
   networking.hostName = "nixos-wsl";
 }
