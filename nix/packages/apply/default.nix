@@ -1,12 +1,11 @@
 {
   pkgs,
   lib,
-  namespace,
   ...
 }:
 
 let
-  inherit (lib.${namespace}) username;
+  inherit (lib.internal) username;
 in
 pkgs.writeShellApplication {
   name = "apply";

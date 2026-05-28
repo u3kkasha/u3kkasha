@@ -2,16 +2,15 @@
   pkgs,
   lib,
   config,
-  namespace,
   ...
 }:
 
 let
-  inherit (lib.${namespace}) username systemStateVersion;
-  cfg = config.${namespace}.system;
+  inherit (lib.internal) username systemStateVersion;
+  cfg = config.internal.system;
 in
 {
-  options.${namespace}.system = {
+  options.internal.system = {
     enable = lib.mkEnableOption "Standard system configuration";
   };
 

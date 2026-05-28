@@ -1,82 +1,97 @@
-{ pkgs, ... }:
-
 {
-  programs.helix = {
-    enable = true;
-    extraPackages = with pkgs; [
-      nil
-      nixfmt
-      bash-language-server
-      pyright
-      vscode-langservers-extracted
-      prettier
-      roslyn-ls
-    ];
-    settings = {
-      editor = {
-        true-color = true;
-        line-number = "relative";
-        cursorline = true;
-        color-modes = true;
-        cursor-shape = {
-          insert = "bar";
-          normal = "block";
-          select = "underline";
-        };
-        indent-guides = {
-          render = true;
-          character = "┊";
-        };
-        lsp = {
-          display-messages = true;
-          display-inlay-hints = true;
-        };
-        soft-wrap = {
-          enable = true;
-        };
-        statusline = {
-          left = [
-            "mode"
-            "spinner"
-            "file-name"
-            "read-only-indicator"
-            "file-modification-indicator"
-          ];
-          right = [
-            "diagnostics"
-            "selections"
-            "position"
-            "file-encoding"
-            "file-line-ending"
-            "file-type"
-          ];
-          mode.normal = "NORMAL";
-          mode.insert = "INSERT";
-          mode.select = "SELECT";
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+
+let
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.internal.helix;
+in
+{
+  options.internal.helix = {
+    enable = mkEnableOption "Helix editor configuration";
+  };
+
+  config = mkIf cfg.enable {
+    programs.helix = {
+      enable = true;
+      extraPackages = with pkgs; [
+        nil
+        nixfmt
+        bash-language-server
+        pyright
+        vscode-langservers-extracted
+        prettier
+        roslyn-ls
+      ];
+      settings = {
+        editor = {
+          true-color = true;
+          line-number = "relative";
+          cursorline = true;
+          color-modes = true;
+          cursor-shape = {
+            insert = "bar";
+            normal = "block";
+            select = "underline";
+          };
+          indent-guides = {
+            render = true;
+            character = "┊";
+          };
+          lsp = {
+            display-messages = true;
+            display-inlay-hints = true;
+          };
+          soft-wrap = {
+            enable = true;
+          };
+          statusline = {
+            left = [
+              "mode"
+              "spinner"
+              "file-name"
+              "read-only-indicator"
+              "file-modification-indicator"
+            ];
+            right = [
+              "diagnostics"
+              "selections"
+              "position"
+              "file-encoding"
+              "file-line-ending"
+              "file-type"
+            ];
+            mode.normal = "NORMAL";
+            mode.insert = "INSERT";
+            mode.select = "SELECT";
+          };
         };
       };
-    };
-    languages = {
-      language = [
-        {
-          name = "json";
-          auto-format = true;
-          formatter = {
-            command = "prettier";
-            args = [
-              "--parser"
-              "json"
-            ];
+      languages = {
+        language = [
+          {
+            name = "json";
+            auto-format = true;
+            formatter = {
+              command = "prettier";
+              args = [
+                "--parser"
+                "json"
+              ];
+            };
+          }
+          {
+            name = "c-sharp";
+            language-servers = [ "roslyn" ];
+          }
+        ];
+        language-server = {
+          roslyn = {
+            command = "Microsoft.CodeAnalysis.LanguageServer";
           };
-        }
-        {
-          name = "c-sharp";
-          language-servers = [ "roslyn" ];
-        }
-      ];
-      language-server = {
-        roslyn = {
-          command = "Microsoft.CodeAnalysis.LanguageServer";
         };
       };
     };

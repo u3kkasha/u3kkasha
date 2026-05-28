@@ -1,45 +1,60 @@
-{ pkgs, ... }:
-
 {
-  programs.bat = {
-    enable = true;
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+
+let
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.internal.utils;
+in
+{
+  options.internal.utils = {
+    enable = mkEnableOption "Common CLI utilities configuration";
   };
 
-  programs.fzf = {
-    enable = true;
-    enableBashIntegration = true;
-  };
+  config = mkIf cfg.enable {
+    programs.bat = {
+      enable = true;
+    };
 
-  programs.zoxide = {
-    enable = true;
-    enableBashIntegration = true;
-    enableNushellIntegration = true;
-  };
+    programs.fzf = {
+      enable = true;
+      enableBashIntegration = true;
+    };
 
-  programs.eza = {
-    enable = true;
-    enableBashIntegration = false;
-    enableNushellIntegration = false;
-    git = true;
-    icons = "auto";
-  };
+    programs.zoxide = {
+      enable = true;
+      enableBashIntegration = true;
+      enableNushellIntegration = true;
+    };
 
-  programs.uv = {
-    enable = true;
-  };
+    programs.eza = {
+      enable = true;
+      enableBashIntegration = false;
+      enableNushellIntegration = false;
+      git = true;
+      icons = "auto";
+    };
 
-  home.packages = with pkgs; [
-    nvd
-    ripgrep
-    fd
-    file
-    jq
-    wl-clipboard
-    nodejs_22
-    gemini-cli
-    mdr
-    dotnet-sdk_10
-    nh
-    doppler
-  ];
+    programs.uv = {
+      enable = true;
+    };
+
+    home.packages = with pkgs; [
+      nvd
+      ripgrep
+      fd
+      file
+      jq
+      wl-clipboard
+      nodejs_22
+      gemini-cli
+      mdr
+      dotnet-sdk_10
+      nh
+      doppler
+    ];
+  };
 }

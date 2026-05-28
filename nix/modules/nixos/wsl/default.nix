@@ -1,16 +1,15 @@
 {
   lib,
   config,
-  namespace,
   ...
 }:
 
 let
-  inherit (lib.${namespace}) username;
-  cfg = config.${namespace}.wsl;
+  inherit (lib.internal) username;
+  cfg = config.internal.wsl;
 in
 {
-  options.${namespace}.wsl = {
+  options.internal.wsl = {
     enable = lib.mkEnableOption "WSL specific configuration";
   };
 

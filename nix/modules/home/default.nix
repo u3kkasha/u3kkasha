@@ -1,12 +1,11 @@
 {
   config,
   lib,
-  namespace,
   ...
 }:
 
 let
-  inherit (lib.${namespace}) username homeStateVersion;
+  inherit (lib.internal) username homeStateVersion;
 in
 {
   imports = [
@@ -22,14 +21,29 @@ in
     ./zellij.nix
   ];
 
+  internal = {
+    bash.enable = lib.mkDefault true;
+    cli.enable = lib.mkDefault true;
+    direnv.enable = lib.mkDefault true;
+    gemini.enable = lib.mkDefault true;
+    git.enable = lib.mkDefault true;
+    helix.enable = lib.mkDefault true;
+    nushell.enable = lib.mkDefault true;
+    utils.enable = lib.mkDefault true;
+    yazi.enable = lib.mkDefault true;
+    zellij.enable = lib.mkDefault true;
+  };
+
   catppuccin.enable = true;
-  catppuccin.flavor = "mocha";
+  catppuccin.flavor = lib.internal.themeFlavor;
 
   home.username = username;
   home.homeDirectory = "/home/${username}";
 
   home.sessionVariables = {
     NH_FLAKE = "${config.home.homeDirectory}/.dotfiles/nix";
+    EDITOR = lib.internal.defaultEditor;
+    VISUAL = lib.internal.defaultEditor;
   };
 
   programs.nix-index.enable = true;

@@ -2,15 +2,14 @@
   pkgs,
   lib,
   config,
-  namespace,
   ...
 }:
 
 let
-  cfg = config.${namespace}.podman;
+  cfg = config.internal.podman;
 in
 {
-  options.${namespace}.podman = {
+  options.internal.podman = {
     enable = lib.mkEnableOption "Podman container management";
   };
 
