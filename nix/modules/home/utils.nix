@@ -1,8 +1,5 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
-let
-  aspire-cli = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.aspire-cli;
-in
 {
   programs.bat = {
     enable = true;
@@ -43,7 +40,6 @@ in
     mdr
     dotnet-sdk_10
     nh
-    aspire-cli
     doppler
   ];
 }

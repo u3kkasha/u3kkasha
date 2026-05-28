@@ -9,6 +9,19 @@ let
   inherit (lib.${namespace}) username homeStateVersion;
 in
 {
+  imports = [
+    ./bash.nix
+    ./cli.nix
+    ./direnv.nix
+    ./gemini.nix
+    ./git.nix
+    ./helix.nix
+    ./nushell.nix
+    ./utils.nix
+    ./yazi.nix
+    ./zellij.nix
+  ];
+
   catppuccin.enable = true;
   catppuccin.flavor = "mocha";
 

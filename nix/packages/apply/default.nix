@@ -1,4 +1,9 @@
-{ pkgs, lib, namespace, ... }:
+{
+  pkgs,
+  lib,
+  namespace,
+  ...
+}:
 
 let
   inherit (lib.${namespace}) username;
