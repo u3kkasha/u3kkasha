@@ -5,6 +5,10 @@
     ./hardware-configuration.nix
   ];
 
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.grub.enable = false;
+
   ${namespace} = {
     system.enable = true;
     podman.enable = true;
