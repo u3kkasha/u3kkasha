@@ -19,6 +19,11 @@
     stylix.inputs.nixpkgs.follows = "nixpkgs";
     devshell.url = "github:numtide/devshell";
     devshell.inputs.nixpkgs.follows = "nixpkgs";
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
   nixConfig = {
@@ -58,6 +63,7 @@
       homes.modules = [
         inputs.stylix.homeModules.stylix
         inputs.nix-index-database.homeModules.nix-index
+        inputs.plasma-manager.homeModules.plasma-manager
       ];
 
       outputs-builder =

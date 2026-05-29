@@ -36,6 +36,9 @@ in
 
     system.stateVersion = systemStateVersion;
 
+    time.timeZone = "Asia/Dhaka";
+    i18n.defaultLocale = "en_GB.UTF-8";
+
     environment.systemPackages = with pkgs; [
       nushell
       git # Explicitly ensure git is available at system level too
@@ -54,6 +57,8 @@ in
 
     programs.nix-ld.enable = true;
     nixpkgs.config.allowUnfree = true;
+
+    networking.networkmanager.enable = true;
 
     home-manager = {
       useGlobalPkgs = true;

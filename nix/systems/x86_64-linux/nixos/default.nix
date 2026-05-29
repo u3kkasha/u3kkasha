@@ -11,6 +11,7 @@
 
   ${namespace} = {
     system.enable = true;
+    desktop.enable = true;
     podman.enable = true;
   };
 

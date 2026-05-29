@@ -55,6 +55,8 @@ in
       dotnet-sdk_10
       nh
       doppler
+      ghostty
+      firefox
     ];
   };
 }
