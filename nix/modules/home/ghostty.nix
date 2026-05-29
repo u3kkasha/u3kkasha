@@ -18,17 +18,16 @@ in
       enable = true;
       enableBashIntegration = config.internal.bash.enable;
       settings = {
-        theme = "catppuccin-${lib.internal.themeFlavor}";
         font-family = "JetBrainsMono Nerd Font";
-        font-size = 12;
+        font-size = 16;
         window-padding-x = 8;
         window-padding-y = 8;
-        window-background-opacity = 0.9;
-        window-background-blur = true;
+        background-opacity = 0.9;
+        background-blur = true;
         confirm-close-surface = false;
         mouse-hide-while-typing = true;
         cursor-style = "block";
-        cursor-blink = true;
+        cursor-style-blink = true;
         shell-integration-features = "no-cursor";
       };
     };
