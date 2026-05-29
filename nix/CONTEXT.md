@@ -10,7 +10,7 @@ This repository contains a modular NixOS and Home Manager configuration specific
 - **Home Manager**: Integrated as a NixOS module, configured via `home-manager.nix`.
 - **Shells**: Supports Bash and Nushell with proper integrations for all tools.
 - **Environment Management**: Moved from `devenv` to `direnv` with `nix-direnv` for seamless project-specific developer environments.
-- **Maintenance**: Maintenance tasks are centralized as native Nix Flake Apps (e.g., `nix run .#apply`). This ensures that tools like `nh` are available hermetically and removes the need for an external task runner like `go-task`.
+- **Maintenance**: Maintenance tasks are centralized using `nh` (nix-helper), providing standardized commands for rebuilding the system/home configuration and performing garbage collection. This removes the need for custom wrapper scripts.
 - **Binary Caching**: Cachix is integrated into CI (GitHub Actions) to speed up build verification. Local builds do not push to the cache to keep the environment lean.
 
 ## Key Decisions
