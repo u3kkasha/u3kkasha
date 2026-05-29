@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   imports = [
     ./desktop/default.nix
     ./podman/default.nix

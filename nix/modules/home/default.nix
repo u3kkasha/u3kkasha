@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -18,7 +17,6 @@ in
     ./git.nix
     ./helix.nix
     ./nushell.nix
-    ./plasma.nix
     ./utils.nix
     ./yazi.nix
     ./zellij.nix
@@ -33,39 +31,9 @@ in
     git.enable = lib.mkDefault true;
     helix.enable = lib.mkDefault true;
     nushell.enable = lib.mkDefault true;
-    plasma.enable = lib.mkDefault true;
     utils.enable = lib.mkDefault true;
     yazi.enable = lib.mkDefault true;
     zellij.enable = lib.mkDefault true;
-  };
-
-  stylix.enable = true;
-  stylix.image = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/orangci/walls-catppuccin-mocha/master/space.png";
-    sha256 = "1bnyvwgic8j830034rn1lwdky9fmz0y9k01iv5jnkpskfi0w7vci";
-  };
-  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-${lib.internal.themeFlavor}.yaml";
-  stylix.polarity = "dark";
-
-  stylix.fonts = {
-    monospace = {
-      package = pkgs.nerd-fonts.jetbrains-mono;
-      name = "JetBrainsMono Nerd Font";
-    };
-    sansSerif = {
-      package = pkgs.dejavu_fonts;
-      name = "DejaVu Sans";
-    };
-    serif = {
-      package = pkgs.dejavu_fonts;
-      name = "DejaVu Serif";
-    };
-    sizes = {
-      applications = 16;
-      terminal = 16;
-      desktop = 15;
-      popups = 15;
-    };
   };
 
   dconf.settings = lib.mkForce { };
@@ -80,7 +48,6 @@ in
   };
 
   programs.nix-index.enable = true;
-  programs.nix-index-database.comma.enable = true;
 
   home.stateVersion = homeStateVersion;
 }

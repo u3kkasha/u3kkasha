@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository contains a modular NixOS and Home Manager configuration specifically tailored for a WSL environment.
+This repository contains a modular NixOS and Home Manager configuration specifically tailored for a WSL environment, now powered by `flake-parts`.
 
 ## Current State
 

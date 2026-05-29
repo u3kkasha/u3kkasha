@@ -1,5 +1,3 @@
-_:
-
 {
   username = "ukasha";
   name = "Fida Waseque Choudhury";
