@@ -20,44 +20,16 @@ The configuration is modularized into logical units for both system-level and us
 
 ## Maintenance Workflows
 
-This project uses **Nix Flake Apps** to centralize maintenance tasks, ensuring they are hermetic and don't require external task runners.
+This project uses `nh` (nix-helper) for maintenance tasks. Enter the development shell (`nix develop`) to access these commands.
 
-| Command           | Description                                                                            |
-| ----------------- | -------------------------------------------------------------------------------------- |
-| `nix run .#apply` | **Apply**: Formats code, detects the host, and rebuilds the system/home configuration. |
-| `nix run .#clean` | **Clean**: Performs garbage collection and removes old Nix generations.                |
-| `nix fmt`         | **Format**: Formats the entire repository using `treefmt`.                             |
-| `nix flake check` | **Check**: Verifies formatting and flake integrity.                                    |
+| Command           | Description                                       |
+| ----------------- | ------------------------------------------------- |
+| `nh os switch .`  | **Apply**: Rebuilds the system configuration.     |
+| `nh home switch .`| **Apply**: Rebuilds the Home Manager configuration.|
+| `nh clean all`    | **Clean**: Garbage collects old generations.      |
+| `nix fmt`         | **Format**: Formats the repository.               |
+| `nix flake check` | **Check**: Verifies configuration integrity.      |
+
+See [AGENTS.md](AGENTS.md) for full details on the workflow.
 
 ## CI & Binary Caching
-
-- **GitHub Actions**: Automated verification and flake updates.
-- **Cachix**: Binary caching via the `u3kkasha` cache to speed up builds and CI verification.
-
-## Setup & Application
-
-To apply the configuration manually (e.g., for initial setup):
-
-### WSL
-
-```bash
-sudo nixos-rebuild switch --flake .#nixos-wsl
-```
-
-### Bare-metal NixOS
-
-```bash
-sudo nixos-rebuild switch --flake .#nixos
-```
-
-### Standalone Linux
-
-```bash
-home-manager switch --flake .#ukasha@linux
-```
-
-Once installed, use the flake app for daily updates:
-
-```bash
-nix run .#apply
-```
