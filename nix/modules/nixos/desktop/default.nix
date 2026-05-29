@@ -5,7 +5,6 @@
 }:
 
 let
-  inherit (lib.internal) username;
   cfg = config.internal.desktop;
 in
 {
