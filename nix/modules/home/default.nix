@@ -61,10 +61,10 @@ in
       name = "DejaVu Serif";
     };
     sizes = {
-      applications = 12;
-      terminal = 12;
-      desktop = 11;
-      popups = 11;
+      applications = 16;
+      terminal = 16;
+      desktop = 15;
+      popups = 15;
     };
   };
 
