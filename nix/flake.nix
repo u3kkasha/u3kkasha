@@ -3,10 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
@@ -19,11 +15,7 @@
     stylix.inputs.nixpkgs.follows = "nixpkgs";
     devshell.url = "github:numtide/devshell";
     devshell.inputs.nixpkgs.follows = "nixpkgs";
-    plasma-manager = {
-      url = "github:nix-community/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
   nixConfig = {
@@ -39,44 +31,52 @@
 
   outputs =
     inputs:
-    inputs.snowfall-lib.mkFlake {
-      inherit inputs;
-      src = ./.;
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
 
-      snowfall = {
-        namespace = "internal";
+      flake = {
+        nixosConfigurations = {
+          nixos = inputs.nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = {
+              namespace = "internal";
+              lib = inputs.nixpkgs.lib.extend (
+                _final: _prev: {
+                  internal = import ./lib/constants/default.nix;
+                }
+              );
+            };
+            modules = [
+              ./systems/x86_64-linux/nixos/default.nix
+              ./modules/nixos/default.nix
+              inputs.nixos-wsl.nixosModules.default
+              inputs.home-manager.nixosModules.home-manager
+              inputs.nix-index-database.nixosModules.nix-index
+              inputs.stylix.nixosModules.stylix
+            ];
+          };
+        };
       };
 
-      channels-config = {
-        allowUnfree = true;
-      };
-
-      overlays = [
-        inputs.devshell.overlays.default
-      ];
-
-      systems.modules.nixos = [
-        inputs.nixos-wsl.nixosModules.default
-        inputs.home-manager.nixosModules.home-manager
-      ];
-
-      homes.modules = [
-        inputs.stylix.homeModules.stylix
-        inputs.nix-index-database.homeModules.nix-index
-        inputs.plasma-manager.homeModules.plasma-manager
-      ];
-
-      outputs-builder =
-        channels:
+      perSystem =
+        { pkgs, ... }:
         let
-          pkgs = channels.nixpkgs;
-          treefmtConfig = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+          treefmt = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
         in
         {
-          formatter = treefmtConfig.config.build.wrapper;
+          formatter = treefmt.config.build.wrapper;
+
+          devShells.default = inputs.devshell.legacyPackages.${pkgs.system}.mkShell {
+            name = "nix-config";
+            packages = [
+              pkgs.nh
+              pkgs.nvd
+              pkgs.gitleaks
+            ];
+          };
 
           checks = {
-            formatting = treefmtConfig.config.build.check inputs.self;
+            formatting = treefmt.config.build.check inputs.self;
             gitleaks =
               pkgs.runCommand "gitleaks"
                 {
