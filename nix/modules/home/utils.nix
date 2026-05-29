@@ -43,6 +43,7 @@ in
     };
 
     home.packages = with pkgs; [
+      nixd
       nvd
       ripgrep
       fd
@@ -55,7 +56,6 @@ in
       dotnet-sdk_10
       nh
       doppler
-      ghostty
       firefox
     ];
   };

@@ -24,6 +24,8 @@ in
         iconTheme = "Papirus-Dark";
       };
 
+      configFile.kdeglobals.General.terminalApplication = "ghostty";
+
       hotkeys.commands."launch-ghostty" = {
         name = "Launch Ghostty";
         key = "Meta+Return";

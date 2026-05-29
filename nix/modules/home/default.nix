@@ -14,6 +14,7 @@ in
     ./cli.nix
     ./direnv.nix
     ./gemini.nix
+    ./ghostty.nix
     ./git.nix
     ./helix.nix
     ./nushell.nix
@@ -28,6 +29,7 @@ in
     cli.enable = lib.mkDefault true;
     direnv.enable = lib.mkDefault true;
     gemini.enable = lib.mkDefault true;
+    ghostty.enable = lib.mkDefault true;
     git.enable = lib.mkDefault true;
     helix.enable = lib.mkDefault true;
     nushell.enable = lib.mkDefault true;
@@ -44,6 +46,27 @@ in
   };
   stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-${lib.internal.themeFlavor}.yaml";
   stylix.polarity = "dark";
+
+  stylix.fonts = {
+    monospace = {
+      package = pkgs.nerd-fonts.jetbrains-mono;
+      name = "JetBrainsMono Nerd Font";
+    };
+    sansSerif = {
+      package = pkgs.dejavu_fonts;
+      name = "DejaVu Sans";
+    };
+    serif = {
+      package = pkgs.dejavu_fonts;
+      name = "DejaVu Serif";
+    };
+    sizes = {
+      applications = 12;
+      terminal = 12;
+      desktop = 11;
+      popups = 11;
+    };
+  };
 
   dconf.settings = lib.mkForce { };
 
