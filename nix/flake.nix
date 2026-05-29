@@ -15,8 +15,8 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
-    catppuccin.url = "github:catppuccin/nix";
-    catppuccin.inputs.nixpkgs.follows = "nixpkgs";
+    stylix.url = "github:nix-community/stylix";
+    stylix.inputs.nixpkgs.follows = "nixpkgs";
     devshell.url = "github:numtide/devshell";
     devshell.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -56,7 +56,7 @@
       ];
 
       homes.modules = [
-        inputs.catppuccin.homeModules.catppuccin
+        inputs.stylix.homeModules.stylix
         inputs.nix-index-database.homeModules.nix-index
       ];
 

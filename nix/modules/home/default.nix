@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -34,8 +35,15 @@ in
     zellij.enable = lib.mkDefault true;
   };
 
-  catppuccin.enable = true;
-  catppuccin.flavor = lib.internal.themeFlavor;
+  stylix.enable = true;
+  stylix.image = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/orangci/walls-catppuccin-mocha/master/space.png";
+    sha256 = "1bnyvwgic8j830034rn1lwdky9fmz0y9k01iv5jnkpskfi0w7vci";
+  };
+  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-${lib.internal.themeFlavor}.yaml";
+  stylix.polarity = "dark";
+
+  dconf.settings = lib.mkForce { };
 
   home.username = username;
   home.homeDirectory = "/home/${username}";
