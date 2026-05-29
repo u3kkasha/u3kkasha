@@ -27,36 +27,15 @@ This project uses a modular NixOS configuration based on Flakes, `flake-parts`, 
 
 ## Workflow Commands
 
-This project uses **Nix Flake Apps** to manage maintenance tasks. This ensures tasks are hermetic and don't require external task runners to be installed globally.
+This project uses `nh` (nix-helper) for maintenance tasks. Enter the development shell (`nix develop`) to access these commands.
 
-### Core Tasks
+### Configuration Maintenance
 
+- `nh os switch .`: Apply NixOS system configuration.
+- `nh home switch .`: Apply Home Manager configuration.
+- `nh clean all`: Perform garbage collection and cleanup of old generations.
 - `nix fmt`: Format the entire repository.
-- `nix flake check`: Check for formatting, linting issues, and secret leaks (via gitleaks).
-- `nix run .#apply`: Apply the configuration (rebuild).
-- `nix run .#clean`: Perform garbage collection and cleanup.
-
-### Legacy Commands (Manual)
-
-To apply the configuration manually:
-
-#### WSL
-
-```bash
-sudo nixos-rebuild switch --flake .#nixos-wsl
-```
-
-#### Bare-metal NixOS
-
-```bash
-sudo nixos-rebuild switch --flake .#nixos
-```
-
-#### Standalone Linux (e.g. Kali)
-
-```bash
-home-manager switch --flake .#ukasha@linux
-```
+- `nix flake check`: Check for formatting, linting issues, and secret leaks.
 
 ## Code Style
 
