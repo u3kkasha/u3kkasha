@@ -14,14 +14,45 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Disable stylix for plasma to avoid conflicts with plasma-manager
+    stylix.targets.kde.enable = false;
+
     programs.plasma = {
       enable = true;
+
+      fonts = {
+        general = {
+          family = "DejaVu Sans";
+          pointSize = 16;
+        };
+        fixedWidth = {
+          family = "JetBrainsMono Nerd Font";
+          pointSize = 16;
+        };
+        small = {
+          family = "DejaVu Sans";
+          pointSize = 12;
+        };
+        toolbar = {
+          family = "DejaVu Sans";
+          pointSize = 16;
+        };
+        menu = {
+          family = "DejaVu Sans";
+          pointSize = 16;
+        };
+        windowTitle = {
+          family = "DejaVu Sans";
+          pointSize = 16;
+        };
+      };
 
       workspace = {
         clickItemTo = "select"; # Double click to open
         lookAndFeel = "org.kde.breezedark.desktop";
         cursor.theme = "Bibata-Modern-Ice";
         iconTheme = "Papirus-Dark";
+        wallpaper = config.stylix.image;
       };
 
       configFile.kdeglobals.General.terminalApplication = "ghostty";
