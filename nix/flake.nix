@@ -16,6 +16,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     plasma-manager.url = "github:nix-community/plasma-manager";
     plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
+    catppuccin.url = "github:catppuccin/nix";
   };
 
   nixConfig = {
@@ -37,7 +38,6 @@
       flake = {
         nixosConfigurations = {
           nixos = inputs.nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
             specialArgs = {
               namespace = "internal";
               lib = inputs.nixpkgs.lib.extend (
@@ -55,12 +55,12 @@
               {
                 home-manager.sharedModules = [
                   inputs.plasma-manager.homeModules.plasma-manager
+                  inputs.catppuccin.homeModules.catppuccin
                 ];
               }
             ];
           };
         };
-
         homeConfigurations = {
           "${(import ./lib/constants/default.nix).username}@nixos" =
             inputs.home-manager.lib.homeManagerConfiguration
@@ -78,6 +78,7 @@
                   ./modules/home/default.nix
                   inputs.plasma-manager.homeModules.plasma-manager
                   inputs.nix-index-database.hmModules.nix-index
+                  inputs.catppuccin.homeModules.catppuccin
                 ];
               };
         };
@@ -91,8 +92,9 @@
         {
           formatter = treefmt.config.build.wrapper;
 
-          devShells.default = inputs.devshell.legacyPackages.${pkgs.system}.mkShell {
+          devShells.default = inputs.devshell.legacyPackages.${pkgs.stdenv.hostPlatform.system}.mkShell {
             name = "nix-config";
+            motd = "";
             packages = [
               pkgs.nh
               pkgs.nvd

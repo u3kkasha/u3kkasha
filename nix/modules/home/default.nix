@@ -52,4 +52,9 @@ in
   programs.nix-index.enable = true;
 
   home.stateVersion = homeStateVersion;
+
+  catppuccin = {
+    enable = true;
+    flavor = "mocha";
+  };
 }
