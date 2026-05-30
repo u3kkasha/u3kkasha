@@ -44,6 +44,3 @@ jobs:
 
       - name: Flake Check & Formatting
         run: nix flake check ./nix
-
-      - name: Build NixOS (Dry Run)
-        run: nix build ./nix#nixosConfigurations.nixos.config.system.build.toplevel --dry-run

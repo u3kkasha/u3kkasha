@@ -9,7 +9,7 @@ This project uses a modular NixOS configuration based on Flakes, `flake-parts`, 
 ### Structure
 
 - `flake.nix`: Entry point for the Nix configuration, structured with `flake-parts`.
-- `hosts/`: Host-specific configurations (WSL, NixOS, VM, Linux).
+- `systems/`: Host-specific configurations (WSL, NixOS, VM, Linux).
 - `modules/`: Shared system-level modules, imported hierarchically (`dendritic` pattern).
 - `modules/home/`: Shared user-level Home Manager modules.
 - `pkgs/`: Custom package definitions.

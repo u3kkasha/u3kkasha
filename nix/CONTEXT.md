@@ -19,7 +19,7 @@ This repository contains a modular NixOS and Home Manager configuration specific
 - **Devshell Integration**: Added `devshell` as a flake input and integrated it into the `devShells` output. This provides a rich interactive shell with built-in commands for project maintenance. Support for `direnv` auto-activation via `use flake` ensures seamless environment entry.
 - **Transition to Direnv**: `devenv` has been replaced by `direnv` and `nix-direnv` to provide a more lightweight and standard way to activate developer shells.
 - **Modularity**: Configuration is split into system-level (`modules/`) and user-level (`modules/home/`) modules for better maintainability.
-- **Host-Specific Entry Points**: Introduced a `hosts/` directory to support diverse environments (WSL, NixOS, VM, and standard Linux).
+- Host-Specific Entry Points: Introduced a `systems/` directory to support diverse environments (WSL, NixOS, VM, and standard Linux).
 - **Nushell Functions**: Multi-step maintenance commands in Nushell are defined as `def` functions instead of aliases to prevent accidental execution during shell initialization.
 - **WSL Path Isolation**: Windows paths are explicitly excluded from the Linux `PATH` to ensure environment isolation and prevent Windows binaries from shadowing Nix-installed tools.
 - **CI-only Cachix**: Cachix is only configured for the GitHub Actions pipeline to optimize CI minutes without adding local system overhead.

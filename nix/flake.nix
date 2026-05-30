@@ -35,101 +35,72 @@
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
 
-      flake = {
-        nixosConfigurations = {
-          nixos = inputs.nixpkgs.lib.nixosSystem {
-            specialArgs = {
-              namespace = "internal";
-              lib = inputs.nixpkgs.lib.extend (
-                _final: _prev: {
-                  internal = import ./lib/constants/default.nix;
-                  inherit (inputs.home-manager.lib) hm;
-                }
-              );
-            };
-            modules = [
-              ./systems/x86_64-linux/nixos/default.nix
-              ./modules/nixos/default.nix
-              inputs.nixos-wsl.nixosModules.default
-              inputs.home-manager.nixosModules.home-manager
-              inputs.nix-index-database.nixosModules.nix-index
-              {
-                home-manager.sharedModules = [
-                  inputs.plasma-manager.homeModules.plasma-manager
-                  inputs.catppuccin.homeModules.catppuccin
-                ];
-              }
-            ];
+      flake =
+        let
+          internalLib = import ./lib/internal/default.nix;
+          extendedLib = inputs.nixpkgs.lib.extend (
+            _final: _prev: {
+              internal = internalLib;
+              inherit (inputs.home-manager.lib) hm;
+            }
+          );
+
+          specialArgs = {
+            inherit (inputs) self;
+            inherit inputs;
+            namespace = "internal";
+            lib = extendedLib;
           };
-          nixos-wsl = inputs.nixpkgs.lib.nixosSystem {
-            specialArgs = {
-              namespace = "internal";
-              lib = inputs.nixpkgs.lib.extend (
-                _final: _prev: {
-                  internal = import ./lib/constants/default.nix;
-                  inherit (inputs.home-manager.lib) hm;
-                }
-              );
+
+          sharedNixosModules = [
+            ./modules/nixos/default.nix
+            inputs.nixos-wsl.nixosModules.default
+            inputs.home-manager.nixosModules.home-manager
+            inputs.nix-index-database.nixosModules.nix-index
+            {
+              home-manager.sharedModules = [
+                inputs.plasma-manager.homeModules.plasma-manager
+                inputs.catppuccin.homeModules.catppuccin
+              ];
+            }
+          ];
+        in
+        {
+          nixosConfigurations = {
+            nixos = inputs.nixpkgs.lib.nixosSystem {
+              inherit specialArgs;
+              modules = sharedNixosModules ++ [ ./systems/x86_64-linux/nixos/default.nix ];
             };
-            modules = [
-              ./systems/x86_64-linux/nixos-wsl/default.nix
-              ./modules/nixos/default.nix
-              inputs.nixos-wsl.nixosModules.default
-              inputs.home-manager.nixosModules.home-manager
-              inputs.nix-index-database.nixosModules.nix-index
-              {
-                home-manager.sharedModules = [
-                  inputs.plasma-manager.homeModules.plasma-manager
-                  inputs.catppuccin.homeModules.catppuccin
-                ];
-              }
-            ];
+            nixos-wsl = inputs.nixpkgs.lib.nixosSystem {
+              inherit specialArgs;
+              modules = sharedNixosModules ++ [ ./systems/x86_64-linux/nixos-wsl/default.nix ];
+            };
+          };
+
+          homeConfigurations = {
+            "${internalLib.username}@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
+              pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+              extraSpecialArgs = specialArgs;
+              modules = [
+                ./modules/home/default.nix
+                inputs.plasma-manager.homeModules.plasma-manager
+                inputs.nix-index-database.homeModules.nix-index
+                inputs.catppuccin.homeModules.catppuccin
+              ];
+            };
+            "${internalLib.username}@nixos-wsl" = inputs.home-manager.lib.homeManagerConfiguration {
+              pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+              extraSpecialArgs = specialArgs;
+              modules = [
+                ./modules/home/default.nix
+                inputs.plasma-manager.homeModules.plasma-manager
+                inputs.nix-index-database.homeModules.nix-index
+                inputs.catppuccin.homeModules.catppuccin
+                { internal.gui.enable = false; }
+              ];
+            };
           };
         };
-        homeConfigurations = {
-          "${(import ./lib/constants/default.nix).username}@nixos" =
-            inputs.home-manager.lib.homeManagerConfiguration
-              {
-                pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-                extraSpecialArgs = {
-                  inherit inputs;
-                  lib = inputs.nixpkgs.lib.extend (
-                    _final: _prev: {
-                      internal = import ./lib/constants/default.nix;
-                      inherit (inputs.home-manager.lib) hm;
-                    }
-                  );
-                };
-                modules = [
-                  ./modules/home/default.nix
-                  inputs.plasma-manager.homeModules.plasma-manager
-                  inputs.nix-index-database.homeModules.nix-index
-                  inputs.catppuccin.homeModules.catppuccin
-                ];
-              };
-          "${(import ./lib/constants/default.nix).username}@nixos-wsl" =
-            inputs.home-manager.lib.homeManagerConfiguration
-              {
-                pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-                extraSpecialArgs = {
-                  inherit inputs;
-                  lib = inputs.nixpkgs.lib.extend (
-                    _final: _prev: {
-                      internal = import ./lib/constants/default.nix;
-                      inherit (inputs.home-manager.lib) hm;
-                    }
-                  );
-                };
-                modules = [
-                  ./modules/home/default.nix
-                  inputs.plasma-manager.homeModules.plasma-manager
-                  inputs.nix-index-database.homeModules.nix-index
-                  inputs.catppuccin.homeModules.catppuccin
-                  { internal.gui.enable = false; }
-                ];
-              };
-        };
-      };
 
       perSystem =
         { pkgs, ... }:
@@ -149,6 +120,13 @@
             ];
           };
 
+          packages = {
+            nixos-build = inputs.self.nixosConfigurations.nixos.config.system.build.toplevel;
+            nixos-wsl-build = inputs.self.nixosConfigurations.nixos-wsl.config.system.build.toplevel;
+            home-build = inputs.self.homeConfigurations."ukasha@nixos".activationPackage;
+            home-wsl-build = inputs.self.homeConfigurations."ukasha@nixos-wsl".activationPackage;
+          };
+
           checks = {
             formatting = treefmt.config.build.check inputs.self;
             gitleaks =
@@ -160,10 +138,6 @@
                   gitleaks detect --source ${inputs.self} --verbose --no-git
                   touch $out
                 '';
-            nixos-build = inputs.self.nixosConfigurations.nixos.config.system.build.toplevel;
-            nixos-wsl-build = inputs.self.nixosConfigurations.nixos-wsl.config.system.build.toplevel;
-            home-build = inputs.self.homeConfigurations."ukasha@nixos".activationPackage;
-            home-wsl-build = inputs.self.homeConfigurations."ukasha@nixos-wsl".activationPackage;
           };
         };
     };
