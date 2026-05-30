@@ -43,6 +43,7 @@
               lib = inputs.nixpkgs.lib.extend (
                 _final: _prev: {
                   internal = import ./lib/constants/default.nix;
+                  hm = inputs.home-manager.lib.hm;
                 }
               );
             };
@@ -71,13 +72,14 @@
                   lib = inputs.nixpkgs.lib.extend (
                     _final: _prev: {
                       internal = import ./lib/constants/default.nix;
+                      hm = inputs.home-manager.lib.hm;
                     }
                   );
                 };
                 modules = [
                   ./modules/home/default.nix
                   inputs.plasma-manager.homeModules.plasma-manager
-                  inputs.nix-index-database.hmModules.nix-index
+                  inputs.nix-index-database.homeModules.nix-index
                   inputs.catppuccin.homeModules.catppuccin
                 ];
               };
@@ -113,6 +115,8 @@
                   gitleaks detect --source ${inputs.self} --verbose --no-git
                   touch $out
                 '';
+            nixos-build = inputs.self.nixosConfigurations.nixos.config.system.build.toplevel;
+            home-build = inputs.self.homeConfigurations."ukasha@nixos".activationPackage;
           };
         };
     };
