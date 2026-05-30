@@ -62,22 +62,24 @@
         };
 
         homeConfigurations = {
-          "${(import ./lib/constants/default.nix).username}@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
-            pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-            extraSpecialArgs = {
-              inputs = inputs;
-              lib = inputs.nixpkgs.lib.extend (
-                _final: _prev: {
-                  internal = import ./lib/constants/default.nix;
-                }
-              );
-            };
-            modules = [
-              ./modules/home/default.nix
-              inputs.plasma-manager.homeModules.plasma-manager
-              inputs.nix-index-database.hmModules.nix-index
-            ];
-          };
+          "${(import ./lib/constants/default.nix).username}@nixos" =
+            inputs.home-manager.lib.homeManagerConfiguration
+              {
+                pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+                extraSpecialArgs = {
+                  inherit inputs;
+                  lib = inputs.nixpkgs.lib.extend (
+                    _final: _prev: {
+                      internal = import ./lib/constants/default.nix;
+                    }
+                  );
+                };
+                modules = [
+                  ./modules/home/default.nix
+                  inputs.plasma-manager.homeModules.plasma-manager
+                  inputs.nix-index-database.hmModules.nix-index
+                ];
+              };
         };
       };
 
