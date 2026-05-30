@@ -43,4 +43,5 @@ This project uses `nh` (nix-helper) for maintenance tasks. Enter the development
 - Modularize configuration into logical units under `nix/modules`.
 - Use `home-manager` for user-level configuration.
 - Follow the existing commit message style: `type(scope): description`.
+- **Gitmoji**: Use Gitmojis to signify the intent of changes (e.g., ✨ for features, 🔧 for fixes). Avoid using emojis involving humans or animals to maintain a clean and professional look.
 - **Nushell Multi-command logic**: Prefer `def` functions over `alias` for multi-step commands to avoid immediate execution on shell startup.

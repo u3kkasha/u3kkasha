@@ -65,7 +65,8 @@ in
       enable = true;
       settings = {
         gui = {
-          showIcons = true;
+          nerdFontsVersion = "3";
+          parseEmoji = true;
           sidePanelWidth = 0.3333;
           mainPanelSplitMode = "horizontal";
         };
