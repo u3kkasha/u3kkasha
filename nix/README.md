@@ -22,13 +22,13 @@ The configuration is modularized into logical units for both system-level and us
 
 This project uses `nh` (nix-helper) for maintenance tasks. Enter the development shell (`nix develop`) to access these commands.
 
-| Command           | Description                                       |
-| ----------------- | ------------------------------------------------- |
-| `nh os switch .`  | **Apply**: Rebuilds the system configuration.     |
-| `nh home switch .`| **Apply**: Rebuilds the Home Manager configuration.|
-| `nh clean all`    | **Clean**: Garbage collects old generations.      |
-| `nix fmt`         | **Format**: Formats the repository.               |
-| `nix flake check` | **Check**: Verifies configuration integrity.      |
+| Command            | Description                                         |
+| ------------------ | --------------------------------------------------- |
+| `nh os switch .`   | **Apply**: Rebuilds the system configuration.       |
+| `nh home switch .` | **Apply**: Rebuilds the Home Manager configuration. |
+| `nh clean all`     | **Clean**: Garbage collects old generations.        |
+| `nix fmt`          | **Format**: Formats the repository.                 |
+| `nix flake check`  | **Check**: Verifies configuration integrity.        |
 
 See [AGENTS.md](AGENTS.md) for full details on the workflow.
 
