@@ -42,21 +42,25 @@ in
       enable = true;
     };
 
-    home.packages = with pkgs; [
-      nixd
-      nvd
-      ripgrep
-      fd
-      file
-      jq
-      wl-clipboard
-      nodejs_22
-      gemini-cli
-      mdr
-      dotnet-sdk_10
-      nh
-      doppler
-      firefox
-    ];
+    home.packages =
+      with pkgs;
+      [
+        nixd
+        nvd
+        ripgrep
+        fd
+        file
+        jq
+        nodejs_22
+        gemini-cli
+        mdr
+        dotnet-sdk_10
+        nh
+        doppler
+      ]
+      ++ lib.optionals config.internal.gui.enable [
+        wl-clipboard
+        firefox
+      ];
   };
 }

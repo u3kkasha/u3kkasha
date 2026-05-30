@@ -23,38 +23,48 @@ in
     ./zellij.nix
   ];
 
-  internal = {
-    bash.enable = lib.mkDefault true;
-    cli.enable = lib.mkDefault true;
-    direnv.enable = lib.mkDefault true;
-    gemini.enable = lib.mkDefault true;
-    ghostty.enable = lib.mkDefault true;
-    git.enable = lib.mkDefault true;
-    helix.enable = lib.mkDefault true;
-    nushell.enable = lib.mkDefault true;
-    plasma.enable = lib.mkDefault true;
-    utils.enable = lib.mkDefault true;
-    yazi.enable = lib.mkDefault true;
-    zellij.enable = lib.mkDefault true;
+  options.internal.gui = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to enable GUI-related configurations.";
+    };
   };
 
-  dconf.settings = lib.mkForce { };
+  config = {
+    internal = {
+      bash.enable = lib.mkDefault true;
+      cli.enable = lib.mkDefault true;
+      direnv.enable = lib.mkDefault true;
+      gemini.enable = lib.mkDefault true;
+      ghostty.enable = lib.mkDefault config.internal.gui.enable;
+      git.enable = lib.mkDefault true;
+      helix.enable = lib.mkDefault true;
+      nushell.enable = lib.mkDefault true;
+      plasma.enable = lib.mkDefault config.internal.gui.enable;
+      utils.enable = lib.mkDefault true;
+      yazi.enable = lib.mkDefault true;
+      zellij.enable = lib.mkDefault true;
+    };
 
-  home.username = username;
-  home.homeDirectory = "/home/${username}";
+    dconf.settings = lib.mkForce { };
 
-  home.sessionVariables = {
-    NH_FLAKE = "${config.home.homeDirectory}/.dotfiles/nix";
-    EDITOR = lib.internal.defaultEditor;
-    VISUAL = lib.internal.defaultEditor;
-  };
+    home.username = username;
+    home.homeDirectory = "/home/${username}";
 
-  programs.nix-index.enable = true;
+    home.sessionVariables = {
+      NH_FLAKE = "${config.home.homeDirectory}/.dotfiles/nix";
+      EDITOR = lib.internal.defaultEditor;
+      VISUAL = lib.internal.defaultEditor;
+    };
 
-  home.stateVersion = homeStateVersion;
+    programs.nix-index.enable = true;
 
-  catppuccin = {
-    enable = true;
-    flavor = "mocha";
+    home.stateVersion = homeStateVersion;
+
+    catppuccin = {
+      enable = true;
+      flavor = "mocha";
+    };
   };
 }
