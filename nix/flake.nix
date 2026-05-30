@@ -161,7 +161,9 @@
                   touch $out
                 '';
             nixos-build = inputs.self.nixosConfigurations.nixos.config.system.build.toplevel;
+            nixos-wsl-build = inputs.self.nixosConfigurations.nixos-wsl.config.system.build.toplevel;
             home-build = inputs.self.homeConfigurations."ukasha@nixos".activationPackage;
+            home-wsl-build = inputs.self.homeConfigurations."ukasha@nixos-wsl".activationPackage;
           };
         };
     };
