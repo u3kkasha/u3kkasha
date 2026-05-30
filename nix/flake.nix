@@ -11,11 +11,11 @@
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
-    stylix.url = "github:nix-community/stylix";
-    stylix.inputs.nixpkgs.follows = "nixpkgs";
     devshell.url = "github:numtide/devshell";
     devshell.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    plasma-manager.url = "github:nix-community/plasma-manager";
+    plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
@@ -52,7 +52,30 @@
               inputs.nixos-wsl.nixosModules.default
               inputs.home-manager.nixosModules.home-manager
               inputs.nix-index-database.nixosModules.nix-index
-              inputs.stylix.nixosModules.stylix
+              {
+                home-manager.sharedModules = [
+                  inputs.plasma-manager.homeModules.plasma-manager
+                ];
+              }
+            ];
+          };
+        };
+
+        homeConfigurations = {
+          "${(import ./lib/constants/default.nix).username}@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
+            pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+            extraSpecialArgs = {
+              inputs = inputs;
+              lib = inputs.nixpkgs.lib.extend (
+                _final: _prev: {
+                  internal = import ./lib/constants/default.nix;
+                }
+              );
+            };
+            modules = [
+              ./modules/home/default.nix
+              inputs.plasma-manager.homeModules.plasma-manager
+              inputs.nix-index-database.hmModules.nix-index
             ];
           };
         };

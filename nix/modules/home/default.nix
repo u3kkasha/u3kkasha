@@ -17,6 +17,7 @@ in
     ./git.nix
     ./helix.nix
     ./nushell.nix
+    ./plasma.nix
     ./utils.nix
     ./yazi.nix
     ./zellij.nix
@@ -31,6 +32,7 @@ in
     git.enable = lib.mkDefault true;
     helix.enable = lib.mkDefault true;
     nushell.enable = lib.mkDefault true;
+    plasma.enable = lib.mkDefault true;
     utils.enable = lib.mkDefault true;
     yazi.enable = lib.mkDefault true;
     zellij.enable = lib.mkDefault true;
