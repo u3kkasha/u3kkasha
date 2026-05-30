@@ -58,8 +58,6 @@ in
     programs.nix-ld.enable = true;
     nixpkgs.config.allowUnfree = true;
 
-    networking.networkmanager.enable = true;
-
     home-manager = {
       useGlobalPkgs = true;
       useUserPackages = true;

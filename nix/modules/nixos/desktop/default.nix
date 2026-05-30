@@ -13,6 +13,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    networking.networkmanager.enable = true;
+
     services.displayManager.sddm.enable = true;
     services.desktopManager.plasma6.enable = true;
 
