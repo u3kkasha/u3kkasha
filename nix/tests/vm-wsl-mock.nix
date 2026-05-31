@@ -1,0 +1,44 @@
+{
+  pkgs,
+  inputs,
+  specialArgs,
+}:
+
+pkgs.testers.runNixOSTest {
+  name = "wsl-isolation-test";
+
+  node.specialArgs = specialArgs;
+
+  nodes.machine =
+    { ... }:
+    {
+      imports = [
+        ../modules/nixos/system/default.nix
+        inputs.home-manager.nixosModules.home-manager
+        inputs.nix-index-database.nixosModules.nix-index
+      ];
+
+      internal.system.enable = true;
+
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        sharedModules = [
+          inputs.plasma-manager.homeModules.plasma-manager
+          inputs.catppuccin.homeModules.catppuccin
+        ];
+      };
+    };
+
+  testScript = ''
+    machine.wait_for_unit("multi-user.target")
+
+    # Verify the system is lean
+    machine.fail("systemctl is-enabled sddm.service")
+    machine.fail("systemctl is-active display-manager.service")
+    machine.fail("systemctl is-active pipewire.service")
+
+    # Verify the user and shell still work
+    machine.succeed("getent passwd ukasha | grep /bin/nu")
+  '';
+}
