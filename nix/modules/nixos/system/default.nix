@@ -26,12 +26,15 @@ in
         "@wheel"
         username
       ];
+      min-free = 5 * 1024 * 1024 * 1024; # 5GB
+      max-free = 10 * 1024 * 1024 * 1024; # 10GB
     };
 
-    nix.gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
+    programs.nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep-since 4d --keep 3";
+      flake = "/home/ukasha/.dotfiles/nix";
     };
 
     system.stateVersion = systemStateVersion;

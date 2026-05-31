@@ -63,7 +63,6 @@ in
         gemini-cli
         mdr
         dotnet-sdk_10
-        nh
         doppler
         dust
       ]
