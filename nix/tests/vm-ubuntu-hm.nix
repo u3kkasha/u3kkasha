@@ -40,7 +40,7 @@ let
       # 3. Run Home Manager activation from the shared flake
       # Ensure nix is in PATH for the user
       vm.succeed("sudo -i -u ukasha bash -lc 'nix --version'")
-      
+
       vm.succeed(
         "sudo -i -u ukasha bash -lc \"nix run 'github:nix-community/home-manager' -- \
           switch --flake /repo/nix#ukasha@nixos-wsl --impure --show-trace\""
