@@ -17,6 +17,8 @@
     plasma-manager.url = "github:nix-community/plasma-manager";
     plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
     catppuccin.url = "github:catppuccin/nix";
+    nix-vm-test.url = "github:numtide/nix-vm-test";
+    nix-vm-test.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   nixConfig = {
@@ -141,12 +143,19 @@
             vm-test-nixos = import ./tests/vm-nixos.nix { inherit pkgs inputs specialArgs; };
             vm-test-wsl-mock = import ./tests/vm-wsl-mock.nix { inherit pkgs inputs specialArgs; };
             vm-test-home-manager = import ./tests/vm-home-manager.nix { inherit pkgs inputs specialArgs; };
-            unit-tests = import ./tests/unit.nix { inherit pkgs; lib = extendedLib; };
+            vm-test-ubuntu-portability = import ./tests/vm-ubuntu-hm.nix { inherit pkgs inputs; };
+            unit-tests = import ./tests/unit.nix {
+              inherit pkgs;
+              lib = extendedLib;
+            };
           };
 
           checks = {
             formatting = treefmt.config.build.check inputs.self;
-            unit-tests = import ./tests/unit.nix { inherit pkgs; lib = extendedLib; };
+            unit-tests = import ./tests/unit.nix {
+              inherit pkgs;
+              lib = extendedLib;
+            };
             gitleaks =
               pkgs.runCommand "gitleaks"
                 {
