@@ -14,11 +14,13 @@ pkgs.testers.runNixOSTest {
     {
       imports = [
         ../modules/nixos/system/default.nix
+        ../modules/nixos/podman/default.nix
         inputs.home-manager.nixosModules.home-manager
         inputs.nix-index-database.nixosModules.nix-index
       ];
 
       internal.system.enable = true;
+      internal.podman.enable = true;
 
       home-manager = {
         useGlobalPkgs = true;
@@ -40,5 +42,8 @@ pkgs.testers.runNixOSTest {
 
     # Verify the user and shell still work
     machine.succeed("getent passwd ukasha | grep /bin/nu")
+
+    # Verify podman is functional in WSL
+    machine.succeed("podman --version")
   '';
 }
