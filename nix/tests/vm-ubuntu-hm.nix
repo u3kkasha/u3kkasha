@@ -22,8 +22,8 @@ let
       # Wait for the Ubuntu system to boot
       vm.wait_for_unit("multi-user.target")
 
-      # Ensure repo is accessible to the test user
-      vm.succeed("chmod -R +r /repo")
+      # Repo is mounted from host and usually read-only
+
 
       # 1. Setup the correct user (matching the flake config)
       vm.succeed("useradd -m -s /bin/bash ukasha")
@@ -38,7 +38,9 @@ let
       vm.succeed("systemctl restart nix-daemon || true")
 
       # 3. Run Home Manager activation from the shared flake
-      # We use a login shell to ensure Nix profile is sourced
+      # Ensure nix is in PATH for the user
+      vm.succeed("sudo -i -u ukasha bash -lc 'nix --version'")
+      
       vm.succeed(
         "sudo -i -u ukasha bash -lc \"nix run 'github:nix-community/home-manager' -- \
           switch --flake /repo/nix#ukasha@nixos-wsl --impure --show-trace\""
