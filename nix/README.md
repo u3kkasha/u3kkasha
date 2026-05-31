@@ -35,3 +35,8 @@ This project uses `nh` (nix-helper) for maintenance tasks. Enter the development
 See [AGENTS.md](AGENTS.md) for full details on the workflow.
 
 ## CI & Binary Caching
+
+- **Cachix**: This project uses [Cachix](https://www.cachix.org/) for binary caching. The cache is named `u3kkasha`.
+- **GitHub Actions**: Every push to the `main` branch triggers a CI pipeline that verifies the configuration (formatting, unit tests, and VM tests) and pushes successful builds to the Cachix cache.
+- **Local Usage**: Local configurations are kept lean by using public caches (nix-community, numtide) by default. To use the project-specific cache locally, you can add it to your `nixConfig` or use `cachix use u3kkasha`.
+
