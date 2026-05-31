@@ -38,6 +38,14 @@ in
       icons = "auto";
     };
 
+    programs.bottom = {
+      enable = true;
+    };
+
+    programs.fastfetch = {
+      enable = true;
+    };
+
     programs.uv = {
       enable = true;
     };
@@ -57,6 +65,7 @@ in
         dotnet-sdk_10
         nh
         doppler
+        dust
       ]
       ++ lib.optionals config.internal.gui.enable [
         wl-clipboard
