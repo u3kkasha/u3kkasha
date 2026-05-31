@@ -1,19 +1,20 @@
 { pkgs, lib }:
 let
-  internalLib = import ../lib/internal/default.nix;
+  # Use the internal lib passed from flake.nix for consistency
+  inherit (lib) internal;
 
   # Simple pure-Nix unit tests using lib.runTests
   testResults = lib.runTests {
     testUsername = {
-      expr = internalLib.username;
+      expr = internal.username;
       expected = "ukasha";
     };
     testDefaultEditor = {
-      expr = internalLib.defaultEditor;
+      expr = internal.defaultEditor;
       expected = "hx";
     };
     testEmailFormat = {
-      expr = lib.strings.isString internalLib.email;
+      expr = lib.strings.isString internal.email;
       expected = true;
     };
   };

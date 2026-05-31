@@ -22,9 +22,9 @@ let
       # Wait for the Ubuntu system to boot
       vm.wait_for_unit("multi-user.target")
 
-      # 1. Setup a test user
-      vm.succeed("useradd -m -s /bin/bash testuser")
-      vm.succeed("echo 'testuser ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/testuser")
+      # 1. Setup the correct user (matching the flake config)
+      vm.succeed("useradd -m -s /bin/bash ukasha")
+      vm.succeed("echo 'ukasha ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ukasha")
 
       # 2. Ensure Nix is functional with flakes enabled
       # (nix-vm-test images usually have Nix, but we ensure flakes are enabled)
@@ -36,16 +36,16 @@ let
       # We use one of the existing configurations that is relatively minimal
       # Note: We use '--impure' because the shared directory might have untracked changes
       vm.succeed(
-        "sudo -i -u testuser nix run 'github:nix-community/home-manager' -- \
+        "sudo -i -u ukasha nix run 'github:nix-community/home-manager' -- \
           switch --flake /repo/nix#ukasha@nixos-wsl --impure --show-trace"
       )
 
       # 4. Verification
       # Check if nushell is available and functional (it's part of the HM config)
-      vm.succeed("sudo -i -u testuser nu -c 'echo \"Home Manager works on Ubuntu!\"'")
+      vm.succeed("sudo -i -u ukasha nu -c 'echo \"Home Manager works on Ubuntu!\"'")
 
       # Check if git is configured as per the module
-      vm.succeed("sudo -i -u testuser git config --get user.name | grep 'Fida Waseque Choudhury'")
+      vm.succeed("sudo -i -u ukasha git config --get user.name | grep 'Fida Waseque Choudhury'")
 
       # Ensure no KDE services leaked into Ubuntu headless VM
       vm.fail("systemctl is-active sddm")
