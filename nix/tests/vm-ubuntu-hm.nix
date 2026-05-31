@@ -22,6 +22,9 @@ let
       # Wait for the Ubuntu system to boot
       vm.wait_for_unit("multi-user.target")
 
+      # Ensure repo is accessible to the test user
+      vm.succeed("chmod -R +r /repo")
+
       # 1. Setup the correct user (matching the flake config)
       vm.succeed("useradd -m -s /bin/bash ukasha")
       vm.succeed("echo 'ukasha ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ukasha")
@@ -35,19 +38,18 @@ let
       vm.succeed("systemctl restart nix-daemon || true")
 
       # 3. Run Home Manager activation from the shared flake
-      # We use the absolute path to nix or ensure it's in the PATH
-      # We use the 'nixos-wsl' config as it is designed for headless/lean environments
+      # We use a login shell to ensure Nix profile is sourced
       vm.succeed(
-        "sudo -i -u ukasha env PATH=\"$PATH:/nix/var/nix/profiles/default/bin\" nix run 'github:nix-community/home-manager' -- \
-          switch --flake /repo/nix#ukasha@nixos-wsl --impure --show-trace"
+        "sudo -i -u ukasha bash -lc \"nix run 'github:nix-community/home-manager' -- \
+          switch --flake /repo/nix#ukasha@nixos-wsl --impure --show-trace\""
       )
 
       # 4. Verification
       # Check if nushell is available and functional (it's part of the HM config)
-      vm.succeed("sudo -i -u ukasha env PATH=\"$PATH:/home/ukasha/.nix-profile/bin\" nu -c 'echo \"Home Manager works on Ubuntu!\"'")
+      vm.succeed("sudo -i -u ukasha bash -lc \"nu -c 'echo \\\"Home Manager works on Ubuntu!\\\"'\"")
 
       # Check if git is configured as per the module
-      vm.succeed("sudo -i -u ukasha env PATH=\"$PATH:/home/ukasha/.nix-profile/bin\" git config --get user.name | grep 'Fida Waseque Choudhury'")
+      vm.succeed("sudo -i -u ukasha bash -lc \"git config --get user.name | grep 'Fida Waseque Choudhury'\"")
 
       # Ensure no KDE services leaked into Ubuntu headless VM
       vm.fail("systemctl is-active sddm")

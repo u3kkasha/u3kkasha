@@ -45,7 +45,7 @@ pkgs.testers.runNixOSTest {
     machine.succeed("podman --version")
 
     # Check if desktop services are configured
-    # We check display-manager.service which is the stable alias for the configured DM
-    machine.succeed("systemctl is-enabled display-manager.service")
+    machine.wait_for_unit("display-manager.service")
+    machine.succeed("systemctl status display-manager.service")
   '';
 }
