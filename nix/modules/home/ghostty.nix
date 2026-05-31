@@ -19,7 +19,7 @@ in
       enableBashIntegration = config.internal.bash.enable;
       settings = {
         font-family = "JetBrainsMono Nerd Font";
-        font-size = 16;
+        font-size = 24;
         window-padding-x = 8;
         window-padding-y = 8;
         background-opacity = 0.9;
