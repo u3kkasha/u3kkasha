@@ -43,6 +43,12 @@ This project uses `nh` (nix-helper) for maintenance tasks. Enter the development
 - `nix fmt`: Format the entire repository.
 - `nix flake check`: Check for formatting, linting issues, and secret leaks.
 
+## State Version Policy
+
+- **Policy**: The `systemStateVersion` and `homeStateVersion` (defined in `lib/internal/default.nix`) are set to `26.05` and should **not** be updated monthly.
+- **Reasoning**: `stateVersion` is a compatibility shim, not a version for the configuration itself. It tells NixOS and Home Manager which "defaults" to use for stateful data (e.g., file formats, service defaults). Updating it without manual migration can cause subtle breakages or incompatible configuration formats.
+- **Migration**: Only update this value when performing a major system overhaul or after carefully reading the NixOS/Home Manager release notes to identify required manual data migrations. Use the [NixOS Release Notes](https://nixos.org/manual/nixos/stable/release-notes) to check for "State Version" changes.
+
 ## Testing
 
 Before finalizing changes, use the following commands to verify the configuration:

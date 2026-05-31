@@ -16,6 +16,10 @@ The configuration is modularized into logical units for both system-level and us
 - **`modules/home/`**: Shared user-level Home Manager modules (shells, git, helix, zellij, etc.).
 - **`packages/`**: Custom package definitions.
 
+## Configuration Policy
+
+- **State Version**: This project maintains a stable `stateVersion` (currently `26.05`). This value is **not** updated automatically or monthly, as it serves as a compatibility shim for stateful data. See [AGENTS.md](AGENTS.md) for details.
+
 ## Maintenance Workflows
 
 This project uses `nh` (nix-helper) for maintenance tasks. Enter the development shell (`nix develop`) to access these commands.

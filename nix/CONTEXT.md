@@ -22,4 +22,5 @@ This repository contains a modular NixOS and Home Manager configuration specific
 - **Host-Specific Entry Points**: Located in the `systems/` directory to support diverse environments (WSL, NixOS).
 - **Nushell Functions**: Multi-step maintenance commands in Nushell are defined as `def` functions instead of aliases to prevent accidental execution during shell initialization.
 - **WSL Path Isolation**: Windows paths are explicitly excluded from the Linux `PATH` to ensure environment isolation and prevent Windows binaries from shadowing Nix-installed tools.
+- **State Version Stability**: Decided to keep `stateVersion` fixed at `26.05` across all configurations. This field is a compatibility shim for stateful data and service defaults; updating it monthly would lead to unnecessary configuration churn and potential data format breakages. Users should only update it when they are prepared to perform manual migrations as detailed in NixOS release notes.
 - **CI-only Cachix**: Cachix is only configured for the GitHub Actions pipeline to optimize CI minutes without adding local system overhead.
