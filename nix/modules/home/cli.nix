@@ -16,6 +16,7 @@ in
   config = mkIf cfg.enable {
     programs.carapace.enable = true;
     programs.television.enable = true;
+    programs.nix-index.enable = true;
 
     programs.starship = {
       enable = true;

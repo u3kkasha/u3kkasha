@@ -59,6 +59,7 @@ in
     };
 
     programs.nix-ld.enable = true;
+    zramSwap.enable = true;
 
     home-manager = {
       useGlobalPkgs = true;
