@@ -28,30 +28,24 @@ let
       # 1. Setup the correct user (matching the flake config)
       vm.succeed("useradd -m -s /bin/bash ukasha")
       vm.succeed("echo 'ukasha ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ukasha")
-      # Add to nix-users group to ensure access to the nix-daemon
-      vm.succeed("groupadd -r nix-users || true")
-      vm.succeed("usermod -aG nix-users ukasha")
 
-      # 2. Ensure Nix is functional with flakes enabled
+      # 2. Setup Nix and ensure it's available in the shell
+      # We source /etc/profile.d/nix.sh which is standard for multi-user Nix
       vm.succeed("mkdir -p /etc/nix")
       vm.succeed("echo 'experimental-features = nix-command flakes' >> /etc/nix/nix.conf")
-      vm.succeed("systemctl restart nix-daemon || true")
+      # Restarting nix-daemon is good practice if it exists
+      vm.execute("systemctl restart nix-daemon")
 
-      # 3. Run Home Manager activation from the shared flake
-      # Ensure nix is in PATH for the user
-      vm.succeed("sudo -i -u ukasha bash -lc 'nix --version'")
-
+      # 3. Run Home Manager activation
+      # We explicitly source the Nix profile to be 100% sure
       vm.succeed(
-        "sudo -i -u ukasha bash -lc \"nix run 'github:nix-community/home-manager' -- \
+        "sudo -i -u ukasha bash -c \"source /etc/profile.d/nix.sh && nix run 'github:nix-community/home-manager' -- \
           switch --flake /repo/nix#ukasha@nixos-wsl --impure --show-trace\""
       )
 
       # 4. Verification
-      # Check if nushell is available and functional (it's part of the HM config)
-      vm.succeed("sudo -i -u ukasha bash -lc \"nu -c 'echo \\\"Home Manager works on Ubuntu!\\\"'\"")
-
-      # Check if git is configured as per the module
-      vm.succeed("sudo -i -u ukasha bash -lc \"git config --get user.name | grep 'Fida Waseque Choudhury'\"")
+      vm.succeed("sudo -i -u ukasha bash -c \"source /etc/profile.d/nix.sh && source \\$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh && nu -c 'echo \\\"Home Manager works on Ubuntu!\\\"'\"")
+      vm.succeed("sudo -i -u ukasha bash -c \"source /etc/profile.d/nix.sh && git config --get user.name | grep 'Fida Waseque Choudhury'\"")
 
       # Ensure no KDE services leaked into Ubuntu headless VM
       vm.fail("systemctl is-active sddm")
