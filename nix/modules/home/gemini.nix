@@ -24,7 +24,6 @@ in
           fileName = [
             "AGENTS.md"
             "CONTEXT.md"
-            "GEMINI.md"
           ];
         };
         general = {

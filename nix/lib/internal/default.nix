@@ -6,8 +6,8 @@
   defaultEditor = "hx";
   defaultTerminal = "ghostty";
   themeFlavor = "mocha";
-  systemStateVersion = "25.11";
-  homeStateVersion = "25.11";
+  systemStateVersion = "26.05";
+  homeStateVersion = "26.05";
 
   # Helper to import all .nix files and directories containing default.nix in a path
   scanPaths =

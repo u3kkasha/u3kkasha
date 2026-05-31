@@ -9,14 +9,12 @@ This directory contains the modular NixOS and Home Manager configurations for th
 
 The configuration is modularized into logical units for both system-level and user-level settings:
 
-- **`hosts/`**: Host-specific entry points.
-  - `wsl/`: NixOS configuration optimized for WSL.
+- **`systems/`**: Host-specific entry points.
+  - `nixos-wsl/`: NixOS configuration optimized for WSL.
   - `nixos/`: Bare-metal NixOS configuration.
-  - `vm/`: Virtual machine configuration.
-  - `linux/`: Standalone Home Manager for standard Linux distributions (e.g., Kali).
 - **`modules/`**: Shared system-level NixOS modules (system, podman, etc.).
 - **`modules/home/`**: Shared user-level Home Manager modules (shells, git, helix, zellij, etc.).
-- **`pkgs/`**: Custom package definitions (e.g., `aspire-cli`).
+- **`packages/`**: Custom package definitions.
 
 ## Maintenance Workflows
 
