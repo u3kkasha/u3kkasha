@@ -108,7 +108,7 @@ in
                     expr = "(builtins.getFlake \"${config.home.homeDirectory}/.dotfiles/nix\").nixosConfigurations.nixos-wsl.options";
                   };
                   home-manager = {
-                    expr = "(builtins.getFlake \"${config.home.homeDirectory}/.dotfiles/nix\").homeConfigurations.\"ukasha@nixos-wsl\".options";
+                    expr = "(builtins.getFlake \"${config.home.homeDirectory}/.dotfiles/nix\").homeConfigurations.\"${lib.internal.username}@nixos-wsl\".options";
                   };
                 };
               };

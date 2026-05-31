@@ -13,26 +13,12 @@ pkgs.testers.runNixOSTest {
     { ... }:
     {
       imports = [
-        ../modules/nixos/system/default.nix
-        ../modules/nixos/desktop/default.nix
-        ../modules/nixos/podman/default.nix
-        inputs.home-manager.nixosModules.home-manager
-        inputs.nix-index-database.nixosModules.nix-index
+        inputs.self.nixosModules.core
       ];
 
       internal.system.enable = true;
       internal.podman.enable = true;
       internal.desktop.enable = true;
-
-      # Set home-manager options for the test
-      home-manager = {
-        useGlobalPkgs = true;
-        useUserPackages = true;
-        sharedModules = [
-          inputs.plasma-manager.homeModules.plasma-manager
-          inputs.catppuccin.homeModules.catppuccin
-        ];
-      };
     };
 
   testScript = ''

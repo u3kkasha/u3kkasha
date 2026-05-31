@@ -34,7 +34,7 @@
   outputs =
     inputs:
     let
-      internalLib = import ./lib/internal/default.nix;
+      internalLib = import ./lib/internal/default.nix { inherit (inputs.nixpkgs) lib; };
       extendedLib = inputs.nixpkgs.lib.extend (
         _final: _prev: {
           internal = internalLib;
@@ -54,31 +54,47 @@
 
       flake =
         let
+          sharedHomeModules = [
+            inputs.plasma-manager.homeModules.plasma-manager
+            inputs.catppuccin.homeModules.catppuccin
+            inputs.nix-index-database.homeModules.nix-index
+          ];
           sharedNixosModules = [
             ./modules/nixos/default.nix
             inputs.nixos-wsl.nixosModules.default
             inputs.home-manager.nixosModules.home-manager
             inputs.nix-index-database.nixosModules.nix-index
             {
-              home-manager.sharedModules = [
-                inputs.plasma-manager.homeModules.plasma-manager
-                inputs.catppuccin.homeModules.catppuccin
-              ];
+              home-manager.sharedModules = sharedHomeModules;
             }
           ];
         in
         {
+          nixosModules = {
+            core = {
+              imports = sharedNixosModules;
+            };
+          };
+
+          homeModules = {
+            shared = {
+              imports = sharedHomeModules;
+            };
+          };
+
           nixosConfigurations = {
             nixos = inputs.nixpkgs.lib.nixosSystem {
               inherit specialArgs;
-              modules = sharedNixosModules ++ [
+              modules = [
+                inputs.self.nixosModules.core
                 ./systems/x86_64-linux/nixos/default.nix
                 { nixpkgs.config.allowUnfree = true; }
               ];
             };
             nixos-wsl = inputs.nixpkgs.lib.nixosSystem {
               inherit specialArgs;
-              modules = sharedNixosModules ++ [
+              modules = [
+                inputs.self.nixosModules.core
                 ./systems/x86_64-linux/nixos-wsl/default.nix
                 { nixpkgs.config.allowUnfree = true; }
               ];
@@ -89,22 +105,16 @@
             "${internalLib.username}@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
               pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
               extraSpecialArgs = specialArgs;
-              modules = [
+              modules = sharedHomeModules ++ [
                 ./modules/home/default.nix
-                inputs.plasma-manager.homeModules.plasma-manager
-                inputs.nix-index-database.homeModules.nix-index
-                inputs.catppuccin.homeModules.catppuccin
                 { nixpkgs.config.allowUnfree = true; }
               ];
             };
             "${internalLib.username}@nixos-wsl" = inputs.home-manager.lib.homeManagerConfiguration {
               pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
               extraSpecialArgs = specialArgs;
-              modules = [
+              modules = sharedHomeModules ++ [
                 ./modules/home/default.nix
-                inputs.plasma-manager.homeModules.plasma-manager
-                inputs.nix-index-database.homeModules.nix-index
-                inputs.catppuccin.homeModules.catppuccin
                 {
                   internal.gui.enable = false;
                   nixpkgs.config.allowUnfree = true;

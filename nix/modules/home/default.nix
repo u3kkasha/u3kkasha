@@ -5,23 +5,14 @@
 }:
 
 let
-  inherit (lib.internal) username homeStateVersion;
+  inherit (lib.internal)
+    username
+    homeStateVersion
+    scanPaths
+    ;
 in
 {
-  imports = [
-    ./bash.nix
-    ./cli.nix
-    ./direnv.nix
-    ./gemini.nix
-    ./ghostty.nix
-    ./git.nix
-    ./helix.nix
-    ./nushell.nix
-    ./plasma.nix
-    ./utils.nix
-    ./yazi.nix
-    ./zellij.nix
-  ];
+  imports = scanPaths ./.;
 
   options.internal.gui = {
     enable = lib.mkOption {

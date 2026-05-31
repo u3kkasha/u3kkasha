@@ -43,6 +43,10 @@ pkgs.testers.runNixOSTest {
     # Verify the user and shell still work
     machine.succeed("getent passwd ukasha | grep /bin/nu")
 
+    # Verify GUI packages are absent
+    machine.fail("which firefox")
+    machine.fail("which wl-clipboard")
+
     # Verify podman is functional in WSL
     machine.succeed("podman --version")
   '';
