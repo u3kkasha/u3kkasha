@@ -16,9 +16,47 @@ in
   config = mkIf cfg.enable {
     programs.carapace.enable = true;
     programs.television.enable = true;
-    programs.oh-my-posh = {
+
+    programs.starship = {
       enable = true;
-      useTheme = "catppuccin_${lib.internal.themeFlavor}";
+      enableBashIntegration = true;
+      enableNushellIntegration = true;
+      settings = {
+        add_newline = true;
+        format = lib.concatStrings [
+          "$username"
+          "$hostname"
+          "$directory"
+          "$git_branch"
+          "$git_state"
+          "$git_status"
+          "$nix_shell"
+          "$fill"
+          "$cmd_duration"
+          "$line_break"
+          "$character"
+        ];
+
+        nix_shell = {
+          symbol = "❄️ ";
+          format = "via [$symbol$state( \\($name\\))]($style) ";
+          style = "bold blue";
+          impure_msg = "impure";
+          pure_msg = "pure";
+        };
+
+        fill = {
+          symbol = " ";
+        };
+
+        directory = {
+          read_only = " 󰌾";
+        };
+
+        git_branch = {
+          symbol = " ";
+        };
+      };
     };
   };
 }
