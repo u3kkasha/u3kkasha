@@ -132,15 +132,17 @@
         {
           formatter = treefmt.config.build.wrapper;
           devShells.default = inputs.devshell.legacyPackages.${system}.mkShell {
+            imports = [
+              "${inputs.devshell}/extra/git/hooks.nix"
+            ];
             name = "nix-config";
             motd = "";
-            bash.extra = ''
-              ${pre-commit-check.shellHook}
-              # Ensure pre-push hook is installed specifically
-              if [ -d .git ] || [ -d ../.git ]; then
-                ${pkgs.pre-commit}/bin/pre-commit install --hook-type pre-push
-              fi
-            '';
+            git.hooks = {
+              enable = true;
+              pre-push.text = ''
+                nix flake check ./nix --impure
+              '';
+            };
             packages = [
               pkgs.nh
               pkgs.nvd
