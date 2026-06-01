@@ -16,6 +16,8 @@
     plasma-manager.url = "github:nix-community/plasma-manager";
     plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
     catppuccin.url = "github:catppuccin/nix";
+    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
   };
   nixConfig = {
     extra-substituters = [
@@ -116,15 +118,34 @@
           };
         };
       perSystem =
-        { pkgs, ... }:
+        { pkgs, system, ... }:
         let
           treefmt = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+          pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+            src = ./..;
+            hooks = {
+              nix-flake-check = {
+                enable = true;
+                name = "nix flake check";
+                entry = "nix flake check ./nix --impure";
+                pass_filenames = false;
+                stages = [ "push" ];
+              };
+            };
+          };
         in
         {
           formatter = treefmt.config.build.wrapper;
-          devShells.default = inputs.devshell.legacyPackages.${pkgs.stdenv.hostPlatform.system}.mkShell {
+          devShells.default = inputs.devshell.legacyPackages.${system}.mkShell {
             name = "nix-config";
             motd = "";
+            bash.extra = ''
+              ${pre-commit-check.shellHook}
+              # Ensure pre-push hook is installed specifically
+              if [ -d .git ] || [ -d ../.git ]; then
+                ${pkgs.pre-commit}/bin/pre-commit install --hook-type pre-push
+              fi
+            '';
             packages = [
               pkgs.nh
               pkgs.nvd
@@ -146,6 +167,7 @@
             };
           };
           checks = {
+            pre-push = pre-commit-check;
             formatting = treefmt.config.build.check inputs.self;
             unit-tests = import ./tests/unit.nix {
               inherit pkgs;
