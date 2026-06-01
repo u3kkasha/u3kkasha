@@ -72,11 +72,6 @@
               imports = sharedNixosModules;
             };
           };
-          homeModules = {
-            shared = {
-              imports = sharedHomeModules;
-            };
-          };
           nixosConfigurations = {
             nixos = inputs.nixpkgs.lib.nixosSystem {
               inherit specialArgs;
@@ -129,7 +124,7 @@
                 name = "nix flake check";
                 entry = "nix flake check ./nix --impure";
                 pass_filenames = false;
-                stages = [ "push" ];
+                stages = [ "pre-push" ];
               };
             };
           };

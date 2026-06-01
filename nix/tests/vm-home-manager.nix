@@ -30,7 +30,9 @@ pkgs.testers.runNixOSTest {
         users.ukasha = import ../modules/home/default.nix;
         extraSpecialArgs = specialArgs;
         sharedModules = [
-          inputs.self.homeModules.shared
+          inputs.plasma-manager.homeModules.plasma-manager
+          inputs.catppuccin.homeModules.catppuccin
+          inputs.nix-index-database.homeModules.nix-index
         ];
       };
 
