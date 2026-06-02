@@ -105,8 +105,9 @@
               modules = sharedHomeModules ++ [
                 ./modules/home/default.nix
                 {
-                  internal.gui.enable = false;
                   nixpkgs.config.allowUnfree = true;
+                  internal.wsl.enable = true;
+                  internal.gui.enable = false;
                 }
               ];
             };

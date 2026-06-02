@@ -7,7 +7,10 @@
     wsl.enable = true;
   };
 
-  home-manager.users.${lib.internal.username}.internal.gui.enable = false;
+  home-manager.users.${lib.internal.username}.internal = {
+    gui.enable = false;
+    wsl.enable = true;
+  };
 
   networking.hostName = "nixos-wsl";
   nixpkgs.hostPlatform = "x86_64-linux";
