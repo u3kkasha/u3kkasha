@@ -35,6 +35,7 @@ in
       nushell.enable = lib.mkDefault true;
       plasma.enable = lib.mkDefault config.internal.gui.enable;
       utils.enable = lib.mkDefault true;
+      wsl.enable = lib.mkDefault false;
       yazi.enable = lib.mkDefault true;
       zellij.enable = lib.mkDefault true;
     };
