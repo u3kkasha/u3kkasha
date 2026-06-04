@@ -5,8 +5,6 @@
 - `nh os switch .`: Rebuild and switch to the NixOS system configuration.
 - `nh home switch .`: Rebuild and switch to the Home Manager configuration.
 - `nh clean all`: Garbage collection and generation cleanup.
-- `nix run .#apply`: (Implicitly used by `nh` commands) Apply configuration.
-
 ## Development & Quality
 
 - `nix fmt`: Format all files using `treefmt`.
@@ -17,4 +15,4 @@
 
 - `hx <file>`: Open file in Helix.
 - `nu`: Start Nushell.
-- `zj`: Start Zellij.
+- `zellij`: Start Zellij.

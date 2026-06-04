@@ -7,15 +7,15 @@ Modular NixOS and Home Manager configuration for personal dotfiles, optimized fo
 - `flake.nix`: Root configuration using `flake-parts`.
 - `systems/x86_64-linux/`: Host-specific configurations (`nixos`, `nixos-wsl`).
 - `modules/`: Shared logic.
-    - `modules/nixos/`: System-level modules (`mem:core/nixos`).
-    - `modules/home/`: User-level Home Manager modules (`mem:core/home`).
-- `lib/constants/`: Project-wide invariants and constants.
+    - `modules/nixos/`: System-level modules.
+    - `modules/home/`: User-level Home Manager modules.
+- `lib/internal/`: Core logic, variables, and constants.
 
 ## System Invariants
 
 - Namespace: `internal` (custom lib extension).
 - User: `ukasha` (`mem:tech_stack`).
-- State Version: `25.11`.
+- State Version: `26.05`.
 - Theme: `catppuccin` (mocha).
 
 ## See Also

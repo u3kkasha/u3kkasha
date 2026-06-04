@@ -29,7 +29,7 @@ This project uses a modular NixOS configuration based on Flakes, `flake-parts`, 
 ## Configuration Management
 
 - **Read-Only Files**: Most configuration files in `.config` (e.g., `lazygit/config.yml`) are managed by Home Manager and are symlinked to the Nix store. These files are **read-only**.
-- **Modifying Config**: Do not attempt to modify these files directly or allow applications to "auto-migrate" them. All changes must be made in the corresponding Nix module (e.g., `modules/home/git.nix`) and applied via `nix run .#apply`.
+- **Modifying Config**: Do not attempt to modify these files directly or allow applications to "auto-migrate" them. All changes must be made in the corresponding Nix module (e.g., `modules/home/git.nix`) and applied via `nh os switch .` or `nh home switch .`.
 
 ## Workflow Commands
 
