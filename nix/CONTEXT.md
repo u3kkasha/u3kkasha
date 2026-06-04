@@ -21,6 +21,6 @@ This repository contains a modular NixOS and Home Manager configuration specific
 - **Modularity (Dendritic Pattern)**: Configuration uses a custom `scanPaths` helper to automatically discover and import modules within `modules/` and `modules/home/`. This allows for a "dendritic" structure where adding a file to a directory automatically includes it in the configuration.
 - **Host-Specific Entry Points**: Located in the `systems/` directory to support diverse environments (WSL, NixOS).
 - **Nushell Functions**: Multi-step maintenance commands in Nushell are defined as `def` functions instead of aliases to prevent accidental execution during shell initialization.
-- **WSL Path Isolation**: Windows paths are explicitly excluded from the Linux `PATH` to ensure environment isolation and prevent Windows binaries from shadowing Nix-installed tools.
+- **WSL Path Integration**: Windows paths are included in the Linux `PATH` to allow seamless interop with Windows binaries.
 - **State Version Stability**: Decided to keep `stateVersion` fixed at `26.05` across all configurations. This field is a compatibility shim for stateful data and service defaults; updating it monthly would lead to unnecessary configuration churn and potential data format breakages. Users should only update it when they are prepared to perform manual migrations as detailed in NixOS release notes.
 - **CI-only Cachix**: Cachix is only configured for the GitHub Actions pipeline to optimize CI minutes without adding local system overhead.
