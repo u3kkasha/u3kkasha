@@ -56,6 +56,7 @@ in
       extraGroups = [
         "wheel"
         "podman"
+        "docker"
       ];
     };
 

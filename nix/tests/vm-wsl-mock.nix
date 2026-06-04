@@ -15,12 +15,14 @@ pkgs.testers.runNixOSTest {
       imports = [
         ../modules/nixos/system/default.nix
         ../modules/nixos/podman/default.nix
+        ../modules/nixos/docker/default.nix
         inputs.home-manager.nixosModules.home-manager
         inputs.nix-index-database.nixosModules.nix-index
       ];
 
       internal.system.enable = true;
       internal.podman.enable = true;
+      internal.docker.enable = true;
 
       home-manager = {
         useGlobalPkgs = true;
@@ -49,5 +51,10 @@ pkgs.testers.runNixOSTest {
 
     # Verify podman is functional in WSL
     machine.succeed("podman --version")
+
+    # Verify docker is functional in WSL
+    machine.wait_for_unit("docker.service")
+    machine.succeed("docker --version")
+    machine.succeed("docker-compose --version")
   '';
 }

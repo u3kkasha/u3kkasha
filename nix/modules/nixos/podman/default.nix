@@ -16,14 +16,20 @@ in
   config = lib.mkIf cfg.enable {
     virtualisation.podman = {
       enable = true;
-      dockerCompat = true;
-      dockerSocket.enable = true;
+      dockerCompat = lib.mkDefault (!config.internal.docker.enable);
+      dockerSocket.enable = lib.mkDefault (!config.internal.docker.enable);
       defaultNetwork.settings.dns_enabled = true;
+      autoPrune = {
+        enable = true;
+        dates = "weekly";
+      };
     };
 
     environment.systemPackages = with pkgs; [
       podman-compose
       podman-tui
+      lazydocker
+      ctop
     ];
   };
 }

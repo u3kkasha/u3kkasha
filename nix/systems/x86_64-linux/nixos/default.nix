@@ -13,6 +13,7 @@
     system.enable = true;
     desktop.enable = true;
     podman.enable = true;
+    docker.enable = true;
   };
 
   networking.hostName = "nixos";
