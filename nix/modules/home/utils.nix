@@ -65,6 +65,7 @@ in
         dotnet-sdk_10
         doppler
         dust
+        opencode
       ]
       ++ lib.optionals config.internal.gui.enable [
         wl-clipboard
