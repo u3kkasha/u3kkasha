@@ -30,6 +30,7 @@ pkgs.testers.runNixOSTest {
         sharedModules = [
           inputs.plasma-manager.homeModules.plasma-manager
           inputs.catppuccin.homeModules.catppuccin
+          inputs.nix-index-database.homeModules.nix-index
         ];
       };
     };

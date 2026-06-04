@@ -51,8 +51,6 @@ in
       VISUAL = lib.internal.defaultEditor;
     };
 
-    programs.nix-index.enable = true;
-
     nix.package = lib.mkDefault pkgs.lix;
 
     home.stateVersion = homeStateVersion;
