@@ -27,6 +27,7 @@ pkgs.testers.runNixOSTest {
       home-manager = {
         useGlobalPkgs = true;
         useUserPackages = true;
+        extraSpecialArgs = specialArgs;
         sharedModules = [
           inputs.plasma-manager.homeModules.plasma-manager
           inputs.catppuccin.homeModules.catppuccin

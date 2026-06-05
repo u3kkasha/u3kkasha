@@ -23,6 +23,7 @@ in
           "AGENTS.md"
           "CONTEXT.md"
         ];
+        plugin = [ "opencode-snip@latest" ];
         mcp = {
           context7 = {
             type = "remote";
