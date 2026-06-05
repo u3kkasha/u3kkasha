@@ -2,6 +2,7 @@
   description = "Multi-System Nix Flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
@@ -62,6 +63,7 @@
             inputs.home-manager.nixosModules.home-manager
             inputs.nix-index-database.nixosModules.nix-index
             {
+              home-manager.extraSpecialArgs = specialArgs;
               home-manager.sharedModules = sharedHomeModules;
             }
           ];

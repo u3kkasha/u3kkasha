@@ -1,6 +1,8 @@
 {
   lib,
   config,
+  pkgs,
+  inputs,
   ...
 }:
 
@@ -14,37 +16,31 @@ in
   };
 
   config = mkIf cfg.enable {
-    # This module manages the gemini-cli settings and MCP servers.
-    # Sensitive keys (like CONTEXT7_API_KEY) should be set via environment variables
-    # or added to a local-only file.
+    home.packages = [
+      (import inputs.nixpkgs-master {
+        system = pkgs.stdenv.hostPlatform.system;
+        config.allowUnfree = true;
+      }).antigravity-cli
+    ];
 
-    home.file.".gemini/settings.json" = {
+    home.file.".gemini/antigravity-cli/mcp_config.json" = {
       text = builtins.toJSON {
-        context = {
-          fileName = [
-            "AGENTS.md"
-            "CONTEXT.md"
-          ];
-        };
-        general = {
-          preferredEditor = lib.internal.defaultEditor;
-        };
         mcpServers = {
           context7 = {
-            httpUrl = "https://mcp.context7.com/mcp";
+            serverUrl = "https://mcp.context7.com/mcp";
             headers = {
               "CONTEXT7_API_KEY" = "$CONTEXT7_API_KEY";
               "Accept" = "application/json, text/event-stream";
             };
           };
           github = {
-            httpUrl = "https://api.githubcopilot.com/mcp/";
+            serverUrl = "https://api.githubcopilot.com/mcp/";
             headers = {
               "Authorization" = "Bearer $GITHUB_TOKEN";
             };
           };
           "microsoft learn" = {
-            httpUrl = "https://learn.microsoft.com/api/mcp";
+            serverUrl = "https://learn.microsoft.com/api/mcp";
           };
           nixos = {
             args = [ "mcp-nixos" ];
@@ -60,7 +56,7 @@ in
             command = "podman";
           };
           nuxt-ui = {
-            httpUrl = "https://ui.nuxt.com/mcp";
+            serverUrl = "https://ui.nuxt.com/mcp";
           };
           playwright = {
             args = [
@@ -69,7 +65,7 @@ in
               "--rm"
               "--init"
               "-v"
-              "$PWD:/data:Z"
+              ".:/data:Z"
               "--pull=always"
               "mcr.microsoft.com/playwright/mcp"
               "--allow-unrestricted-file-access"
@@ -91,13 +87,7 @@ in
             command = "nix";
           };
         };
-        security = {
-          auth = {
-            selectedType = "oauth-personal";
-          };
-        };
       };
-      # Setting force = true ensures your MCP servers are always synced from this file
       force = true;
     };
   };
