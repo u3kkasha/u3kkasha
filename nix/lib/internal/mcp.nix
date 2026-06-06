@@ -49,6 +49,10 @@ let
         "ghcr.io/dimonsmart/nugetmcpserver:latest"
       ];
     };
+    nuxt = {
+      type = "remote";
+      url = "https://nuxt.com/mcp";
+    };
     nuxt-ui = {
       type = "remote";
       url = "https://ui.nuxt.com/mcp";
