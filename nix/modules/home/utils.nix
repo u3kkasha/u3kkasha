@@ -60,7 +60,6 @@ in
         file
         jq
         nodejs_22
-        gemini-cli
         mdr
         dotnet-sdk_10
         doppler

@@ -14,8 +14,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    # This module manages the OpenCode config and mirrors the Gemini MCP setup.
-    # Sensitive values should be injected via environment variables at runtime.
     home.file.".config/opencode/opencode.json" = {
       text = builtins.toJSON {
         "$schema" = "https://opencode.ai/config.json";
