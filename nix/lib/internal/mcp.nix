@@ -119,7 +119,7 @@ let
           command = map replacer server.command;
         }
         // (lib.optionalAttrs (server ? env) {
-          env = lib.mapAttrs (_eName: replacer) server.env;
+          environment = lib.mapAttrs (_eName: replacer) server.env;
         })
       else
         throw "Unknown server type: ${server.type}"
