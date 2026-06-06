@@ -16,18 +16,15 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [
-      (import inputs.nixpkgs-master {
-        system = pkgs.stdenv.hostPlatform.system;
-        config.allowUnfree = true;
-      }).antigravity-cli
-    ];
+    programs.antigravity-cli = {
+      enable = true;
+      package =
+        (import inputs.nixpkgs-master {
+          system = pkgs.stdenv.hostPlatform.system;
+          config.allowUnfree = true;
+        }).antigravity-cli;
 
-    home.file.".gemini/antigravity-cli/mcp_config.json" = {
-      text = builtins.toJSON {
-        mcpServers = lib.internal.mcp.antigravityMcp;
-      };
-      force = true;
+      mcpServers = lib.internal.mcp.antigravityMcp;
     };
   };
 }
