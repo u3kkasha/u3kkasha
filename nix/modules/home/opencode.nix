@@ -24,7 +24,6 @@ in
         plugin = [
           "opencode-snip@latest"
           "@tarquinen/opencode-dcp@latest"
-          "@0xsero/open-queue"
           "opencode-websearch-cited@1.1.1"
         ];
         mcp = lib.internal.mcp.openCodeMcp;
