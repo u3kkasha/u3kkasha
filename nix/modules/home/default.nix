@@ -30,6 +30,7 @@ in
       direnv.enable = lib.mkDefault true;
       antigravity.enable = lib.mkDefault true;
       ghostty.enable = lib.mkDefault config.internal.gui.enable;
+      herdr.enable = lib.mkDefault true;
       git.enable = lib.mkDefault true;
       helix.enable = lib.mkDefault true;
       nushell.enable = lib.mkDefault true;
