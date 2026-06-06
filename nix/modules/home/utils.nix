@@ -53,7 +53,6 @@ in
     home.packages =
       with pkgs;
       [
-        nixd
         nvd
         ripgrep
         fd
