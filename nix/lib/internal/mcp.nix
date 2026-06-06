@@ -13,6 +13,10 @@ let
         "Accept" = "application/json, text/event-stream";
       };
     };
+    gh_grep = {
+      type = "remote";
+      url = "https://mcp.grep.app";
+    };
     github = {
       type = "local";
       command = [
