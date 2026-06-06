@@ -63,7 +63,6 @@ in
         dotnet-sdk_10
         doppler
         dust
-        snip
         opencode
         lazydocker
         ctop
