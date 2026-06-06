@@ -9,6 +9,8 @@
   systemStateVersion = "26.05";
   homeStateVersion = "26.05";
 
+  mcp = import ./mcp.nix { inherit lib; };
+
   # Helper to import all .nix files and directories containing default.nix in a path
   scanPaths =
     path:
