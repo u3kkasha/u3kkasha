@@ -14,6 +14,9 @@ in
   };
 
   config = mkIf cfg.enable {
+    home.sessionVariables = {
+      EDITOR = lib.internal.defaultEditor;
+    };
     programs.nushell = {
       enable = true;
       settings = {

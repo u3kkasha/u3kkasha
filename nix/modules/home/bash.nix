@@ -18,6 +18,9 @@ in
       enable = true;
       enableCompletion = true;
       shellAliases = { };
+      sessionVariables = {
+        EDITOR = lib.internal.defaultEditor;
+      };
       bashrcExtra = ''
         # Load Doppler secrets if logged in
         if [ -f ~/.doppler/config.yaml ]; then
