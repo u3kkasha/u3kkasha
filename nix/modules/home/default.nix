@@ -61,6 +61,7 @@ in
       enable = true;
       autoEnable = true;
       flavor = "mocha";
+      gemini-cli.enable = false;
     };
   };
 }
