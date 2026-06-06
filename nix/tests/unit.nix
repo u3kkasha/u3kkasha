@@ -52,9 +52,13 @@ let
       expr = internal.mcp.antigravityMcp.context7.headers.CONTEXT7_API_KEY;
       expected = "$CONTEXT7_API_KEY";
     };
-    testAntigravityGithubHeaderAuth = {
-      expr = internal.mcp.antigravityMcp.github.headers.Authorization;
-      expected = "Bearer $GITHUB_TOKEN";
+    testAntigravityGithubCommand = {
+      expr = internal.mcp.antigravityMcp.github.command;
+      expected = "podman";
+    };
+    testAntigravityGithubEnvToken = {
+      expr = internal.mcp.antigravityMcp.github.env.GITHUB_PERSONAL_ACCESS_TOKEN;
+      expected = "$GITHUB_TOKEN";
     };
     testAntigravityPlaywrightCommand = {
       expr = internal.mcp.antigravityMcp.playwright.command;

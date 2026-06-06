@@ -14,10 +14,18 @@ let
       };
     };
     github = {
-      type = "remote";
-      url = "https://api.githubcopilot.com/mcp/";
-      headers = {
-        "Authorization" = "Bearer {env:GITHUB_TOKEN}";
+      type = "local";
+      command = [
+        "podman"
+        "run"
+        "-i"
+        "--rm"
+        "-e"
+        "GITHUB_PERSONAL_ACCESS_TOKEN"
+        "ghcr.io/github/github-mcp-server"
+      ];
+      env = {
+        "GITHUB_PERSONAL_ACCESS_TOKEN" = "{env:GITHUB_TOKEN}";
       };
     };
     "microsoft learn" = {
@@ -106,6 +114,9 @@ let
           type = "local";
           command = map replacer server.command;
         }
+        // (lib.optionalAttrs (server ? env) {
+          env = lib.mapAttrs (_eName: replacer) server.env;
+        })
       else
         throw "Unknown server type: ${server.type}"
     );
@@ -134,6 +145,9 @@ let
           command = replacer (builtins.head server.command);
           args = map replacer (builtins.tail server.command);
         }
+        // (lib.optionalAttrs (server ? env) {
+          env = lib.mapAttrs (_eName: replacer) server.env;
+        })
       else
         throw "Unknown server type: ${server.type}"
     );
