@@ -65,6 +65,8 @@ in
         dust
         snip
         opencode
+        lazydocker
+        ctop
       ]
       ++ lib.optionals config.internal.gui.enable [
         wl-clipboard

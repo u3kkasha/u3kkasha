@@ -28,8 +28,6 @@ in
     environment.systemPackages = with pkgs; [
       podman-compose
       podman-tui
-      lazydocker
-      ctop
     ];
   };
 }
