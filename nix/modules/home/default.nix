@@ -28,7 +28,7 @@ in
       bash.enable = lib.mkDefault true;
       cli.enable = lib.mkDefault true;
       direnv.enable = lib.mkDefault true;
-      gemini.enable = lib.mkDefault true;
+      antigravity.enable = lib.mkDefault true;
       ghostty.enable = lib.mkDefault config.internal.gui.enable;
       git.enable = lib.mkDefault true;
       helix.enable = lib.mkDefault true;

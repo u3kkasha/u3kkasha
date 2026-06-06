@@ -8,11 +8,11 @@
 
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.internal.gemini;
+  cfg = config.internal.antigravity;
 in
 {
-  options.internal.gemini = {
-    enable = mkEnableOption "Gemini CLI configuration";
+  options.internal.antigravity = {
+    enable = mkEnableOption "Antigravity CLI configuration";
   };
 
   config = mkIf cfg.enable {
