@@ -25,7 +25,11 @@ in
 
     hostName = lib.mkOption {
       type = lib.types.str;
-      default = if osConfig != null then osConfig.networking.hostName else throw "internal.hostName must be explicitly set for standalone Home Manager configurations";
+      default =
+        if osConfig != null then
+          osConfig.networking.hostName
+        else
+          throw "internal.hostName must be explicitly set for standalone Home Manager configurations";
       description = "The target hostname/system configuration name.";
     };
 
