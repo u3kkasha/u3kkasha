@@ -44,6 +44,40 @@ let
         "--allow-unrestricted-file-access"
       ];
     };
+    testGeminiContext7HttpUrl = {
+      expr = internal.mcp.geminiMcp.context7.httpUrl;
+      expected = "https://mcp.context7.com/mcp";
+    };
+    testGeminiContext7HeaderKey = {
+      expr = internal.mcp.geminiMcp.context7.headers.CONTEXT7_API_KEY;
+      expected = "$CONTEXT7_API_KEY";
+    };
+    testGeminiGhGrepName = {
+      expr = internal.mcp.geminiMcp ? "gh-grep";
+      expected = true;
+    };
+    testGeminiGithubCommand = {
+      expr = internal.mcp.geminiMcp.github.command;
+      expected = "podman";
+    };
+    testGeminiGithubEnvToken = {
+      expr = internal.mcp.geminiMcp.github.env.GITHUB_PERSONAL_ACCESS_TOKEN;
+      expected = "$GITHUB_TOKEN";
+    };
+    testGeminiPlaywrightArgs = {
+      expr = internal.mcp.geminiMcp.playwright.args;
+      expected = [
+        "run"
+        "-i"
+        "--rm"
+        "--init"
+        "-v"
+        "$PWD:/data:Z"
+        "--pull=always"
+        "mcr.microsoft.com/playwright/mcp"
+        "--allow-unrestricted-file-access"
+      ];
+    };
     testAntigravityContext7ServerUrl = {
       expr = internal.mcp.antigravityMcp.context7.serverUrl;
       expected = "https://mcp.context7.com/mcp";

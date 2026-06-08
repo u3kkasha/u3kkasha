@@ -129,6 +129,34 @@ let
         throw "Unknown server type: ${server.type}"
     );
 
+  toGemini =
+    let
+      replacer = s: replaceEnvVars (builtins.replaceStrings [ "{PWD}" ] [ "$PWD" ] s);
+      serverName = name: builtins.replaceStrings [ "_" " " ] [ "-" "-" ] name;
+    in
+    lib.mapAttrs' (
+      name: server:
+      lib.nameValuePair (serverName name) (
+        if server.type == "remote" then
+          {
+            httpUrl = server.url;
+          }
+          // (lib.optionalAttrs (server ? headers) {
+            headers = lib.mapAttrs (_hName: replacer) server.headers;
+          })
+        else if server.type == "local" then
+          {
+            command = replacer (builtins.head server.command);
+            args = map replacer (builtins.tail server.command);
+          }
+          // (lib.optionalAttrs (server ? env) {
+            env = lib.mapAttrs (_eName: replacer) server.env;
+          })
+        else
+          throw "Unknown server type: ${server.type}"
+      )
+    );
+
   # Helper to transform configurations for Antigravity
   toAntigravity =
     let
@@ -163,5 +191,6 @@ in
 {
   inherit servers;
   openCodeMcp = toOpenCode servers;
+  geminiMcp = toGemini servers;
   antigravityMcp = toAntigravity servers;
 }
