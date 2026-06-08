@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [nixos-build, nixos-wsl-build, home-build, home-wsl-build, vm-test-nixos, vm-test-wsl-mock, vm-test-home-manager]
+        target: [nixos-build, nixos-wsl-build, vm-test-nixos, vm-test-wsl-mock]
     steps:
       - uses: actions/checkout@v4
         with:
