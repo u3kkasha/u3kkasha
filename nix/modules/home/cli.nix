@@ -28,41 +28,22 @@ in
       enableBashIntegration = true;
       enableNushellIntegration = true;
       settings = {
-        add_newline = true;
-        format = lib.concatStrings [
-          "$username"
-          "$hostname"
-          "$directory"
-          "$git_branch"
-          "$git_state"
-          "$git_status"
-          "$nix_shell"
-          "$fill"
-          "$cmd_duration"
-          "$line_break"
-          "$character"
-        ];
-
+        direnv = {
+          disabled = false;
+          format = "via [$symbol$loaded/$allowed]($style) ";
+          symbol = "󰒋 ";
+          style = "bold peach";
+        };
         nix_shell = {
-          symbol = "❄️ ";
-          format = "via [$symbol$state( \\($name\\))]($style) ";
-          style = "bold blue";
-          impure_msg = "impure";
-          pure_msg = "pure";
+          disabled = true;
         };
-
-        fill = {
-          symbol = " ";
-        };
-
         directory = {
-          read_only = " 󰌾";
-        };
-
-        git_branch = {
-          symbol = " ";
+          truncate_to_repo = false;
+          truncation_length = 3;
+          style = "bold blue";
         };
       };
+
     };
   };
 }
