@@ -15,7 +15,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = [
+    nixpkgs.overlays = lib.mkDefault [
       (_final: prev: {
         nushell = prev.nushell.override {
           additionalFeatures = f: f ++ [ "mcp" ];
@@ -43,7 +43,6 @@ in
       enable = true;
       clean.enable = true;
       clean.extraArgs = "--keep-since 4d --keep 3";
-      flake = "/home/ukasha/.dotfiles/nix";
     };
 
     system.stateVersion = systemStateVersion;

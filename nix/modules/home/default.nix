@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  osConfig ? null,
   ...
 }:
 
@@ -21,6 +22,12 @@ in
 
   options.internal = {
     gemini-cli.enable = lib.mkEnableOption "Gemini CLI configuration";
+
+    hostName = lib.mkOption {
+      type = lib.types.str;
+      default = if osConfig != null then osConfig.networking.hostName else throw "internal.hostName must be explicitly set for standalone Home Manager configurations";
+      description = "The target hostname/system configuration name.";
+    };
 
     gui = {
       enable = lib.mkOption {
@@ -58,7 +65,6 @@ in
     home.homeDirectory = "/home/${username}";
 
     home.sessionVariables = {
-      NH_FLAKE = "${config.home.homeDirectory}/.dotfiles/nix";
       EDITOR = lib.internal.defaultEditor;
       VISUAL = lib.internal.defaultEditor;
     };

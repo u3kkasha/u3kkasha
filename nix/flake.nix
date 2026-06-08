@@ -56,7 +56,6 @@
             inputs.plasma-manager.homeModules.plasma-manager
             inputs.catppuccin.homeModules.catppuccin
             inputs.nix-index-database.homeModules.nix-index
-
           ];
           sharedNixosModules = [
             ./modules/nixos/default.nix
@@ -68,6 +67,17 @@
               home-manager.sharedModules = sharedHomeModules;
             }
           ];
+          homePkgs = import inputs.nixpkgs {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+            overlays = [
+              (_final: prev: {
+                nushell = prev.nushell.override {
+                  additionalFeatures = f: f ++ [ "mcp" ];
+                };
+              })
+            ];
+          };
         in
         {
           nixosModules = {
@@ -95,22 +105,24 @@
           };
           homeConfigurations = {
             "${internalLib.username}@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
-              pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-              extraSpecialArgs = specialArgs;
-              modules = sharedHomeModules ++ [
-                ./modules/home/default.nix
-                { nixpkgs.config.allowUnfree = true; }
-              ];
-            };
-            "${internalLib.username}@nixos-wsl" = inputs.home-manager.lib.homeManagerConfiguration {
-              pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+              pkgs = homePkgs;
               extraSpecialArgs = specialArgs;
               modules = sharedHomeModules ++ [
                 ./modules/home/default.nix
                 {
-                  nixpkgs.config.allowUnfree = true;
+                  internal.hostName = "nixos";
+                }
+              ];
+            };
+            "${internalLib.username}@nixos-wsl" = inputs.home-manager.lib.homeManagerConfiguration {
+              pkgs = homePkgs;
+              extraSpecialArgs = specialArgs;
+              modules = sharedHomeModules ++ [
+                ./modules/home/default.nix
+                {
                   internal.wsl.enable = true;
                   internal.gui.enable = false;
+                  internal.hostName = "nixos-wsl";
                 }
               ];
             };
@@ -141,6 +153,12 @@
             ];
             name = "nix-config";
             motd = "";
+            env = [
+              {
+                name = "NH_FLAKE";
+                eval = "$PRJ_ROOT";
+              }
+            ];
             git.hooks = {
               enable = true;
               pre-push.text = ''

@@ -105,10 +105,10 @@ in
                 };
                 options = {
                   nixos = {
-                    expr = "(builtins.getFlake \"${config.home.homeDirectory}/.dotfiles/nix\").nixosConfigurations.nixos-wsl.options";
+                    expr = "(builtins.getFlake (builtins.toString ./../..)).nixosConfigurations.${config.internal.hostName}.options";
                   };
                   home-manager = {
-                    expr = "(builtins.getFlake \"${config.home.homeDirectory}/.dotfiles/nix\").homeConfigurations.\"${lib.internal.username}@nixos-wsl\".options";
+                    expr = "(builtins.getFlake (builtins.toString ./../..)).homeConfigurations.\"${lib.internal.username}@${config.internal.hostName}\".options";
                   };
                 };
               };
