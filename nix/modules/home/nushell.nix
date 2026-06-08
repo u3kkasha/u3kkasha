@@ -22,6 +22,9 @@ in
       settings = {
         show_banner = false;
         edit_mode = "vi";
+        history = {
+          file_format = "sqlite";
+        };
       };
       extraConfig = ''
         # Load Doppler secrets if logged in

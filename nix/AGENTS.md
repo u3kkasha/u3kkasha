@@ -57,7 +57,6 @@ Before finalizing changes, use the following commands to verify the configuratio
 - **Integration Tests**:
   - `nix build .#vm-test-nixos` (Full NixOS system).
   - `nix build .#vm-test-wsl-mock` (WSL environment isolation).
-  - `nix build .#vm-test-home-manager` (Standalone Home Manager).
 
 ## Code Style
 

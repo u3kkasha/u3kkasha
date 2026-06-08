@@ -69,17 +69,6 @@
               home-manager.sharedModules = sharedHomeModules;
             }
           ];
-          homePkgs = import inputs.nixpkgs {
-            system = "x86_64-linux";
-            config.allowUnfree = true;
-            overlays = [
-              (_final: prev: {
-                nushell = prev.nushell.override {
-                  additionalFeatures = f: f ++ [ "mcp" ];
-                };
-              })
-            ];
-          };
         in
         {
           nixosModules = {
@@ -102,30 +91,6 @@
                 inputs.self.nixosModules.core
                 ./systems/x86_64-linux/nixos-wsl/default.nix
                 { nixpkgs.config.allowUnfree = true; }
-              ];
-            };
-          };
-          homeConfigurations = {
-            "${internalLib.username}@nixos" = inputs.home-manager.lib.homeManagerConfiguration {
-              pkgs = homePkgs;
-              extraSpecialArgs = specialArgs;
-              modules = sharedHomeModules ++ [
-                ./modules/home/default.nix
-                {
-                  internal.hostName = "nixos";
-                }
-              ];
-            };
-            "${internalLib.username}@nixos-wsl" = inputs.home-manager.lib.homeManagerConfiguration {
-              pkgs = homePkgs;
-              extraSpecialArgs = specialArgs;
-              modules = sharedHomeModules ++ [
-                ./modules/home/default.nix
-                {
-                  internal.wsl.enable = true;
-                  internal.gui.enable = false;
-                  internal.hostName = "nixos-wsl";
-                }
               ];
             };
           };
@@ -176,12 +141,9 @@
           packages = {
             nixos-build = inputs.self.nixosConfigurations.nixos.config.system.build.toplevel;
             nixos-wsl-build = inputs.self.nixosConfigurations.nixos-wsl.config.system.build.toplevel;
-            home-build = inputs.self.homeConfigurations."ukasha@nixos".activationPackage;
-            home-wsl-build = inputs.self.homeConfigurations."ukasha@nixos-wsl".activationPackage;
             # Integration Tests (Heavy - CI Only)
             vm-test-nixos = import ./tests/vm-nixos.nix { inherit pkgs inputs specialArgs; };
             vm-test-wsl-mock = import ./tests/vm-wsl-mock.nix { inherit pkgs inputs specialArgs; };
-            vm-test-home-manager = import ./tests/vm-home-manager.nix { inherit pkgs inputs specialArgs; };
             unit-tests = import ./tests/unit.nix {
               inherit pkgs;
               lib = extendedLib;
