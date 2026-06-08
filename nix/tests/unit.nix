@@ -112,6 +112,29 @@ let
         "--allow-unrestricted-file-access"
       ];
     };
+    testOpenCodeNushellCommand = {
+      expr = internal.mcp.openCodeMcp.nushell.command;
+      expected = [
+        "nu"
+        "--mcp"
+      ];
+    };
+    testGeminiNushellCommand = {
+      expr = internal.mcp.geminiMcp.nushell.command;
+      expected = "nu";
+    };
+    testGeminiNushellArgs = {
+      expr = internal.mcp.geminiMcp.nushell.args;
+      expected = [ "--mcp" ];
+    };
+    testAntigravityNushellCommand = {
+      expr = internal.mcp.antigravityMcp.nushell.command;
+      expected = "nu";
+    };
+    testAntigravityNushellArgs = {
+      expr = internal.mcp.antigravityMcp.nushell.args;
+      expected = [ "--mcp" ];
+    };
   };
 in
 if testResults == [ ] then

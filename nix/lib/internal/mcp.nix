@@ -53,6 +53,13 @@ let
         "ghcr.io/dimonsmart/nugetmcpserver:latest"
       ];
     };
+    nushell = {
+      type = "local";
+      command = [
+        "nu"
+        "--mcp"
+      ];
+    };
     nuxt = {
       type = "remote";
       url = "https://nuxt.com/mcp";

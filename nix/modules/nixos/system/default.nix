@@ -15,6 +15,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (_final: prev: {
+        nushell = prev.nushell.override {
+          additionalFeatures = f: f ++ [ "mcp" ];
+        };
+      })
+    ];
+
     nix.package = pkgs.lix;
     nix.settings = {
       experimental-features = [

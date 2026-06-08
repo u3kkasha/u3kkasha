@@ -35,9 +35,6 @@ in
         if (which gh | is-not-empty) {
             $env.GITHUB_TOKEN = (do { ^gh auth token } | complete | get -o stdout | str trim)
         }
-
-        # Sophisticated greeting
-        fastfetch
       '';
     };
   };
