@@ -20,7 +20,6 @@
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     herdr.url = "github:ogulcancelik/herdr";
-    impermanence.url = "github:nix-community/impermanence";
   };
   nixConfig = {
     extra-substituters = [
@@ -63,7 +62,6 @@
             inputs.nixos-wsl.nixosModules.default
             inputs.home-manager.nixosModules.home-manager
             inputs.nix-index-database.nixosModules.nix-index
-            inputs.impermanence.nixosModules.impermanence
             {
               home-manager.extraSpecialArgs = specialArgs;
               home-manager.sharedModules = sharedHomeModules;

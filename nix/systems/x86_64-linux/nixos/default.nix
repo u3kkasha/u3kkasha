@@ -14,7 +14,6 @@
     desktop.enable = true;
     podman.enable = true;
     docker.enable = true;
-    impermanence.enable = true;
   };
 
   networking.hostName = "nixos";
