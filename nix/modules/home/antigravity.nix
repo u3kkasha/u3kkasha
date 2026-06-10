@@ -26,5 +26,12 @@ in
 
       mcpServers = lib.internal.mcp.antigravityMcp;
     };
+
+    home.file.".gemini/antigravity-cli/mcp_config.json" = {
+      text = builtins.toJSON { inherit (config.programs.antigravity-cli) mcpServers; };
+      force = true;
+    };
+
+    home.file.".gemini/config/mcp_config.json".force = true;
   };
 }
