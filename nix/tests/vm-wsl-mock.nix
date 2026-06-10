@@ -29,7 +29,6 @@ pkgs.testers.runNixOSTest {
         useUserPackages = true;
         extraSpecialArgs = specialArgs;
         sharedModules = [
-          inputs.plasma-manager.homeModules.plasma-manager
           inputs.catppuccin.homeModules.catppuccin
           inputs.nix-index-database.homeModules.nix-index
         ];

@@ -55,7 +55,7 @@ in
       helix.enable = lib.mkDefault true;
       nushell.enable = lib.mkDefault true;
       opencode.enable = lib.mkDefault true;
-      plasma.enable = lib.mkDefault config.internal.gui.enable;
+      gnome.enable = lib.mkDefault config.internal.gui.enable;
       utils.enable = lib.mkDefault true;
       snip.enable = lib.mkDefault true;
       wsl.enable = lib.mkDefault false;

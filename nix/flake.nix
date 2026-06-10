@@ -14,12 +14,11 @@
     devshell.url = "github:numtide/devshell";
     devshell.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
-    plasma-manager.url = "github:nix-community/plasma-manager";
-    plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
     catppuccin.url = "github:catppuccin/nix";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     herdr.url = "github:ogulcancelik/herdr";
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
   };
   nixConfig = {
     extra-substituters = [
@@ -53,7 +52,6 @@
       flake =
         let
           sharedHomeModules = [
-            inputs.plasma-manager.homeModules.plasma-manager
             inputs.catppuccin.homeModules.catppuccin
             inputs.nix-index-database.homeModules.nix-index
           ];
@@ -62,6 +60,7 @@
             inputs.nixos-wsl.nixosModules.default
             inputs.home-manager.nixosModules.home-manager
             inputs.nix-index-database.nixosModules.nix-index
+            inputs.nix-flatpak.nixosModules.nix-flatpak
             {
               home-manager.extraSpecialArgs = specialArgs;
               home-manager.sharedModules = sharedHomeModules;
