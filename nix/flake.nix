@@ -83,9 +83,12 @@
                 inputs.self.nixosModules.core
                 ./systems/x86_64-linux/nixos/default.nix
                 {
-                  home-manager.sharedModules = [
-                    inputs.noctalia-shell.homeModules.default
-                  ];
+                  home-manager.users.${extendedLib.internal.username} = {
+                    imports = [
+                      inputs.noctalia-shell.homeModules.default
+                      ./modules/home/noctalia/config.nix
+                    ];
+                  };
                 }
                 { nixpkgs.config.allowUnfree = true; }
               ];
