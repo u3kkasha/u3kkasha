@@ -14,17 +14,19 @@ in
   };
 
   config = mkIf cfg.enable {
-    # Niri configuration via KDL
     xdg.configFile."niri/config.kdl".text = ''
       input {
           keyboard {
               xkb {
-                  layout "us"
+                  layout "us,ara"
+                  options "grp:win_space_toggle"
               }
           }
           touchpad {
               tap
               dwt
+              natural-scroll
+              scroll-factor 0.5
           }
       }
 
@@ -42,34 +44,28 @@ in
       spawn-at-startup "noctalia-shell"
       spawn-at-startup "nm-applet"
       spawn-at-startup "hypridle"
-      spawn-at-startup "wlsunset" "-l" "23.8" "-L" "90.4" # Dhaka coordinates
+      spawn-at-startup "wlsunset" "-l" "23.8" "-L" "90.4"
 
       binds {
-          // Applications
           Super+T { spawn "ghostty"; }
           Super+D { spawn "noctalia-shell" "--launcher"; }
           Super+Q { close-window; }
           Super+Shift+E { quit; }
           Super+L { spawn "hyprlock"; }
-          
-          // Audio
+
           XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
           XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
           XF86AudioMute { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-          
-          // Media
+
           XF86AudioPlay { spawn "playerctl" "play-pause"; }
           XF86AudioNext { spawn "playerctl" "next"; }
           XF86AudioPrev { spawn "playerctl" "previous"; }
 
-          // Brightness
           XF86MonBrightnessUp { spawn "brightnessctl" "set" "5%+"; }
           XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
 
-          // Screenshots
           Print { spawn "grim" "-g" "$(slurp)" "- | wl-copy"; }
 
-          // Navigation
           Super+Left  { focus-column-left; }
           Super+Right { focus-column-right; }
           Super+Up    { focus-window-or-monitor-up; }
@@ -77,18 +73,16 @@ in
 
           Super+Shift+Left  { move-column-left; }
           Super+Shift+Right { move-column-right; }
-          
-          // Layout
+
           Super+F { maximize-column; }
           Super+Shift+F { fullscreen-window; }
           Super+C { center-column; }
 
           Super+Minus { set-column-width "-10%"; }
-          Super+Equal { set-column-width "+10%" };
-          }
+          Super+Equal { set-column-width "+10%"; }
+      }
     '';
 
-    # Idle Management
     xdg.configFile."hypr/hypridle.conf".text = ''
       general {
       lock_cmd = pidof hyprlock || hyprlock
@@ -108,7 +102,6 @@ in
       }
     '';
 
-    # Ensure standard directories exist
     xdg.userDirs.enable = true;
   };
 }
