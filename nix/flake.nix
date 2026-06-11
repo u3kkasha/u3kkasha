@@ -18,15 +18,19 @@
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     nix-flatpak.url = "github:gmodena/nix-flatpak";
+    noctalia-shell.url = "github:noctalia-dev/noctalia-shell";
+    noctalia-shell.inputs.nixpkgs.follows = "nixpkgs";
   };
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
       "https://numtide.cachix.org"
+      "https://noctalia.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "numtide.cachix.org-1:2ps1H2rnfjkW8Vgi8M96u6Vny89Y460GqT8m2R27Yrg="
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
     ];
   };
   outputs =
@@ -53,6 +57,7 @@
           sharedHomeModules = [
             inputs.catppuccin.homeModules.catppuccin
             inputs.nix-index-database.homeModules.nix-index
+            inputs.noctalia-shell.homeModules.default
           ];
           sharedNixosModules = [
             ./modules/nixos/default.nix
@@ -60,6 +65,7 @@
             inputs.home-manager.nixosModules.home-manager
             inputs.nix-index-database.nixosModules.nix-index
             inputs.nix-flatpak.nixosModules.nix-flatpak
+            inputs.noctalia-shell.nixosModules.default
             {
               home-manager.extraSpecialArgs = specialArgs;
               home-manager.sharedModules = sharedHomeModules;
