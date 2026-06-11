@@ -5,6 +5,11 @@ let
   # - `{env:VAR_NAME}` for environment variables
   # - `{PWD}` for the working directory placeholder (which resolves to `.` in Antigravity and `{env:PWD}` in OpenCode)
   servers = {
+    "dotnet-debugger" = {
+      type = "local";
+      command = [ "dnx" "-y" "debug-mcp" ];
+    };
+
     context7 = {
       type = "remote";
       url = "https://mcp.context7.com/mcp";
