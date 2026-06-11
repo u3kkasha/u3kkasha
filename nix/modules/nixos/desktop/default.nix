@@ -38,7 +38,7 @@ in
     # Essential Desktop Utilities
     environment.systemPackages = with pkgs; [
       networkmanagerapplet
-      inputs.noctalia-shell.packages.${pkgs.system}.default
+      inputs.noctalia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default
       wl-clipboard
       libnotify
       brightnessctl

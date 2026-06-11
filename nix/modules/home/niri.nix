@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 
@@ -85,36 +84,30 @@ in
           Super+C { center-column; }
 
           Super+Minus { set-column-width "-10%"; }
-          Super+Equal { set-column-width "+10%"; }
-      }
+          Super+Equal { set-column-width "+10%" };
+          }
     '';
 
     # Idle Management
     xdg.configFile."hypr/hypridle.conf".text = ''
       general {
-          lock_cmd = pidof hyprlock || hyprlock
-          before_sleep_cmd = loginctl lock-session
-          after_sleep_cmd = hyprctl dispatch dpms on
+      lock_cmd = pidof hyprlock || hyprlock
+      before_sleep_cmd = loginctl lock-session
+      after_sleep_cmd = hyprctl dispatch dpms on
       }
 
       listener {
-          timeout = 300
-          on-timeout = loginctl lock-session
+      timeout = 300
+      on-timeout = loginctl lock-session
       }
 
       listener {
-          timeout = 330
-          on-timeout = niri msg action power-off-monitors
-          on-resume = niri msg action power-on-monitors
+      timeout = 330
+      on-timeout = niri msg action power-off-monitors
+      on-resume = niri msg action power-on-monitors
       }
     '';
 
-    # Enable noctalia-shell user configuration
-    programs.noctalia-shell = {
-      enable = true;
-      systemd.enable = true;
-    };
-    
     # Ensure standard directories exist
     xdg.userDirs.enable = true;
   };

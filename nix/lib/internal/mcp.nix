@@ -7,7 +7,11 @@ let
   servers = {
     "dotnet-debugger" = {
       type = "local";
-      command = [ "dnx" "-y" "debug-mcp" ];
+      command = [
+        "dnx"
+        "-y"
+        "debug-mcp"
+      ];
     };
 
     context7 = {
