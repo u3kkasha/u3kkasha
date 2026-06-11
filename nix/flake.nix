@@ -17,7 +17,6 @@
     catppuccin.url = "github:catppuccin/nix";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
-    herdr.url = "github:ogulcancelik/herdr";
     nix-flatpak.url = "github:gmodena/nix-flatpak";
   };
   nixConfig = {

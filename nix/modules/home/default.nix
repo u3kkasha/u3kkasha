@@ -50,7 +50,6 @@ in
       antigravity.enable = lib.mkDefault true;
       gemini-cli.enable = lib.mkDefault true;
       ghostty.enable = lib.mkDefault config.internal.gui.enable;
-      herdr.enable = lib.mkDefault true;
       git.enable = lib.mkDefault true;
       helix.enable = lib.mkDefault true;
       nushell.enable = lib.mkDefault true;
@@ -95,7 +94,6 @@ in
       enable = true;
       autoEnable = true;
       flavor = "mocha";
-      gemini-cli.enable = false;
     };
   };
 }
