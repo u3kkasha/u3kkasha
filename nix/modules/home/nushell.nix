@@ -28,9 +28,11 @@ in
       };
       extraConfig = ''
         # Load Doppler secrets if logged in
-        try {
-          if ("~/.doppler/config.yaml" | path exists) {
-            load-env (doppler secrets download --no-file --format json | from json)
+        if (which doppler | is-not-empty) {
+          try {
+            if (doppler configure get token --plain | str trim | is-not-empty) {
+              load-env (doppler secrets download --no-file --format json | from json)
+            }
           }
         }
 

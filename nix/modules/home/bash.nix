@@ -23,7 +23,7 @@ in
       };
       bashrcExtra = ''
         # Load Doppler secrets if logged in
-        if [ -f ~/.doppler/config.yaml ]; then
+        if command -v doppler >/dev/null 2>&1 && [ -n "$(doppler configure get token --plain 2>/dev/null)" ]; then
           eval "$(doppler secrets download --no-file --format env)"
         fi
 
