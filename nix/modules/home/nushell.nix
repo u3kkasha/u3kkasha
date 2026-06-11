@@ -30,7 +30,7 @@ in
         # Load Doppler secrets if logged in
         try {
           if ("~/.doppler/config.yaml" | path exists) {
-            load-env (doppler secrets download --format json | from json)
+            load-env (doppler secrets download --no-file --format json | from json)
           }
         }
 

@@ -24,7 +24,7 @@ in
       bashrcExtra = ''
         # Load Doppler secrets if logged in
         if [ -f ~/.doppler/config.yaml ]; then
-          eval "$(doppler secrets download --no-tag --format docker)"
+          eval "$(doppler secrets download --no-file --format env)"
         fi
 
         # Export GitHub token from gh if available
