@@ -35,11 +35,22 @@ in
     security.pam.services.greetd.enableGnomeKeyring = true;
     services.gnome.gnome-keyring.enable = true;
 
-    # Noctalia Shell (Desktop UI)
-    services.noctalia-shell = {
-      enable = true;
-      package = inputs.noctalia-shell.packages.${pkgs.system}.default;
-    };
+    # Essential Desktop Utilities
+    environment.systemPackages = with pkgs; [
+      networkmanagerapplet
+      inputs.noctalia-shell.packages.${pkgs.system}.default
+      wl-clipboard
+      libnotify
+      brightnessctl
+      playerctl
+      pavucontrol # Audio GUI
+      wlsunset # Night Light
+      grim # screenshots
+      slurp # region selection
+      hyprlock # screen locker
+      hypridle # idle daemon
+      nautilus # file manager (Niri works well with it)
+    ];
 
     # Polkit for privilege escalation
     security.polkit.enable = true;
@@ -65,22 +76,6 @@ in
       ];
       config.common.default = [ "gtk" ];
     };
-
-    # Essential Desktop Utilities
-    environment.systemPackages = with pkgs; [
-      networkmanagerapplet
-      wl-clipboard
-      libnotify
-      brightnessctl
-      playerctl
-      pavucontrol # Audio GUI
-      wlsunset # Night Light
-      grim # screenshots
-      slurp # region selection
-      hyprlock # screen locker
-      hypridle # idle daemon
-      nautilus # file manager (Niri works well with it)
-    ];
 
     # Enable Electron Wayland support
     environment.sessionVariables.NIXOS_OZONE_WL = "1";

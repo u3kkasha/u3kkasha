@@ -57,7 +57,6 @@
           sharedHomeModules = [
             inputs.catppuccin.homeModules.catppuccin
             inputs.nix-index-database.homeModules.nix-index
-            inputs.noctalia-shell.homeModules.default
           ];
           sharedNixosModules = [
             ./modules/nixos/default.nix
@@ -65,7 +64,6 @@
             inputs.home-manager.nixosModules.home-manager
             inputs.nix-index-database.nixosModules.nix-index
             inputs.nix-flatpak.nixosModules.nix-flatpak
-            inputs.noctalia-shell.nixosModules.default
             {
               home-manager.extraSpecialArgs = specialArgs;
               home-manager.sharedModules = sharedHomeModules;
@@ -84,6 +82,11 @@
               modules = [
                 inputs.self.nixosModules.core
                 ./systems/x86_64-linux/nixos/default.nix
+                {
+                  home-manager.sharedModules = [
+                    inputs.noctalia-shell.homeModules.default
+                  ];
+                }
                 { nixpkgs.config.allowUnfree = true; }
               ];
             };
