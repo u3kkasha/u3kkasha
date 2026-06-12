@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  self,
   ...
 }:
 
@@ -46,6 +47,7 @@ in
     };
 
     system.stateVersion = systemStateVersion;
+    system.nixos.versionSuffix = ".${self.shortRev or self.dirtyShortRev or "dirty"}";
 
     time.timeZone = "Asia/Dhaka";
     i18n.defaultLocale = "en_GB.UTF-8";
