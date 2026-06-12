@@ -25,11 +25,14 @@ in
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd niri";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd ${config.programs.niri.package}/bin/niri-session";
           user = "greeter";
         };
       };
     };
+
+    # Let niri inherit the full PATH set up by niri-session
+    systemd.user.services.niri.enableDefaultPath = false;
 
     # Unlock gnome-keyring on login
     security.pam.services.greetd.enableGnomeKeyring = true;

@@ -46,12 +46,58 @@ in
           gaps 16
           center-focused-column "never"
           default-column-width { proportion 0.5; }
+          preset-column-widths {
+              proportion 0.33333
+              proportion 0.5
+              proportion 0.66667
+          }
+          focus-ring {
+              width 4
+              active-color "#7fc8ff"
+              inactive-color "#505050"
+          }
+          border {
+              off
+              width 4
+              active-color "#ffc87f"
+              inactive-color "#505050"
+              urgent-color "#9b0000"
+          }
+          shadow {
+              off
+              softness 30
+              spread 5
+              offset x=0 y=5
+              color "#00000070"
+          }
+      }
+
+      prefer-no-csd
+
+      screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+      animations {
+      }
+
+      window-rule {
+          match app-id=r#"^org\.wezfurlong\.wezterm$"#
+          default-column-width {}
+      }
+      window-rule {
+          match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+          open-floating true
+      }
+      window-rule {
+          geometry-corner-radius 12
+          clip-to-geometry true
       }
 
       spawn-at-startup "noctalia"
       spawn-at-startup "nm-applet"
       spawn-at-startup "hypridle"
       spawn-at-startup "wlsunset" "-l" "23.8" "-L" "90.4"
+      spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
+      spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
 
       binds {
           // ═══════════════════════════════════════════════
@@ -153,19 +199,19 @@ in
           // ═══════════════════════════════════════════════
           // Media Keys
           // ═══════════════════════════════════════════════
-          XF86AudioRaiseVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
-          XF86AudioLowerVolume { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
-          XF86AudioMute { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+          XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+          XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+          XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
 
-          XF86AudioPlay { spawn "playerctl" "play-pause"; }
-          XF86AudioNext { spawn "playerctl" "next"; }
-          XF86AudioPrev { spawn "playerctl" "previous"; }
+          XF86AudioPlay allow-when-locked=true { spawn "playerctl" "play-pause"; }
+          XF86AudioNext allow-when-locked=true { spawn "playerctl" "next"; }
+          XF86AudioPrev allow-when-locked=true { spawn "playerctl" "previous"; }
 
           // ═══════════════════════════════════════════════
           // Brightness Keys
           // ═══════════════════════════════════════════════
-          XF86MonBrightnessUp { spawn "brightnessctl" "set" "5%+"; }
-          XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
+          XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }
+          XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
 
           // ═══════════════════════════════════════════════
           // Screenshots
