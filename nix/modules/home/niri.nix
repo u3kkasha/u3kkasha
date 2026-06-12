@@ -48,7 +48,7 @@ in
           default-column-width { proportion 0.5; }
       }
 
-      spawn-at-startup "noctalia-shell"
+      spawn-at-startup "noctalia"
       spawn-at-startup "nm-applet"
       spawn-at-startup "hypridle"
       spawn-at-startup "wlsunset" "-l" "23.8" "-L" "90.4"
@@ -58,7 +58,7 @@ in
           // Windows Key - Run / Launcher
           // ═══════════════════════════════════════════════
           // Win+R - Run dialog (like Windows Run)
-          Super+R { spawn "noctalia-shell" "--launcher"; }
+          Super+R { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
 
           // ═══════════════════════════════════════════════
           // Windows Common Shortcuts
@@ -133,7 +133,7 @@ in
           // ═══════════════════════════════════════════════
           // PowerToys-inspired Shortcuts
           // ═══════════════════════════════════════════════
-          Alt+Space { spawn "noctalia-shell" "--launcher"; }  // Alt+Space - PowerToys Run
+          Alt+Space { spawn "noctalia" "msg" "panel-toggle" "launcher"; }  // Alt+Space - PowerToys Run
 
           // Win+Shift+C - Color Picker (PowerToys)
           Super+Shift+C { spawn "hyprpicker" "-a"; }
