@@ -86,20 +86,6 @@ in
     # Enable gvfs for file manager features (trash, mounts)
     services.gvfs.enable = true;
 
-    # Enable Flatpak
-    services.flatpak.enable = true;
-    services.flatpak.update.auto.enable = true;
-    services.flatpak.packages = [
-      "dev.vencord.Vesktop"
-      "com.spotify.Client"
-      "md.obsidian.Obsidian"
-      "io.github.marcodallasol.flatsweep"
-      "io.github.flattool.Warehouse"
-      "com.bitwarden.desktop"
-      "app.drey.Blanket"
-      "io.github.celluloid_player.Celluloid"
-    ];
-
     # Fonts
     fonts.packages = with pkgs; [
       inter
