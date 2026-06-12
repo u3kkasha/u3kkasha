@@ -18,7 +18,6 @@ in
     programs.helix = {
       enable = true;
       extraPackages = with pkgs; [
-        nixd
         nixfmt
         bash-language-server
         pyright
@@ -96,24 +95,6 @@ in
           }
         ];
         language-server = {
-          nixd = {
-            command = "nixd";
-            config = {
-              nixd = {
-                nixpkgs = {
-                  expr = "import <nixpkgs> { }";
-                };
-                options = {
-                  nixos = {
-                    expr = "(builtins.getFlake (builtins.toString ./../..)).nixosConfigurations.${config.internal.hostName}.options";
-                  };
-                  home-manager = {
-                    expr = "(builtins.getFlake (builtins.toString ./../..)).homeConfigurations.\"${lib.internal.username}@${config.internal.hostName}\".options";
-                  };
-                };
-              };
-            };
-          };
           roslyn = {
             command = "Microsoft.CodeAnalysis.LanguageServer";
           };

@@ -54,6 +54,7 @@ in
       helix.enable = lib.mkDefault true;
       nushell.enable = lib.mkDefault true;
       opencode.enable = lib.mkDefault true;
+      nixd.enable = lib.mkDefault true;
       niri.enable = lib.mkDefault config.internal.gui.enable;
       utils.enable = lib.mkDefault true;
       snip.enable = lib.mkDefault true;
