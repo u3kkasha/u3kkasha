@@ -29,6 +29,18 @@ let
       expr = internal.mcp.openCodeMcp.context7.headers.CONTEXT7_API_KEY;
       expected = "{env:CONTEXT7_API_KEY}";
     };
+    testOpenCodeStitchType = {
+      expr = internal.mcp.openCodeMcp.stitch.type;
+      expected = "remote";
+    };
+    testOpenCodeStitchUrl = {
+      expr = internal.mcp.openCodeMcp.stitch.url;
+      expected = "https://stitch.googleapis.com/mcp";
+    };
+    testOpenCodeStitchHeaderKey = {
+      expr = internal.mcp.openCodeMcp.stitch.headers."X-Goog-Api-Key";
+      expected = "{env:STITCH_API_KEY}";
+    };
     testOpenCodePlaywrightCommand = {
       expr = internal.mcp.openCodeMcp.playwright.command;
       expected = [
@@ -51,6 +63,14 @@ let
     testGeminiContext7HeaderKey = {
       expr = internal.mcp.geminiMcp.context7.headers.CONTEXT7_API_KEY;
       expected = "$CONTEXT7_API_KEY";
+    };
+    testGeminiStitchHttpUrl = {
+      expr = internal.mcp.geminiMcp.stitch.httpUrl;
+      expected = "https://stitch.googleapis.com/mcp";
+    };
+    testGeminiStitchHeaderKey = {
+      expr = internal.mcp.geminiMcp.stitch.headers."X-Goog-Api-Key";
+      expected = "$STITCH_API_KEY";
     };
     testGeminiGhGrepName = {
       expr = internal.mcp.geminiMcp ? "gh-grep";
@@ -85,6 +105,14 @@ let
     testAntigravityContext7HeaderKey = {
       expr = internal.mcp.antigravityMcp.context7.headers.CONTEXT7_API_KEY;
       expected = "$CONTEXT7_API_KEY";
+    };
+    testAntigravityStitchServerUrl = {
+      expr = internal.mcp.antigravityMcp.stitch.serverUrl;
+      expected = "https://stitch.googleapis.com/mcp";
+    };
+    testAntigravityStitchHeaderKey = {
+      expr = internal.mcp.antigravityMcp.stitch.headers."X-Goog-Api-Key";
+      expected = "$STITCH_API_KEY";
     };
     testAntigravityGithubCommand = {
       expr = internal.mcp.antigravityMcp.github.command;

@@ -107,6 +107,13 @@ let
         "false"
       ];
     };
+    stitch = {
+      type = "remote";
+      url = "https://stitch.googleapis.com/mcp";
+      headers = {
+        "X-Goog-Api-Key" = "{env:STITCH_API_KEY}";
+      };
+    };
   };
 
   # Helper to transform `{env:VAR}` placeholders into `$VAR`
