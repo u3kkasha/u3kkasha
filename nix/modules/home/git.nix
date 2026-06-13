@@ -77,6 +77,10 @@ in
             }
           ];
         };
+        os = {
+          edit = "hx {{filename}}";
+          editAtLine = "hx {{filename}}:{{line}}";
+        };
       };
     };
   };
