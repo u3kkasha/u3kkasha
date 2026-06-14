@@ -52,6 +52,7 @@ let
         "-v"
         "{env:PWD}:/data:Z"
         "--pull=always"
+        "--network=host"
         "mcr.microsoft.com/playwright/mcp"
         "--allow-unrestricted-file-access"
       ];
@@ -94,6 +95,7 @@ let
         "-v"
         "$PWD:/data:Z"
         "--pull=always"
+        "--network=host"
         "mcr.microsoft.com/playwright/mcp"
         "--allow-unrestricted-file-access"
       ];
@@ -136,6 +138,7 @@ let
         "-v"
         ".:/data:Z"
         "--pull=always"
+        "--network=host"
         "mcr.microsoft.com/playwright/mcp"
         "--allow-unrestricted-file-access"
       ];
