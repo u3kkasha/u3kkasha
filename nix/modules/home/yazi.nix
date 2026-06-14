@@ -20,12 +20,27 @@ in
       enableBashIntegration = true;
       shellWrapperName = "y";
       settings = {
-        yazi = {
-          manager = {
-            show_hidden = true;
-            sort_by = "mtime";
-            sort_reverse = true;
-          };
+        manager = {
+          show_hidden = true;
+          sort_by = "mtime";
+          sort_reverse = true;
+        };
+        opener = {
+          edit = [
+            {
+              run = ''${lib.internal.defaultEditor} "$@"'';
+              block = true;
+              desc = "Helix";
+            }
+          ];
+        };
+        open = {
+          prepend_rules = [
+            {
+              url = "*";
+              use = "edit";
+            }
+          ];
         };
       };
     };
