@@ -49,6 +49,7 @@ in
       direnv.enable = lib.mkDefault true;
       antigravity.enable = lib.mkDefault true;
       gemini-cli.enable = lib.mkDefault true;
+      codex.enable = lib.mkDefault true;
       ghostty.enable = lib.mkDefault config.internal.gui.enable;
       git.enable = lib.mkDefault true;
       helix.enable = lib.mkDefault true;
