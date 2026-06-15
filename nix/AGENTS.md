@@ -66,3 +66,8 @@ Before finalizing changes, use the following commands to verify the configuratio
 - **Commit Messages**: Follow the style `type(scope): 💡 description`.
 - **Gitmoji**: Use Gitmojis to signify the intent of changes (e.g., ✨ for features, 🔧 for fixes, 🧪 for tests). Avoid using emojis involving humans or animals to maintain a clean and professional look.
 - **Nushell Multi-command logic**: Prefer `def` functions over `alias` for multi-step commands to avoid immediate execution on shell startup.
+
+## MCP Tools
+
+- **Required MCP Servers**: The coding agent should use the `serena` MCP and `nixos` MCP servers while working on this project.
+
