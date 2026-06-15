@@ -12,6 +12,7 @@ This repository contains a modular NixOS and Home Manager configuration specific
 - **Environment Management**: Powered by `direnv` with `nix-direnv` for seamless project-specific developer environments.
 - **Maintenance**: Maintenance tasks are centralized using `nh` (nix-helper), providing standardized commands for rebuilding the system/home configuration and performing garbage collection. This removes the need for custom wrapper scripts.
 - **Binary Caching**: Cachix (`u3kkasha`) is integrated into CI (GitHub Actions) to speed up build verification.
+- **Dynamic Imports (Scan Paths)**: The configuration imports system and user modules dynamically using a custom `scanPaths` helper, enabling auto-discovery of Nix files.
 
 ## Key Decisions
 

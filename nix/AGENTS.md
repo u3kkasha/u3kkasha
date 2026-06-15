@@ -2,6 +2,10 @@
 
 This repository contains NixOS and Home Manager configuration files.
 
+> [!IMPORTANT]
+> Coding agents working on this project must read both this file ([AGENTS.md](file:///home/ukasha/code/.dotfiles/nix/AGENTS.md)) and [CONTEXT.md](file:///home/ukasha/code/.dotfiles/nix/CONTEXT.md) to align on the architecture, current state, and key decisions.
+
+
 ## Architecture
 
 This project uses a modular NixOS configuration based on Flakes, `flake-parts`, and Home Manager.
