@@ -77,8 +77,6 @@ _:
           "-i"
           "--rm"
           "--init"
-          "-v"
-          "{env:PWD}:/data:Z"
           "--pull=always"
           "--network=host"
           "mcr.microsoft.com/playwright/mcp"
