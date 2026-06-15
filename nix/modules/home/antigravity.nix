@@ -20,7 +20,7 @@ let
 
   # Helper to transform the mcp servers to Antigravity's structure, bypassing HM's bug
   mapMcpServer =
-    server:
+    name: server:
     let
       isRemote = server.url != null;
     in
@@ -32,14 +32,23 @@ let
         headers = lib.mapAttrs (_: replaceEnvVars) server.headers;
       }
     else
+      let
+        transformed = lib.hm.mcp.transformMcpServer {
+          inherit server;
+          exclude = [ "type" ];
+          extraTransforms = [
+            (lib.hm.mcp.wrapEnvFilesCommand { inherit pkgs name; })
+          ];
+        };
+      in
       {
-        command = replaceEnvVars server.command;
+        command = replaceEnvVars (toString transformed.command);
       }
-      // lib.optionalAttrs (server ? args) {
-        args = map replaceEnvVars server.args;
+      // lib.optionalAttrs (transformed ? args) {
+        args = map replaceEnvVars transformed.args;
       }
-      // lib.optionalAttrs (server ? env) {
-        env = lib.mapAttrs (_: replaceEnvVars) server.env;
+      // lib.optionalAttrs (transformed ? env) {
+        env = lib.mapAttrs (_: replaceEnvVars) transformed.env;
       };
 in
 {
@@ -51,7 +60,7 @@ in
     programs.antigravity-cli = {
       enable = true;
       enableMcpIntegration = false; # Disable buggy upstream Home Manager integration
-      mcpServers = lib.mapAttrs (_: mapMcpServer) config.programs.mcp.servers;
+      mcpServers = lib.mapAttrs mapMcpServer config.programs.mcp.servers;
       package = pkgs.antigravity-cli;
     };
   };

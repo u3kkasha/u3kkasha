@@ -1,4 +1,4 @@
-_:
+{ config, ... }:
 
 {
   programs.mcp = {
@@ -34,7 +34,9 @@ _:
           "ghcr.io/github/github-mcp-server"
         ];
         env = {
-          "GITHUB_PERSONAL_ACCESS_TOKEN" = "{env:GITHUB_TOKEN}";
+          "GITHUB_PERSONAL_ACCESS_TOKEN" = {
+            file = "${config.home.homeDirectory}/.config/github/token";
+          };
         };
       };
 
