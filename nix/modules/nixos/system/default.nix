@@ -3,6 +3,7 @@
   lib,
   config,
   self,
+  inputs,
   ...
 }:
 
@@ -22,6 +23,17 @@ in
           additionalFeatures = f: f ++ [ "mcp" ];
         };
       })
+      (
+        _final: prev:
+        let
+          agentPkgs = inputs.llm-agents.packages.${prev.stdenv.hostPlatform.system} or { };
+        in
+        {
+          antigravity-cli = agentPkgs.antigravity-cli or prev.antigravity-cli;
+          codex = agentPkgs.codex or prev.codex;
+          opencode = agentPkgs.opencode or prev.opencode;
+        }
+      )
     ];
 
     nix.package = pkgs.lix;

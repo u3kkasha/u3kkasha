@@ -14,8 +14,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.file.".config/opencode/opencode.json" = {
-      text = builtins.toJSON {
+    programs.opencode = {
+      enable = true;
+      enableMcpIntegration = true;
+      settings = {
         "$schema" = "https://opencode.ai/config.json";
         instructions = [
           "AGENTS.md"
@@ -26,9 +28,7 @@ in
           "@tarquinen/opencode-dcp@latest"
           "opencode-websearch-cited@1.1.1"
         ];
-        mcp = lib.internal.mcp.openCodeMcp;
       };
-      force = true;
     };
   };
 }

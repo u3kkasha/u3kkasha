@@ -19,6 +19,8 @@
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     noctalia-shell.url = "github:noctalia-dev/noctalia-shell";
     noctalia-shell.inputs.nixpkgs.follows = "nixpkgs";
+    llm-agents.url = "github:numtide/llm-agents.nix";
+    llm-agents.inputs.nixpkgs.follows = "nixpkgs";
   };
   nixConfig = {
     extra-substituters = [
@@ -56,6 +58,7 @@
           sharedHomeModules = [
             inputs.catppuccin.homeModules.catppuccin
             inputs.nix-index-database.homeModules.nix-index
+            inputs.noctalia-shell.homeModules.default
           ];
           sharedNixosModules = [
             ./modules/nixos/default.nix
@@ -83,7 +86,6 @@
                 {
                   home-manager.users.${extendedLib.internal.username} = {
                     imports = [
-                      inputs.noctalia-shell.homeModules.default
                       ./modules/home/noctalia/config.nix
                     ];
                   };
@@ -148,8 +150,20 @@
             nixos-build = inputs.self.nixosConfigurations.nixos.config.system.build.toplevel;
             nixos-wsl-build = inputs.self.nixosConfigurations.nixos-wsl.config.system.build.toplevel;
             # Integration Tests (Heavy - CI Only)
-            vm-test-nixos = import ./tests/vm-nixos.nix { inherit pkgs inputs specialArgs; };
-            vm-test-wsl-mock = import ./tests/vm-wsl-mock.nix { inherit pkgs inputs specialArgs; };
+            vm-test-nixos = import ./tests/vm-nixos.nix {
+              pkgs = import inputs.nixpkgs {
+                inherit system;
+                config.allowUnfree = true;
+              };
+              inherit inputs specialArgs;
+            };
+            vm-test-wsl-mock = import ./tests/vm-wsl-mock.nix {
+              pkgs = import inputs.nixpkgs {
+                inherit system;
+                config.allowUnfree = true;
+              };
+              inherit inputs specialArgs;
+            };
             unit-tests = import ./tests/unit.nix {
               inherit pkgs;
               lib = extendedLib;

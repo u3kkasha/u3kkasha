@@ -12,10 +12,6 @@ let
     homeStateVersion
     scanPaths
     ;
-  geminiSettings = builtins.toJSON {
-    mcpServers = lib.internal.mcp.geminiMcp;
-  };
-  geminiSettingsFile = pkgs.writeText "gemini-settings.json" geminiSettings;
 in
 {
   imports = scanPaths ./.;
@@ -48,7 +44,7 @@ in
       cli.enable = lib.mkDefault true;
       direnv.enable = lib.mkDefault true;
       antigravity.enable = lib.mkDefault true;
-      gemini-cli.enable = lib.mkDefault true;
+      gemini-cli.enable = lib.mkDefault false;
       codex.enable = lib.mkDefault true;
       ghostty.enable = lib.mkDefault config.internal.gui.enable;
       git.enable = lib.mkDefault true;
@@ -73,20 +69,6 @@ in
       EDITOR = lib.internal.defaultEditor;
       VISUAL = lib.internal.defaultEditor;
     };
-
-    home.packages = lib.mkIf config.internal.gemini-cli.enable [ pkgs.gemini-cli ];
-
-    home.activation.geminiCliSettings = lib.mkIf config.internal.gemini-cli.enable (
-      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        target="$HOME/.gemini/settings.json"
-        if [ -L "$target" ]; then
-          $DRY_RUN_CMD rm "$target"
-          $DRY_RUN_CMD install -Dm600 ${geminiSettingsFile} "$target"
-        elif [ ! -e "$target" ]; then
-          $DRY_RUN_CMD install -Dm600 ${geminiSettingsFile} "$target"
-        fi
-      ''
-    );
 
     nix.package = lib.mkDefault pkgs.lix;
 
