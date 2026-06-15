@@ -22,11 +22,6 @@ in
         EDITOR = lib.internal.defaultEditor;
       };
       bashrcExtra = ''
-        # Load Doppler secrets if logged in
-        if command -v doppler >/dev/null 2>&1 && [ -n "$(doppler configure get token --plain 2>/dev/null)" ]; then
-          eval "$(doppler secrets download --no-file --format env)"
-        fi
-
         # Export GitHub token from gh if available
         if command -v gh >/dev/null 2>&1; then
           export GITHUB_TOKEN=$(gh auth token 2>/dev/null)

@@ -61,7 +61,6 @@ in
         nodejs_22
         mdr
         dotnet-sdk_10
-        doppler
         dust
         opencode
         lazydocker

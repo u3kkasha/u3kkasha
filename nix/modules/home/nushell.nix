@@ -27,15 +27,6 @@ in
         };
       };
       extraConfig = ''
-        # Load Doppler secrets if logged in
-        if (which doppler | is-not-empty) {
-          try {
-            if (doppler configure get token --plain | str trim | is-not-empty) {
-              load-env (doppler secrets download --no-file --format json | from json)
-            }
-          }
-        }
-
         # Export GitHub token from gh if available
         if (which gh | is-not-empty) {
             $env.GITHUB_TOKEN = (do { ^gh auth token } | complete | get -o stdout | str trim)
