@@ -25,23 +25,6 @@ in
           sort_by = "mtime";
           sort_reverse = true;
         };
-        opener = {
-          edit = [
-            {
-              run = ''${lib.internal.defaultEditor} "$@"'';
-              block = true;
-              desc = "Helix";
-            }
-          ];
-        };
-        open = {
-          prepend_rules = [
-            {
-              url = "*";
-              use = "edit";
-            }
-          ];
-        };
       };
     };
 
