@@ -16,4 +16,3 @@ When a tool's configuration needs to change, edit the corresponding Nix module u
 
 [1] [AGENTS.md](../../AGENTS.md)
 [2] [README.md](../../README.md)
-

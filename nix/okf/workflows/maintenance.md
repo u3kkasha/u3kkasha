@@ -27,4 +27,3 @@ nix flake check
 [1] [AGENTS.md](../../AGENTS.md)
 [2] [README.md](../../README.md)
 [3] [CONTEXT.md](../../CONTEXT.md)
-

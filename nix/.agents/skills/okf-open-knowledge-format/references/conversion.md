@@ -14,13 +14,13 @@ Notion exports as markdown with properties in YAML-like format.
 2. **Clean filenames** — remove UUID suffixes (`Page Name abc123def.md` → `page-name.md`)
 3. **Map properties to frontmatter:**
 
-| Notion Property | OKF Field |
-|-----------------|-----------|
-| Type (select) | `type` (required) |
-| Name | `title` |
-| Tags (multi-select) | `tags` |
-| Last Edited | `timestamp` |
-| URL | `resource` |
+| Notion Property     | OKF Field         |
+| ------------------- | ----------------- |
+| Type (select)       | `type` (required) |
+| Name                | `title`           |
+| Tags (multi-select) | `tags`            |
+| Last Edited         | `timestamp`       |
+| URL                 | `resource`        |
 
 4. **Convert links** — Notion uses `[Page Name](Page%20Name%20abc123def.md)`. Convert to clean relative paths: `[Page Name](./page-name.md)`
 5. **Remove Notion artifacts** — empty toggle blocks, breadcrumb headers, cover image references
@@ -48,13 +48,13 @@ Obsidian vaults are already close to OKF. Main differences: wikilinks and potent
 
 2. **Ensure `type` field exists** in every frontmatter block. Common mappings:
 
-| Obsidian pattern | Suggested OKF type |
-|------------------|--------------------|
-| Daily notes | `Log` |
+| Obsidian pattern | Suggested OKF type                    |
+| ---------------- | ------------------------------------- |
+| Daily notes      | `Log`                                 |
 | MOC / index note | Convert to `index.md` (reserved file) |
-| Permanent notes | `Reference` |
-| Literature notes | `Reference` |
-| Project notes | `Playbook` or domain-specific |
+| Permanent notes  | `Reference`                           |
+| Literature notes | `Reference`                           |
+| Project notes    | `Playbook` or domain-specific         |
 
 3. **Convert tags:**
    - Inline `#tag` → move to frontmatter `tags: [tag]`
@@ -86,15 +86,15 @@ Each row becomes one concept document.
 
 1. **Identify column mapping:**
 
-| Column role | Maps to |
-|-------------|---------|
-| Primary identifier / name | Filename (slugified) |
-| Category / kind | `type` field |
-| Short description | `description` field |
-| Tags / labels | `tags` field |
-| URL / link | `resource` field |
-| Last modified date | `timestamp` field |
-| All other columns | Body content (as table or sections) |
+| Column role               | Maps to                             |
+| ------------------------- | ----------------------------------- |
+| Primary identifier / name | Filename (slugified)                |
+| Category / kind           | `type` field                        |
+| Short description         | `description` field                 |
+| Tags / labels             | `tags` field                        |
+| URL / link                | `resource` field                    |
+| Last modified date        | `timestamp` field                   |
+| All other columns         | Body content (as table or sections) |
 
 2. **Generate one `.md` per row:**
 
@@ -109,8 +109,8 @@ timestamp: {date_column}T00:00:00Z
 
 # {name_column}
 
-| Field | Value |
-|-------|-------|
+| Field   | Value   |
+| ------- | ------- |
 | Column3 | {value} |
 | Column4 | {value} |
 ```
@@ -130,6 +130,7 @@ timestamp: {date_column}T00:00:00Z
 # Update Log
 
 ## {today_iso8601}
+
 - **Creation**: Generated {N} concepts from spreadsheet import.
 ```
 

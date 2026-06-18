@@ -9,4 +9,3 @@ okf_version: "0.1"
 - [Modules](./modules/) - Shared NixOS and Home Manager module layers.
 - [Workflows](./workflows/) - Maintenance and verification commands for this repository.
 - [Policies](./policies/) - Project policies that agents and maintainers should preserve.
-

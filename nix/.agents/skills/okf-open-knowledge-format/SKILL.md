@@ -50,32 +50,32 @@ For the full spec, see [references/spec-v01.md](references/spec-v01.md).
 
 ## Quick Reference — Frontmatter Fields
 
-| Field | Required? | Description |
-|-------|-----------|-------------|
-| `type` | **YES** | Kind of concept (free-form string, e.g. `BigQuery Table`, `Metric`, `Playbook`, `API Endpoint`) |
-| `title` | Recommended | Human-readable display name |
-| `description` | Recommended | One-sentence summary |
-| `resource` | Recommended | URI identifying the underlying asset (omit for abstract concepts) |
-| `tags` | Optional | YAML list for cross-cutting categorization |
-| `timestamp` | Optional | ISO 8601 datetime of last meaningful change |
+| Field         | Required?   | Description                                                                                     |
+| ------------- | ----------- | ----------------------------------------------------------------------------------------------- |
+| `type`        | **YES**     | Kind of concept (free-form string, e.g. `BigQuery Table`, `Metric`, `Playbook`, `API Endpoint`) |
+| `title`       | Recommended | Human-readable display name                                                                     |
+| `description` | Recommended | One-sentence summary                                                                            |
+| `resource`    | Recommended | URI identifying the underlying asset (omit for abstract concepts)                               |
+| `tags`        | Optional    | YAML list for cross-cutting categorization                                                      |
+| `timestamp`   | Optional    | ISO 8601 datetime of last meaningful change                                                     |
 
 Additional producer-defined keys are allowed. Never reject unknown fields.
 
 ## Reserved Filenames
 
-| File | Purpose | Has frontmatter? |
-|------|---------|-----------------|
-| `index.md` | Directory listing for progressive disclosure | NO* |
-| `log.md` | Change history, newest first | NO |
+| File       | Purpose                                      | Has frontmatter? |
+| ---------- | -------------------------------------------- | ---------------- |
+| `index.md` | Directory listing for progressive disclosure | NO\*             |
+| `log.md`   | Change history, newest first                 | NO               |
 
-*Exception: bundle-root `index.md` MAY have frontmatter with `okf_version: "0.1"` to declare spec version.
+\*Exception: bundle-root `index.md` MAY have frontmatter with `okf_version: "0.1"` to declare spec version.
 
 ## Conventional Body Headings
 
-| Heading | When to use |
-|---------|-------------|
-| `# Schema` | Data assets — describe columns/fields |
-| `# Examples` | Show concrete usage (code blocks, queries) |
+| Heading       | When to use                                     |
+| ------------- | ----------------------------------------------- |
+| `# Schema`    | Data assets — describe columns/fields           |
+| `# Examples`  | Show concrete usage (code blocks, queries)      |
 | `# Citations` | List external sources backing claims (numbered) |
 
 ---
@@ -152,10 +152,12 @@ Chronological change history, newest first, ISO 8601 date headings:
 # Update Log
 
 ## 2026-06-13
+
 - **Creation**: Added MRR, Churn, and NPS metrics.
 - **Creation**: Established directory structure.
 
 ## 2026-06-10
+
 - **Initialization**: Bundle created.
 ```
 
@@ -181,6 +183,7 @@ This is the only place frontmatter is permitted in an `index.md`.
 ### 7. Distribution
 
 A bundle can be distributed as:
+
 - A **git repository** (recommended — history, attribution, diffs)
 - A tarball or zip archive
 - A subdirectory within a larger repository
@@ -188,6 +191,7 @@ A bundle can be distributed as:
 ### 8. Verify conformance
 
 Three rules — all must pass:
+
 1. Every non-reserved `.md` file has parseable YAML frontmatter
 2. Every frontmatter has a non-empty `type` field
 3. Reserved files (`index.md`, `log.md`) follow their defined structure when present
@@ -238,9 +242,9 @@ For data assets, add `# Schema` with a columns table:
 ```markdown
 # Schema
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `order_id` | STRING | Unique identifier |
+| Column        | Type   | Description                             |
+| ------------- | ------ | --------------------------------------- |
+| `order_id`    | STRING | Unique identifier                       |
 | `customer_id` | STRING | FK to [customers](/tables/customers.md) |
 ```
 
@@ -272,6 +276,7 @@ If `title`, `description`, `tags`, or `timestamp` are missing, add them. Derive 
 ### Enrichment workflow reference
 
 The official enrichment agent follows this pattern — apply the same logic manually:
+
 1. Start with metadata-only docs (just frontmatter + minimal body)
 2. Add schema/structure from source system
 3. Add citations from authoritative documentation

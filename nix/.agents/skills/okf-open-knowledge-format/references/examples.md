@@ -32,13 +32,13 @@ timestamp: 2026-05-28T14:30:00Z
 
 # Schema
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `order_id` | STRING | Globally unique order identifier |
-| `customer_id` | STRING | FK to [customers](./customers.md) |
-| `total_usd` | NUMERIC | Order total in US dollars |
-| `placed_at` | TIMESTAMP | When the customer submitted the order |
-| `channel` | STRING | Acquisition channel (web, mobile, pos) |
+| Column        | Type      | Description                            |
+| ------------- | --------- | -------------------------------------- |
+| `order_id`    | STRING    | Globally unique order identifier       |
+| `customer_id` | STRING    | FK to [customers](./customers.md)      |
+| `total_usd`   | NUMERIC   | Order total in US dollars              |
+| `placed_at`   | TIMESTAMP | When the customer submitted the order  |
+| `channel`     | STRING    | Acquisition channel (web, mobile, pos) |
 
 # Joins
 
@@ -64,12 +64,12 @@ timestamp: 2026-05-28T14:30:00Z
 
 # Schema
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `customer_id` | STRING | Primary key |
-| `email` | STRING | Customer email (hashed in prod) |
-| `created_at` | TIMESTAMP | Registration date |
-| `ltv_usd` | NUMERIC | Lifetime value in USD |
+| Column        | Type      | Description                     |
+| ------------- | --------- | ------------------------------- |
+| `customer_id` | STRING    | Primary key                     |
+| `email`       | STRING    | Customer email (hashed in prod) |
+| `created_at`  | TIMESTAMP | Registration date               |
+| `ltv_usd`     | NUMERIC   | Lifetime value in USD           |
 
 # Joins
 
@@ -78,7 +78,7 @@ timestamp: 2026-05-28T14:30:00Z
 
 ### metrics/gross-revenue.md
 
-```markdown
+````markdown
 ---
 type: Metric
 title: Gross Revenue
@@ -100,12 +100,14 @@ SELECT DATE_TRUNC(placed_at, MONTH) as month,
 FROM `acme.sales.orders`
 GROUP BY 1
 ```
+````
 
 # Related
 
 - Source table: [orders](/tables/orders.md)
 - Counterpart: Net Revenue (gross minus refunds)
-```
+
+````
 
 ### index.md (root)
 
@@ -114,7 +116,7 @@ GROUP BY 1
 
 - [Tables](./tables/) - Database tables powering the analytics stack
 - [Metrics](./metrics/) - Business KPIs derived from tables
-```
+````
 
 ---
 
@@ -134,7 +136,7 @@ incidents/
 
 ### alerts/api-latency-p99.md
 
-```markdown
+````markdown
 ---
 type: Alert
 title: API Latency P99 > 2s
@@ -149,6 +151,7 @@ timestamp: 2026-06-01T09:00:00Z
 ```promql
 histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m])) > 2
 ```
+````
 
 # Impact
 
@@ -163,7 +166,8 @@ Users experience timeouts. Downstream services may cascade-fail.
 # Citations
 
 [1] [SLA definition](https://wiki.internal/sla/api-latency)
-```
+
+````
 
 ### runbooks/escalate-incident.md
 
@@ -197,7 +201,7 @@ timestamp: 2026-06-01T09:00:00Z
 | Secondary on-call | Rotation | PagerDuty |
 | Eng Manager | @manager | Slack DM |
 | Infra lead | @infra-lead | Slack DM |
-```
+````
 
 ---
 
@@ -219,7 +223,7 @@ api/
 
 ### endpoints/create-order.md
 
-```markdown
+````markdown
 ---
 type: API Endpoint
 title: Create Order
@@ -239,10 +243,11 @@ Creates a new order. Requires [OAuth2 authentication](/auth/oauth2-flow.md).
 ```json
 {
   "customer_id": "cust_abc123",
-  "items": [{"sku": "WIDGET-01", "quantity": 2}],
+  "items": [{ "sku": "WIDGET-01", "quantity": 2 }],
   "idempotency_key": "unique-request-id"
 }
 ```
+````
 
 # Response (201 Created)
 
@@ -257,17 +262,18 @@ Creates a new order. Requires [OAuth2 authentication](/auth/oauth2-flow.md).
 
 # Errors
 
-| Code | Meaning |
-|------|---------|
-| 400 | Invalid request body |
-| 401 | Missing or invalid auth token |
-| 409 | Duplicate idempotency_key |
-| 429 | [Rate limit](/policies/rate-limits.md) exceeded |
+| Code | Meaning                                         |
+| ---- | ----------------------------------------------- |
+| 400  | Invalid request body                            |
+| 401  | Missing or invalid auth token                   |
+| 409  | Duplicate idempotency_key                       |
+| 429  | [Rate limit](/policies/rate-limits.md) exceeded |
 
 # Rate Limits
 
 Subject to [rate limiting](/policies/rate-limits.md). See `X-RateLimit-*` headers.
-```
+
+````
 
 ### policies/rate-limits.md
 
@@ -299,4 +305,4 @@ Every response includes:
 
 Returns `429 Too Many Requests`. Retry after `X-RateLimit-Reset`.
 Applies to all endpoints including [create order](/endpoints/create-order.md).
-```
+````
