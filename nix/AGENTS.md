@@ -73,4 +73,7 @@ Before finalizing changes, use the following commands to verify the configuratio
 
 ## MCP Tools
 
-- **Required MCP Servers**: The coding agent should use the `serena` MCP and `nixos` MCP servers while working on this project.
+- **Required MCP Servers**: The coding agent should use the `serena` MCP, `semble` MCP, and `nixos` MCP servers while working on this project.
+- **Coordinating Semble and Serena**:
+  - **Semble** (`search`, `find_related`): Use Semble first for broad, semantic, or natural-language searches to locate files and line numbers associated with a concept, configuration, or feature (e.g., searching for "home-manager package config" or "mcp configuration").
+  - **Serena** (`find_symbol`, `find_referencing_symbols`, `replace_content`): Once Semble identifies the target file and lines, use Serena to query the AST/symbols, trace structural references, and perform precise, symbol-aware edits.

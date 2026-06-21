@@ -49,6 +49,15 @@
         args = [ "mcp-nixos" ];
       };
 
+      semble = {
+        command = "uvx";
+        args = [
+          "--from"
+          "semble[mcp]"
+          "semble"
+        ];
+      };
+
       nuget = {
         command = "podman";
         args = [
