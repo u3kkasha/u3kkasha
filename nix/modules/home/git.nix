@@ -1,6 +1,8 @@
 {
   lib,
   config,
+  pkgs,
+  inputs,
   ...
 }:
 
@@ -48,12 +50,19 @@ in
 
     programs.difftastic = {
       enable = true;
-      git.enable = true;
+      # git.enable is intentionally false — git diff uses the default.
+      # difftastic is configured as lazygit's pager instead.
+      git.enable = false;
       options = {
         background = "dark";
         display = "side-by-side";
       };
     };
+
+    # hunk is a standalone diff viewer; no git/lazygit integration.
+    home.packages = [
+      inputs.hunk.packages.${pkgs.stdenv.hostPlatform.system}.hunk
+    ];
 
     programs.gh = {
       enable = true;
@@ -76,6 +85,7 @@ in
         git = {
           pagers = [
             {
+              # difftastic is the default lazygit pager (press | to cycle).
               externalDiffCommand = "difft --color=always --background=dark --display=side-by-side";
             }
           ];
