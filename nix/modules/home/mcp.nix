@@ -58,6 +58,17 @@
         ];
       };
 
+      skylos = {
+        command = "uvx";
+        args = [
+          "--with"
+          "skylos"
+          "python"
+          "-m"
+          "skylos_mcp.server"
+        ];
+      };
+
       nuget = {
         command = "podman";
         args = [
