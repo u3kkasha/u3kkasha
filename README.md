@@ -5,7 +5,7 @@
 </p>
 
 ### 🚀 Systems Architect, Full-Stack Engineer & AI Agent Developer
-Software engineer specializing in **Functional Programming**, **Cloud-Native Distributed Systems**, **Declarative Infrastructure**, and **AI Agent Development**. I build resilient, scalable applications and agentic systems using modern ecosystems like **.NET**, **Python**, **Nix**, **TypeScript**, **LangChain**, **LangGraph**, and **Qdrant**.
+Software engineer specializing in **Functional Programming**, **Cloud-Native Distributed Systems**, **Declarative Infrastructure**, and **AI Agent Development**. I build resilient, scalable applications and agentic systems using modern ecosystems like **.NET**, **Python**, **Nix** and **TypeScript**.
 
 ---
 
@@ -65,11 +65,11 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
       <br />Python
     </td>
     <td align="center" width="96">
-      <img src="https://cdn.simpleicons.org/langchain/1C3C3C" width="48" height="48" alt="LangChain" />
+      <img src="https://cdn.simpleicons.org/langchain/85c8fd" width="48" height="48" alt="LangChain" />
       <br />LangChain
     </td>
     <td align="center" width="96">
-      <img src="https://cdn.simpleicons.org/langgraph/1C3C3C" width="48" height="48" alt="LangGraph" />
+      <img src="https://cdn.simpleicons.org/langgraph/85c8fd" width="48" height="48" alt="LangGraph" />
       <br />LangGraph
     </td>
     <td align="center" width="96">
