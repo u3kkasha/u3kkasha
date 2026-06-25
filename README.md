@@ -4,8 +4,8 @@
   <img src="https://komarev.com/ghpvc/?username=u3kkasha&color=blueviolet&style=flat-square" alt="u3kkasha" />
 </p>
 
-### 🚀 Systems Architect & Full-Stack Engineer
-Software engineer specializing in **Functional Programming**, **Cloud-Native Distributed Systems**, and **Declarative Infrastructure**. I build resilient, scalable applications using modern ecosystems like **.NET**, **Nix**, and **TypeScript**.
+### 🚀 Systems Architect, Full-Stack Engineer & AI Agent Developer
+Software engineer specializing in **Functional Programming**, **Cloud-Native Distributed Systems**, **Declarative Infrastructure**, and **AI Agent Development**. I build resilient, scalable applications and agentic systems using modern ecosystems like **.NET**, **Python**, **Nix** and **TypeScript**.
 
 ---
 
@@ -57,9 +57,37 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
 
 **Distributed & Cloud-Native:** .NET Aspire, Dapr, Podman, Docker.
 
+#### **AI Agent Development**
+<table>
+  <tr>
+    <td align="center" width="96">
+      <img src="https://skillicons.dev/icons?i=python" width="48" height="48" alt="Python" />
+      <br />Python
+    </td>
+    <td align="center" width="96">
+      <img src="https://cdn.simpleicons.org/langchain/85c8fd" width="48" height="48" alt="LangChain" />
+      <br />LangChain
+    </td>
+    <td align="center" width="96">
+      <img src="https://cdn.simpleicons.org/langgraph/85c8fd" width="48" height="48" alt="LangGraph" />
+      <br />LangGraph
+    </td>
+    <td align="center" width="96">
+      <img src="https://cdn.simpleicons.org/qdrant/DC244C" width="48" height="48" alt="Qdrant" />
+      <br />Qdrant
+    </td>
+  </tr>
+</table>
+
+**Agentic AI:** RAG systems, tool-using agents, workflow orchestration, and vector search with Qdrant.
+
 #### **Frontend & Web**
 <table>
   <tr>
+    <td align="center" width="96">
+      <img src="https://skillicons.dev/icons?i=ts" width="48" height="48" alt="TypeScript" />
+      <br />TypeScript
+    </td>
     <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=bun" width="48" height="48" alt="Bun" />
       <br />Bun
