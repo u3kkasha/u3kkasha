@@ -1,6 +1,8 @@
 {
   pkgs,
   inputs,
+  config,
+  lib,
   ...
 }:
 
@@ -15,6 +17,8 @@
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
       pull.rebase = true;
+      credential.helper = lib.mkIf config.internal.wsl.enable "/mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe";
+      credential.useHttpPath = true;
     };
   };
 
