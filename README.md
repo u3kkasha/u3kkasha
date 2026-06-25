@@ -85,6 +85,10 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
 <table>
   <tr>
     <td align="center" width="96">
+      <img src="https://skillicons.dev/icons?i=ts" width="48" height="48" alt="TypeScript" />
+      <br />TypeScript
+    </td>
+    <td align="center" width="96">
       <img src="https://skillicons.dev/icons?i=bun" width="48" height="48" alt="Bun" />
       <br />Bun
     </td>
