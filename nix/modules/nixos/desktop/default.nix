@@ -53,6 +53,8 @@ in
       hyprlock # screen locker
       hypridle # idle daemon
       nautilus # file manager (Niri works well with it)
+      xwayland-satellite # X11 compatibility bridge for Niri Wayland compositor
+      pulseaudio # Provides pactl utility for PipeWire audio control
     ];
 
     # Polkit for privilege escalation
