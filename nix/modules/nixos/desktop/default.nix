@@ -47,7 +47,6 @@ in
       brightnessctl
       playerctl
       pavucontrol # Audio GUI
-      wlsunset # Night Light
       grim # screenshots
       slurp # region selection
       hyprlock # screen locker

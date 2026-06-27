@@ -52,6 +52,7 @@ in
       opencode.enable = lib.mkDefault true;
       nixd.enable = lib.mkDefault true;
       niri.enable = lib.mkDefault config.internal.gui.enable;
+      wlsunset.enable = lib.mkDefault config.internal.gui.enable;
       utils.enable = lib.mkDefault true;
       snip.enable = lib.mkDefault true;
       wsl.enable = lib.mkDefault false;

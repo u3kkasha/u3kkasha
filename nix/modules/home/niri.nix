@@ -95,7 +95,6 @@ in
       spawn-at-startup "noctalia"
       spawn-at-startup "nm-applet"
       spawn-at-startup "hypridle"
-      spawn-at-startup "wlsunset" "-l" "23.8" "-L" "90.4"
       spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
       spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
 

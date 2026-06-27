@@ -38,7 +38,7 @@ in
 
     # Install user-facing gaming overlays and compatibility utilities
     environment.systemPackages = with pkgs; [
-      mangohud    # HUD overlay for FPS, temperatures, CPU/GPU usage
+      mangohud # HUD overlay for FPS, temperatures, CPU/GPU usage
       protonup-qt # Graphical utility to install and manage community Proton GE versions
     ];
   };
