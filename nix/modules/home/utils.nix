@@ -22,6 +22,7 @@ in
     programs.fzf = {
       enable = true;
       enableBashIntegration = true;
+      enableNushellIntegration = false;
     };
 
     programs.zoxide = {
