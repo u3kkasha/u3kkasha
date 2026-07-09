@@ -1,10 +1,11 @@
 { namespace, lib, ... }:
 
 {
+  imports = [ ./wsl.nix ];
+
   ${namespace} = {
     system.enable = true;
     podman.enable = true;
-    docker.enable = true;
     wsl.enable = true;
   };
 

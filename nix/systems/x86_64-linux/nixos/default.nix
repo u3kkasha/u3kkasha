@@ -18,7 +18,6 @@
     desktop.enable = true;
     gaming.enable = true;
     podman.enable = true;
-    docker.enable = true;
   };
 
   networking.hostName = "nixos";

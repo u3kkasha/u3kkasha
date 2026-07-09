@@ -16,7 +16,7 @@ The flake exposes two NixOS configurations:
 - `nixos`, which imports [/systems/nixos](/systems/nixos.md) and enables the shared graphical Home Manager configuration.
 - `nixos-wsl`, which imports [/systems/nixos-wsl](/systems/nixos-wsl.md) and configures the WSL-oriented host.
 
-Shared NixOS modules are grouped into `nixosModules.core`, which includes the repository's [/modules/nixos](/modules/nixos.md) layer along with upstream NixOS-WSL, Home Manager, and nix-index modules.
+Shared NixOS modules are grouped into `nixosModules.core`, which includes the repository's [/modules/nixos](/modules/nixos.md) layer along with Home Manager and nix-index modules. The upstream NixOS-WSL module is imported only by the `nixos-wsl` host.
 
 Shared Home Manager modules include the `mcp-servers-nix` bridge. Agent packages are read from the independently pinned `llm-agents.nix` input, whose public Numtide binary cache is configured in `nixConfig`.
 

@@ -2,24 +2,36 @@
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }:
 
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.internal.nixd;
+  lockedInputs = pkgs.linkFarm "nixd-locked-inputs" [
+    {
+      name = "flake";
+      path = inputs.self;
+    }
+    {
+      name = "nixpkgs";
+      path = inputs.nixpkgs;
+    }
+  ];
+  lockedInputsPath = builtins.unsafeDiscardStringContext "${lockedInputs}";
   nixdConfig = pkgs.writeText "nixd-config.json" (
     builtins.toJSON {
       nixd = {
         nixpkgs = {
-          expr = "import <nixpkgs> { }";
+          expr = "import ${lockedInputsPath}/nixpkgs { }";
         };
         options = {
           nixos = {
-            expr = "(builtins.getFlake (builtins.toString ./../..)).nixosConfigurations.${config.internal.hostName}.options";
+            expr = "(builtins.getFlake \"${lockedInputsPath}/flake\").nixosConfigurations.${config.internal.hostName}.options";
           };
           home-manager = {
-            expr = "(builtins.getFlake (builtins.toString ./../..)).nixosConfigurations.${config.internal.hostName}.options.home-manager.users.type.getSubOptions [ ]";
+            expr = "(builtins.getFlake \"${lockedInputsPath}/flake\").nixosConfigurations.${config.internal.hostName}.options.home-manager.users.type.getSubOptions [ ]";
           };
         };
       };
@@ -35,5 +47,6 @@ in
     home.packages = [ pkgs.nixd ];
 
     xdg.configFile."nixd/config.json".source = nixdConfig;
+    xdg.dataFile."nixd/locked-inputs".source = lockedInputs;
   };
 }

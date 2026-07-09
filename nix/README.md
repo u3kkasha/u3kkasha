@@ -14,7 +14,7 @@ The configuration is modularized into logical units for both system-level and us
   - `nixos/`: Bare-metal NixOS configuration.
 - **`modules/`**: Shared system-level NixOS modules (system, podman, etc.).
 - **`modules/home/`**: Shared user-level Home Manager modules (shells, git, helix, zellij, etc.).
-- **`packages/`**: Custom package definitions.
+- **`lib/internal/`**: Shared repository values and module discovery helpers.
 
 ## Configuration Policy
 

@@ -2,16 +2,8 @@ name: Verification
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - "**.md"
-      - "LICENSE"
-      - ".gitignore"
   pull_request:
     branches: [main]
-    paths-ignore:
-      - "**.md"
-      - "LICENSE"
-      - ".gitignore"
   workflow_dispatch:
 
 concurrency:
@@ -44,7 +36,10 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Flake Check
-        run: nix flake check ./nix --impure
+        run: nix flake check ./nix
+
+      - name: Validate OKF documentation
+        run: bash ./nix/.agents/skills/okf-open-knowledge-format/scripts/validate.sh ./nix/okf
 
   build:
     needs: verify
@@ -65,4 +60,22 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Build ${{ matrix.target }}
-        run: nix build ./nix#${{ matrix.target }} --impure
+        run: nix build ./nix#${{ matrix.target }}
+
+  cache-independent:
+    needs: verify
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [unit-tests, nixos-build, nixos-wsl-build]
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+
+      - name: Build ${{ matrix.target }} without configured extra caches
+        run: >-
+          nix build ./nix#${{ matrix.target }}
+          --no-accept-flake-config
+          --option substituters https://cache.nixos.org

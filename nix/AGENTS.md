@@ -60,6 +60,8 @@ Before finalizing changes, use the following commands to verify the configuratio
 - **Integration Tests**:
   - `nix build .#vm-test-nixos` (Full NixOS system).
   - `nix build .#vm-test-wsl-mock` (WSL environment isolation).
+- **Cache Independence**: Important build outputs are also tested in CI with flake-configured extra caches disabled.
+- **Documentation**: Markdown changes trigger CI, including formatting and OKF conformance validation.
 
 ## Code Style
 

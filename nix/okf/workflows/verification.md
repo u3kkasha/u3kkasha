@@ -11,7 +11,7 @@ timestamp: 2026-06-18T00:00:00+06:00
 
 The flake defines checks for pre-push validation, formatting, unit tests, and gitleaks secret scanning. It also exposes build packages for the main NixOS configurations and VM integration tests.
 
-The unit tests validate selected internal library values, including the username, default editor, and email string type.
+The unit tests validate the username, default editor, email format, both dynamic-import trees, locked nixd expressions, container-runtime exclusivity and group membership, WSL GUI package exclusion, packaged MCP commands, and the writable Codex merge behavior.
 
 # Examples
 
@@ -23,6 +23,8 @@ nix flake check
 ```
 
 The VM integration tests are intended for CI because they are resource-intensive. The pre-push hook runs `nix flake check ./nix` and builds both system configurations using pure evaluation.
+
+Markdown changes trigger CI. CI also validates the OKF bundle and builds important outputs with flake-configured extra caches disabled.
 
 # Citations
 

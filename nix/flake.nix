@@ -63,7 +63,6 @@
           ];
           sharedNixosModules = [
             ./modules/nixos/default.nix
-            inputs.nixos-wsl.nixosModules.default
             inputs.home-manager.nixosModules.home-manager
             inputs.nix-index-database.nixosModules.nix-index
             {
@@ -99,6 +98,7 @@
               system = "x86_64-linux";
               modules = [
                 inputs.self.nixosModules.core
+                inputs.nixos-wsl.nixosModules.default
                 ./systems/x86_64-linux/nixos-wsl/default.nix
                 { nixpkgs.config.allowUnfree = true; }
               ];

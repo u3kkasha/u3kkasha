@@ -18,6 +18,8 @@ This discovery pattern is used by the shared NixOS module layer and the Home Man
 
 Adding a module file or a `default.nix`-backed module directory under those locations automatically includes it in the relevant layer.
 
+Unit tests assert the complete discovered list for both trees. A new module therefore requires an explicit test update, making the configuration change visible in review.
+
 # Examples
 
 ```nix

@@ -14,6 +14,7 @@ pkgs.testers.runNixOSTest {
     {
       imports = [
         inputs.self.nixosModules.core
+        inputs.nixos-wsl.nixosModules.default
         ../systems/x86_64-linux/nixos-wsl/default.nix
       ];
 
@@ -41,9 +42,7 @@ pkgs.testers.runNixOSTest {
     # Verify podman is functional in WSL
     machine.succeed("podman --version")
 
-    # Verify docker is functional in WSL
-    machine.wait_for_unit("docker.service")
-    machine.succeed("docker --version")
-    machine.succeed("docker-compose --version")
+    # The selected container runtime is exclusive.
+    machine.fail("systemctl is-enabled docker.service")
   '';
 }

@@ -28,8 +28,6 @@ in
       auto-optimise-store = true;
       trusted-users = [
         "root"
-        "@wheel"
-        username
       ];
       min-free = 5 * 1024 * 1024 * 1024; # 5GB
       max-free = 10 * 1024 * 1024 * 1024; # 10GB
@@ -59,9 +57,9 @@ in
       shell = nushell;
       extraGroups = [
         "wheel"
-        "podman"
-        "docker"
-      ];
+      ]
+      ++ lib.optional config.internal.podman.enable "podman"
+      ++ lib.optional config.internal.docker.enable "docker";
     };
 
     programs.nix-ld.enable = true;

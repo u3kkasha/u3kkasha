@@ -18,7 +18,6 @@ pkgs.testers.runNixOSTest {
 
       internal.system.enable = true;
       internal.podman.enable = true;
-      internal.docker.enable = true;
       internal.desktop.enable = true;
     };
 
@@ -31,10 +30,8 @@ pkgs.testers.runNixOSTest {
     # Check if podman is available
     machine.succeed("podman --version")
 
-    # Check if docker is available
-    machine.wait_for_unit("docker.service")
-    machine.succeed("docker --version")
-    machine.succeed("docker-compose --version")
+    # The selected container runtime is exclusive.
+    machine.fail("systemctl is-enabled docker.service")
 
     # Check if desktop services are configured
     machine.wait_for_unit("display-manager.service")

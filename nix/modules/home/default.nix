@@ -11,14 +11,13 @@ let
     username
     homeStateVersion
     scanPaths
+    themeFlavor
     ;
 in
 {
   imports = scanPaths ./.;
 
   options.internal = {
-    gemini-cli.enable = lib.mkEnableOption "Gemini CLI configuration";
-
     hostName = lib.mkOption {
       type = lib.types.str;
       default =
@@ -44,7 +43,6 @@ in
       cli.enable = lib.mkDefault true;
       direnv.enable = lib.mkDefault true;
       antigravity.enable = lib.mkDefault true;
-      gemini-cli.enable = lib.mkDefault false;
       codex.enable = lib.mkDefault true;
       ghostty.enable = lib.mkDefault config.internal.gui.enable;
       helix.enable = lib.mkDefault true;
@@ -76,7 +74,7 @@ in
     catppuccin = {
       enable = true;
       autoEnable = true;
-      flavor = "mocha";
+      flavor = themeFlavor;
     };
   };
 }

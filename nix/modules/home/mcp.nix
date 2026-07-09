@@ -57,35 +57,6 @@ in
       # point, so it needs no Python environment or runtime dependency resolver.
       semble.command = getExe' semble "semble-mcp";
 
-      # These MCP servers are not packaged by either integrated flake. Pin their
-      # ecosystem package versions so upgrades remain explicit and reviewable.
-      dotnet-debugger = {
-        command = getExe' pkgs.dotnet-sdk_10 "dnx";
-        args = [
-          "debug-mcp@0.19.0"
-          "--yes"
-        ];
-      };
-
-      nuget = {
-        command = getExe' pkgs.dotnet-sdk_10 "dnx";
-        args = [
-          "NuGet.Mcp.Server@1.4.16"
-          "--yes"
-        ];
-      };
-
-      skylos = {
-        command = getExe' pkgs.uv "uvx";
-        args = [
-          "--from"
-          "skylos==4.28.0"
-          "python"
-          "-m"
-          "skylos_mcp.server"
-        ];
-      };
-
       nushell = {
         command = getExe config.programs.nushell.package;
         args = [ "--mcp" ];
