@@ -15,8 +15,6 @@
     devshell.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     catppuccin.url = "github:catppuccin/nix";
-    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-    pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     noctalia-shell.url = "github:noctalia-dev/noctalia-shell";
     noctalia-shell.inputs.nixpkgs.follows = "nixpkgs";
     llm-agents.url = "github:numtide/llm-agents.nix";
@@ -110,18 +108,6 @@
         { pkgs, system, ... }:
         let
           treefmt = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
-          pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
-            src = ./..;
-            hooks = {
-              nix-flake-check = {
-                enable = true;
-                name = "nix flake check";
-                entry = "nix flake check ./nix --impure";
-                pass_filenames = false;
-                stages = [ "pre-push" ];
-              };
-            };
-          };
         in
         {
           formatter = treefmt.config.build.wrapper;
@@ -139,8 +125,13 @@
             ];
             git.hooks = {
               enable = true;
+              pre-commit.text = ''
+                nix build ./nix#checks.${system}.formatting --no-link
+                gitleaks git --staged --redact --no-banner
+              '';
               pre-push.text = ''
                 nix flake check ./nix --impure
+                nix build ./nix#nixos-build ./nix#nixos-wsl-build --no-link --impure
               '';
             };
             packages = [
@@ -173,7 +164,6 @@
             };
           };
           checks = {
-            pre-push = pre-commit-check;
             formatting = treefmt.config.build.check inputs.self;
             unit-tests = import ./tests/unit.nix {
               inherit pkgs;
@@ -185,7 +175,7 @@
                   nativeBuildInputs = [ pkgs.gitleaks ];
                 }
                 ''
-                  gitleaks detect --source ${inputs.self} --verbose --no-git
+                  gitleaks dir ${inputs.self} --verbose --no-banner
                   touch $out
                 '';
           };

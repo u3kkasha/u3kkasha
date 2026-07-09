@@ -64,6 +64,7 @@ in
 
     home.username = username;
     home.homeDirectory = "/home/${username}";
+    home.pointerCursor.enable = true;
 
     home.sessionVariables = {
       EDITOR = lib.internal.defaultEditor;
