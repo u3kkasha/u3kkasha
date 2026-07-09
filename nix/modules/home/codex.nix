@@ -43,6 +43,7 @@ in
   config = mkIf cfg.enable {
     programs.codex = {
       enable = true;
+      package = pkgs.codex;
       enableMcpIntegration = false; # We manage config.toml ourselves to keep it writable
     };
 
