@@ -1,124 +1,94 @@
-{ config, ... }:
-
 {
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  inherit (lib) getExe getExe';
+  semble = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.semble;
+in
+{
+  # Packaged MCP servers. mcp-servers-nix evaluates these modules and merges
+  # their generated commands into Home Manager's shared programs.mcp registry.
+  mcp-servers.programs = {
+    github = {
+      enable = true;
+      passwordCommand.GITHUB_PERSONAL_ACCESS_TOKEN = [
+        (getExe config.programs.gh.package)
+        "auth"
+        "token"
+      ];
+    };
+
+    nixos.enable = true;
+
+    playwright.enable = true;
+
+    serena = {
+      enable = true;
+      context = "ide-assistant";
+      enableWebDashboard = false;
+      extraPackages = [
+        pkgs.nixd
+      ];
+    };
+  };
+
   programs.mcp = {
     enable = true;
     servers = {
-      dotnet-debugger = {
-        command = "dnx";
-        args = [
-          "-y"
-          "debug-mcp"
-        ];
-      };
-
+      # Hosted MCP servers remain remote: there is no local runtime to pin.
       context7 = {
         url = "https://mcp.context7.com/mcp";
-        headers = {
-          "Accept" = "application/json, text/event-stream";
-        };
+        headers.Accept = "application/json, text/event-stream";
       };
 
-      gh-grep = {
-        url = "https://mcp.grep.app";
-      };
+      gh-grep.url = "https://mcp.grep.app";
 
-      github = {
-        command = "podman";
+      microsoft-learn.url = "https://learn.microsoft.com/api/mcp";
+
+      nuxt.url = "https://nuxt.com/mcp";
+      nuxt-ui.url = "https://ui.nuxt.com/mcp";
+
+      # Semble is packaged by llm-agents.nix and exposes a dedicated MCP entry
+      # point, so it needs no Python environment or runtime dependency resolver.
+      semble.command = getExe' semble "semble-mcp";
+
+      # These MCP servers are not packaged by either integrated flake. Pin their
+      # ecosystem package versions so upgrades remain explicit and reviewable.
+      dotnet-debugger = {
+        command = getExe' pkgs.dotnet-sdk_10 "dnx";
         args = [
-          "run"
-          "-i"
-          "--rm"
-          "-e"
-          "GITHUB_PERSONAL_ACCESS_TOKEN"
-          "ghcr.io/github/github-mcp-server"
+          "debug-mcp@0.19.0"
+          "--yes"
         ];
-        env = {
-          "GITHUB_PERSONAL_ACCESS_TOKEN" = {
-            file = "${config.home.homeDirectory}/.config/github/token";
-          };
-        };
       };
 
-      microsoft-learn = {
-        url = "https://learn.microsoft.com/api/mcp";
-      };
-
-      nixos = {
-        command = "uvx";
-        args = [ "mcp-nixos" ];
-      };
-
-      semble = {
-        command = "uvx";
+      nuget = {
+        command = getExe' pkgs.dotnet-sdk_10 "dnx";
         args = [
-          "--from"
-          "semble[mcp]"
-          "semble"
+          "NuGet.Mcp.Server@1.4.16"
+          "--yes"
         ];
       };
 
       skylos = {
-        command = "uvx";
+        command = getExe' pkgs.uv "uvx";
         args = [
-          "--with"
-          "skylos"
+          "--from"
+          "skylos==4.28.0"
           "python"
           "-m"
           "skylos_mcp.server"
         ];
       };
 
-      nuget = {
-        command = "podman";
-        args = [
-          "run"
-          "-i"
-          "--rm"
-          "ghcr.io/dimonsmart/nugetmcpserver:latest"
-        ];
-      };
-
       nushell = {
-        command = "nu";
+        command = getExe config.programs.nushell.package;
         args = [ "--mcp" ];
-      };
-
-      nuxt = {
-        url = "https://nuxt.com/mcp";
-      };
-
-      nuxt-ui = {
-        url = "https://ui.nuxt.com/mcp";
-      };
-
-      playwright = {
-        command = "podman";
-        args = [
-          "run"
-          "-i"
-          "--rm"
-          "--init"
-          "--pull=always"
-          "--network=host"
-          "mcr.microsoft.com/playwright/mcp"
-          "--allow-unrestricted-file-access"
-        ];
-      };
-
-      serena = {
-        command = "nix";
-        args = [
-          "run"
-          "github:oraios/serena"
-          "--"
-          "start-mcp-server"
-          "--project-from-cwd"
-          "--context"
-          "ide"
-          "--open-web-dashboard"
-          "false"
-        ];
       };
     };
   };

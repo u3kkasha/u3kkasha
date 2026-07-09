@@ -13,6 +13,7 @@ This repository contains a modular NixOS and Home Manager configuration specific
 - **Maintenance**: Maintenance tasks are centralized using `nh` (nix-helper), providing standardized commands for rebuilding the system/home configuration and performing garbage collection. This removes the need for custom wrapper scripts.
 - **Binary Caching**: Cachix (`u3kkasha`) is integrated into CI (GitHub Actions) to speed up build verification.
 - **Dynamic Imports (Scan Paths)**: The configuration imports system and user modules dynamically using a custom `scanPaths` helper, enabling auto-discovery of Nix files.
+- **AI Tooling**: Agent applications come from the pinned `llm-agents.nix` package set, while `mcp-servers-nix` supplies packaged MCP servers through Home Manager's shared MCP registry.
 - **Testing & Verification**: Leverages a suite of unit tests, `gitleaks` detection, and system-level VM integration tests (NixOS and WSL-mock) to ensure configuration safety.
 
 ## Key Decisions
@@ -22,10 +23,13 @@ This repository contains a modular NixOS and Home Manager configuration specific
 - **Transition to Direnv**: `devenv` has been replaced by `direnv` and `nix-direnv` to provide a more lightweight and standard way to activate developer shells.
 - **Modularity (Dendritic Pattern)**: Configuration uses a custom `scanPaths` helper to automatically discover and import modules within `modules/` and `modules/home/`. This allows for a "dendritic" structure where adding a file to a directory automatically includes it in the configuration.
 - **Host-Specific Entry Points**: Located in the `systems/` directory to support diverse environments (WSL, NixOS).
+- **Explicit Agent Packages**: Codex, OpenCode, Antigravity, and Semble are selected directly from the locked `llm-agents.nix` input. They are not injected into nixpkgs with global package-replacement overlays.
+- **Central MCP Registry**: Packaged MCP servers are declared through `mcp-servers-nix`; hosted and unsupported servers remain explicit entries in `programs.mcp.servers`. All MCP-aware clients consume the same Home Manager registry.
+- **Scoped Credentials**: GitHub credentials are retrieved by the GitHub MCP wrapper with `gh auth token`; authentication tokens are not exported globally during shell startup.
 - **Nushell Functions**: Multi-step maintenance commands in Nushell are defined as `def` functions instead of aliases to prevent accidental execution during shell initialization.
 - **WSL Path Integration**: Windows paths are included in the Linux `PATH` to allow seamless interop with Windows binaries.
 - **State Version Stability**: Decided to keep `stateVersion` fixed at `26.05` across all configurations. This field is a compatibility shim for stateful data and service defaults; updating it monthly would lead to unnecessary configuration churn and potential data format breakages. Users should only update it when they are prepared to perform manual migrations as detailed in NixOS release notes.
 - **CI-only Cachix**: Cachix is only configured for the GitHub Actions pipeline to optimize CI minutes without adding local system overhead.
 - **Pre-Push Git Hooks (Impure)**: A pre-push git hook is automatically configured in the devshell to run `nix flake check ./nix --impure`. The `--impure` flag is used to allow checks to run smoothly on local environments while maintaining code standard compliance.
 - **CI-only Integration Tests**: Integration tests (`vm-test-nixos`, `vm-test-wsl-mock`) run full VM configurations and are resource-intensive. They are set up as package outputs to run automatically in CI, rather than block local git commit workflows.
-- **Extra Substituters**: The `nixConfig` block in `flake.nix` configures additional public binary caches (nix-community, numtide, noctalia) to speed up local builds by pulling pre-built artifacts where possible.
+- **Extra Substituters**: The `nixConfig` block in `flake.nix` configures additional public binary caches (nix-community, Numtide, noctalia) to speed up local builds by pulling pre-built artifacts where possible. The Numtide cache is used for `llm-agents.nix` packages built against that input's pinned nixpkgs.

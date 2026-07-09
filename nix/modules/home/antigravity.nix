@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  inputs,
   pkgs,
   ...
 }:
@@ -8,6 +9,7 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.internal.antigravity;
+  package = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.antigravity-cli;
 in
 {
   options.internal.antigravity = {
@@ -18,7 +20,7 @@ in
     programs.antigravity-cli = {
       enable = true;
       enableMcpIntegration = true;
-      package = pkgs.antigravity-cli;
+      inherit package;
     };
   };
 }

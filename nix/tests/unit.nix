@@ -6,6 +6,8 @@
 let
   inherit (lib) internal;
   inherit (nixosConfigurations) nixos nixos-wsl;
+  homeConfig = nixos.config.home-manager.users.${internal.username};
+  mcpServers = homeConfig.programs.mcp.servers;
 
   testResults = lib.runTests {
     testScanPathsDiscoversModules = {
@@ -45,6 +47,47 @@ let
     testNixosStateVersion = {
       expr = nixos.config.system.stateVersion;
       expected = internal.systemStateVersion;
+    };
+    testMcpRegistry = {
+      expr = builtins.attrNames mcpServers;
+      expected = [
+        "context7"
+        "dotnet-debugger"
+        "gh-grep"
+        "github"
+        "microsoft-learn"
+        "nixos"
+        "nuget"
+        "nushell"
+        "nuxt"
+        "nuxt-ui"
+        "playwright"
+        "semble"
+        "serena"
+        "skylos"
+      ];
+    };
+    testPackagedMcpServers = {
+      expr = builtins.all (name: lib.hasPrefix "/nix/store/" mcpServers.${name}.command) [
+        "github"
+        "nixos"
+        "playwright"
+        "semble"
+        "serena"
+      ];
+      expected = true;
+    };
+    testAgentPackages = {
+      expr = {
+        antigravity = homeConfig.programs.antigravity-cli.package.pname;
+        codex = homeConfig.programs.codex.package.pname;
+        opencode = homeConfig.programs.opencode.package.pname;
+      };
+      expected = {
+        antigravity = "antigravity-cli";
+        codex = "codex";
+        opencode = "opencode";
+      };
     };
     testWslHostName = {
       expr = nixos-wsl.config.networking.hostName;

@@ -1,12 +1,15 @@
 {
   lib,
   config,
+  inputs,
+  pkgs,
   ...
 }:
 
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.internal.opencode;
+  package = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
 in
 {
   options.internal.opencode = {
@@ -17,6 +20,7 @@ in
     programs.opencode = {
       enable = true;
       enableMcpIntegration = true;
+      inherit package;
       settings = {
         "$schema" = "https://opencode.ai/config.json";
         instructions = [

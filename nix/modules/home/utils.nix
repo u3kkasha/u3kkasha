@@ -63,7 +63,6 @@ in
         mdr
         dotnet-sdk_10
         dust
-        opencode
         lazydocker
         ctop
       ]

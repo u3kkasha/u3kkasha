@@ -1,12 +1,16 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.internal.nushell;
+  package = pkgs.nushell.override {
+    additionalFeatures = features: features ++ [ "mcp" ];
+  };
 in
 {
   options.internal.nushell = {
@@ -16,6 +20,7 @@ in
   config = mkIf cfg.enable {
     programs.nushell = {
       enable = true;
+      inherit package;
       environmentVariables = config.home.sessionVariables;
       settings = {
         show_banner = false;
@@ -24,12 +29,6 @@ in
           file_format = "sqlite";
         };
       };
-      extraConfig = ''
-        # Export GitHub token from gh if available
-        if (which gh | is-not-empty) {
-            $env.GITHUB_TOKEN = (do { ^gh auth token } | complete | get -o stdout | str trim)
-        }
-      '';
     };
   };
 }

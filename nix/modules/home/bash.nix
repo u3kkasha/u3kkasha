@@ -21,12 +21,6 @@ in
       sessionVariables = {
         EDITOR = lib.internal.defaultEditor;
       };
-      bashrcExtra = ''
-        # Export GitHub token from gh if available
-        if command -v gh >/dev/null 2>&1; then
-          export GITHUB_TOKEN=$(gh auth token 2>/dev/null)
-        fi
-      '';
     };
   };
 }

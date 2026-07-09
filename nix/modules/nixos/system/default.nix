@@ -3,13 +3,15 @@
   lib,
   config,
   self,
-  inputs,
   ...
 }:
 
 let
   inherit (lib.internal) username systemStateVersion;
   cfg = config.internal.system;
+  nushell = pkgs.nushell.override {
+    additionalFeatures = features: features ++ [ "mcp" ];
+  };
 in
 {
   options.internal.system = {
@@ -17,25 +19,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.overlays = lib.mkDefault [
-      (_final: prev: {
-        nushell = prev.nushell.override {
-          additionalFeatures = f: f ++ [ "mcp" ];
-        };
-      })
-      (
-        _final: prev:
-        let
-          agentPkgs = inputs.llm-agents.packages.${prev.stdenv.hostPlatform.system} or { };
-        in
-        {
-          antigravity-cli = agentPkgs.antigravity-cli or prev.antigravity-cli;
-          inherit (prev) codex;
-          opencode = agentPkgs.opencode or prev.opencode;
-        }
-      )
-    ];
-
     nix.package = pkgs.lix;
     nix.settings = {
       experimental-features = [
@@ -64,16 +47,16 @@ in
     time.timeZone = "Asia/Dhaka";
     i18n.defaultLocale = "en_GB.UTF-8";
 
-    environment.systemPackages = with pkgs; [
+    environment.systemPackages = [
       nushell
-      git # Explicitly ensure git is available at system level too
+      pkgs.git # Explicitly ensure git is available at system level too
     ];
 
-    environment.shells = with pkgs; [ nushell ];
+    environment.shells = [ nushell ];
 
     users.users.${username} = {
       isNormalUser = true;
-      shell = pkgs.nushell;
+      shell = nushell;
       extraGroups = [
         "wheel"
         "podman"
