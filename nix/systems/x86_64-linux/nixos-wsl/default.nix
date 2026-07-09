@@ -14,5 +14,4 @@
   };
 
   networking.hostName = "nixos-wsl";
-  nixpkgs.hostPlatform = "x86_64-linux";
 }

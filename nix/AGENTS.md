@@ -15,7 +15,6 @@ This project uses a modular NixOS configuration based on Flakes, `flake-parts`, 
 - `systems/`: Host-specific configurations (WSL, NixOS).
 - `modules/`: Shared system-level modules, imported hierarchically.
 - `modules/home/`: Shared user-level Home Manager modules.
-- `packages/`: Custom package definitions.
 - `lib/internal/`: Core logic and variables (username, email, stateVersion).
 - `okf/`: Open Knowledge Format bundle documenting repository architecture, systems, modules, workflows, and policies for agent consumption.
 - `AGENTS.md`: This file.

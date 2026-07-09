@@ -19,7 +19,7 @@ let
             expr = "(builtins.getFlake (builtins.toString ./../..)).nixosConfigurations.${config.internal.hostName}.options";
           };
           home-manager = {
-            expr = "(builtins.getFlake (builtins.toString ./../..)).homeConfigurations.\"${lib.internal.username}@${config.internal.hostName}\".options";
+            expr = "(builtins.getFlake (builtins.toString ./../..)).nixosConfigurations.${config.internal.hostName}.options.home-manager.users.type.getSubOptions [ ]";
           };
         };
       };

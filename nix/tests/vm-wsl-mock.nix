@@ -10,29 +10,16 @@ pkgs.testers.runNixOSTest {
   node.specialArgs = specialArgs;
 
   nodes.machine =
-    { ... }:
+    { lib, ... }:
     {
       imports = [
-        ../modules/nixos/system/default.nix
-        ../modules/nixos/podman/default.nix
-        ../modules/nixos/docker/default.nix
-        inputs.home-manager.nixosModules.home-manager
-        inputs.nix-index-database.nixosModules.nix-index
+        inputs.self.nixosModules.core
+        ../systems/x86_64-linux/nixos-wsl/default.nix
       ];
 
-      internal.system.enable = true;
-      internal.podman.enable = true;
-      internal.docker.enable = true;
-
-      home-manager = {
-        useGlobalPkgs = true;
-        useUserPackages = true;
-        extraSpecialArgs = specialArgs;
-        sharedModules = [
-          inputs.catppuccin.homeModules.catppuccin
-          inputs.nix-index-database.homeModules.nix-index
-        ];
-      };
+      # The host's WSL boot integration cannot run inside a QEMU test VM.
+      # Everything else, including the real host module and HM user, is evaluated.
+      wsl.enable = lib.mkForce false;
     };
 
   testScript = ''
@@ -45,6 +32,7 @@ pkgs.testers.runNixOSTest {
 
     # Verify the user and shell still work
     machine.succeed("getent passwd ukasha | grep /bin/nu")
+    machine.succeed("test -e /etc/profiles/per-user/ukasha/bin/nu")
 
     # Verify GUI packages are absent
     machine.fail("which firefox")

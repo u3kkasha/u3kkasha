@@ -2,7 +2,6 @@
   description = "Multi-System Nix Flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
@@ -96,6 +95,7 @@
             };
             nixos-wsl = inputs.nixpkgs.lib.nixosSystem {
               inherit specialArgs;
+              system = "x86_64-linux";
               modules = [
                 inputs.self.nixosModules.core
                 ./systems/x86_64-linux/nixos-wsl/default.nix
@@ -161,6 +161,7 @@
             unit-tests = import ./tests/unit.nix {
               inherit pkgs;
               lib = extendedLib;
+              inherit (inputs.self) nixosConfigurations;
             };
           };
           checks = {
@@ -168,6 +169,7 @@
             unit-tests = import ./tests/unit.nix {
               inherit pkgs;
               lib = extendedLib;
+              inherit (inputs.self) nixosConfigurations;
             };
             gitleaks =
               pkgs.runCommand "gitleaks"

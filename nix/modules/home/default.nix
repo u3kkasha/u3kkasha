@@ -60,8 +60,6 @@ in
       zellij.enable = lib.mkDefault true;
     };
 
-    dconf.settings = lib.mkForce { };
-
     home.username = username;
     home.homeDirectory = "/home/${username}";
     home.pointerCursor.enable = true;

@@ -30,7 +30,7 @@ in
         in
         {
           antigravity-cli = agentPkgs.antigravity-cli or prev.antigravity-cli;
-          codex = prev.codex;
+          inherit (prev) codex;
           opencode = agentPkgs.opencode or prev.opencode;
         }
       )

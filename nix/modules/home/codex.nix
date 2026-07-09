@@ -10,6 +10,7 @@ let
   cfg = config.internal.codex;
 
   tomlFormat = pkgs.formats.toml { };
+  python = pkgs.python3.withPackages (pythonPackages: [ pythonPackages.tomlkit ]);
 
   # Replicate the transform/merge of MCP servers from programs.codex module:
   transformedMcpServers = lib.optionalAttrs config.programs.mcp.enable (
@@ -48,48 +49,52 @@ in
     };
 
     home.activation.copyCodexConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-            configDir="$HOME/.codex"
-            configFile="$configDir/config.toml"
-            baseConfig="${baseConfigToml}"
+      configDir="$HOME/.codex"
+      configFile="$configDir/config.toml"
+      baseConfig="${baseConfigToml}"
 
-            mkdir -p "$configDir"
+      mkdir -p "$configDir"
 
-            if [ -f "$configFile" ] && [ ! -L "$configFile" ]; then
-              ${pkgs.python3}/bin/python3 -c '
-      import sys, re
+      if [ -f "$configFile" ] && [ ! -L "$configFile" ]; then
+        ${python}/bin/python3 - "$baseConfig" "$configFile" <<'PY'
+      import os
+      import sys
+      import tempfile
 
-      base_file = sys.argv[1]
-      current_file = sys.argv[2]
+      import tomlkit
 
-      with open(base_file, "r") as f:
-          base_content = f.read()
+      base_file, current_file = sys.argv[1:]
 
-      with open(current_file, "r") as f:
-          current_content = f.read()
+      with open(base_file, encoding="utf-8") as stream:
+          base = tomlkit.load(stream)
 
-      # Find the [projects] section in the current file
-      projects_matches = list(re.finditer(r"^\[projects(\.|\b)", current_content, re.MULTILINE))
-      if projects_matches:
-          start_idx = projects_matches[0].start()
-          # Find the next section header starting with [ but not [projects
-          next_section = re.search(r"^\[(?!projects)[^\]]+\]", current_content[start_idx:], re.MULTILINE)
-          if next_section:
-              projects_section = current_content[start_idx : start_idx + next_section.start()]
-          else:
-              projects_section = current_content[start_idx:]
+      with open(current_file, encoding="utf-8") as stream:
+          current = tomlkit.load(stream)
 
-          merged = base_content.rstrip() + "\n\n" + projects_section.strip() + "\n"
+      if "mcp_servers" in base:
+          current["mcp_servers"] = base["mcp_servers"]
       else:
-          merged = base_content
+          current.pop("mcp_servers", None)
 
-      with open(current_file, "w") as f:
-          f.write(merged)
-      ' "$baseConfig" "$configFile"
-            else
-              rm -f "$configFile"
-              cp "$baseConfig" "$configFile"
-              chmod +w "$configFile"
-            fi
+      file_descriptor, temporary_file = tempfile.mkstemp(
+          dir=os.path.dirname(current_file),
+          prefix=".config.toml.",
+      )
+      try:
+          with os.fdopen(file_descriptor, "w", encoding="utf-8") as stream:
+              tomlkit.dump(current, stream)
+              stream.flush()
+              os.fsync(stream.fileno())
+          os.chmod(temporary_file, 0o600)
+          os.replace(temporary_file, current_file)
+      finally:
+          if os.path.exists(temporary_file):
+              os.unlink(temporary_file)
+      PY
+      else
+        rm -f "$configFile"
+        install -m 600 "$baseConfig" "$configFile"
+      fi
     '';
   };
 }
