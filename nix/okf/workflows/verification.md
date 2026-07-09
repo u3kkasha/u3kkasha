@@ -22,7 +22,7 @@ nix build .#vm-test-wsl-mock
 nix flake check
 ```
 
-The VM integration tests are intended for CI because they are resource-intensive. The repository context also notes that the pre-push hook runs `nix flake check ./nix --impure`.
+The VM integration tests are intended for CI because they are resource-intensive. The pre-push hook runs `nix flake check ./nix` and builds both system configurations using pure evaluation.
 
 # Citations
 

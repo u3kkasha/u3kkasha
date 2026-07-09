@@ -15,7 +15,6 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     catppuccin.url = "github:catppuccin/nix";
     noctalia-shell.url = "github:noctalia-dev/noctalia-shell";
-    noctalia-shell.inputs.nixpkgs.follows = "nixpkgs";
     llm-agents.url = "github:numtide/llm-agents.nix";
     mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
     mcp-servers-nix.inputs.nixpkgs.follows = "nixpkgs";
@@ -132,8 +131,8 @@
                 gitleaks git --staged --redact --no-banner
               '';
               pre-push.text = ''
-                nix flake check ./nix --impure
-                nix build ./nix#nixos-build ./nix#nixos-wsl-build --no-link --impure
+                nix flake check ./nix
+                nix build ./nix#nixos-build ./nix#nixos-wsl-build --no-link
               '';
             };
             packages = [
