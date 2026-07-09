@@ -11,7 +11,7 @@ timestamp: 2026-06-18T00:00:00+06:00
 
 The flake defines checks for pre-push validation, formatting, unit tests, and gitleaks secret scanning. It also exposes build packages for the main NixOS configurations and VM integration tests.
 
-The unit tests validate the username, default editor, email format, both dynamic-import trees, locked nixd expressions, container-runtime exclusivity and group membership, WSL GUI package exclusion, packaged MCP commands, and the writable Codex merge behavior.
+The unit tests validate the username, default editor, email format, both dynamic-import trees, locked nixd expressions, container-runtime exclusivity and group membership, WSL GUI package exclusion, packaged MCP commands, Home Manager's generated Codex MCP section, and the writable Codex merge behavior.
 
 # Examples
 

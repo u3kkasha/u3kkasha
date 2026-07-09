@@ -9,6 +9,7 @@ let
   homeConfig = nixos.config.home-manager.users.${internal.username};
   wslHomeConfig = nixos-wsl.config.home-manager.users.${internal.username};
   mcpServers = homeConfig.programs.mcp.servers;
+  codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
   nixdConfig = builtins.fromJSON (
     builtins.readFile homeConfig.xdg.configFile."nixd/config.json".source
   );
@@ -176,6 +177,16 @@ let
         );
       expected = true;
     };
+    testCodexUsesDisabledUpstreamConfig = {
+      expr = {
+        inherit (codexUpstreamConfig) enable;
+        sourceName = codexUpstreamConfig.source.name;
+      };
+      expected = {
+        enable = false;
+        sourceName = "codex-config";
+      };
+    };
     testAgentPackages = {
       expr = {
         antigravity = homeConfig.programs.antigravity-cli.package.pname;
@@ -250,6 +261,18 @@ if testResults == [ ] then
       assert merged["model"] == "user-choice"
       assert list(merged["mcp_servers"]) == ["locked"]
       assert merged["mcp_servers"]["locked"]["command"].startswith("/nix/store/")
+      PY
+
+      python3 - ${codexUpstreamConfig.source} <<'PY'
+      import json
+      import sys
+      import tomlkit
+
+      with open(sys.argv[1], encoding="utf-8") as stream:
+          generated = tomlkit.load(stream)
+
+      expected_servers = set(json.loads('${builtins.toJSON (builtins.attrNames mcpServers)}'))
+      assert set(generated["mcp_servers"]) == expected_servers
       PY
 
       touch "$out"

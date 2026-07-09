@@ -11,35 +11,16 @@ let
   cfg = config.internal.codex;
   package = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.codex;
 
-  tomlFormat = pkgs.formats.toml { };
   python = pkgs.python3.withPackages (pythonPackages: [ pythonPackages.tomlkit ]);
   mergeCodexConfig = pkgs.writeShellScript "merge-codex-config" ''
     exec ${python}/bin/python3 ${./codex-merge.py} "$@"
   '';
-
-  # Replicate the transform/merge of MCP servers from programs.codex module:
-  transformedMcpServers = lib.optionalAttrs config.programs.mcp.enable (
-    lib.mapAttrs (
-      name: server:
-      lib.hm.mcp.transformMcpServer {
-        inherit server;
-        exclude = [
-          "headers"
-          "type"
-        ];
-        extraTransforms = [
-          (s: s // lib.optionalAttrs (s.headers or { } != { }) { http_headers = s.headers; })
-          lib.hm.mcp.addType
-          (lib.hm.mcp.wrapEnvFilesCommand { inherit pkgs name; })
-        ];
-      }
-    ) config.programs.mcp.servers
-  );
-
-  # Base Codex config.toml settings generated from Nix
-  baseConfigToml = tomlFormat.generate "codex-base-config" (
-    lib.optionalAttrs (transformedMcpServers != { }) { mcp_servers = transformedMcpServers; }
-  );
+  codexConfigTarget =
+    if config.home.preferXdgDirectories then
+      "${lib.removePrefix config.home.homeDirectory config.xdg.configHome}/codex/config.toml"
+    else
+      ".codex/config.toml";
+  upstreamConfigToml = config.home.file.${codexConfigTarget}.source;
 in
 {
   options.internal.codex = {
@@ -50,13 +31,17 @@ in
     programs.codex = {
       enable = true;
       inherit package;
-      enableMcpIntegration = false; # We manage config.toml ourselves to keep it writable
+      enableMcpIntegration = true;
     };
 
+    # Keep Home Manager's canonical generated config as the merge source, but
+    # do not link it over the user-owned writable file.
+    home.file.${codexConfigTarget}.enable = false;
+
     home.activation.copyCodexConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      configDir="$HOME/.codex"
-      configFile="$configDir/config.toml"
-      baseConfig="${baseConfigToml}"
+      configFile="$HOME/${codexConfigTarget}"
+      configDir="$(dirname "$configFile")"
+      baseConfig="${upstreamConfigToml}"
 
       mkdir -p "$configDir"
 
