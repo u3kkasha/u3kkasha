@@ -98,11 +98,11 @@ let
       expected = {
         nixos = [
           "wheel"
-          "podman"
+          "docker"
         ];
         wsl = [
           "wheel"
-          "podman"
+          "docker"
         ];
       };
     };
