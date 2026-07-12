@@ -64,6 +64,7 @@ jobs:
 
   cache-independent:
     needs: verify
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
