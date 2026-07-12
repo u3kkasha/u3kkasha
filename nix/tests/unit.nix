@@ -45,7 +45,6 @@ let
       expr = discoveredPaths ../modules/nixos;
       expected = [
         "desktop"
-        "docker"
         "gaming"
         "podman"
         "system"
@@ -80,10 +79,46 @@ let
       expr = homeConfig.catppuccin.flavor;
       expected = internal.themeFlavor;
     };
-    testContainerRuntimeExclusivity = {
+    testContainerRuntimeUsesPodmanCompat = {
       expr =
+        map
+          (host: {
+            docker = host.config.virtualisation.docker.enable;
+            podman = host.config.virtualisation.podman.enable;
+            dockerCompat = host.config.virtualisation.podman.dockerCompat;
+            dockerSocket = host.config.virtualisation.podman.dockerSocket.enable;
+          })
+          [
+            nixos
+            nixos-wsl
+          ];
+      expected = [
+        {
+          docker = false;
+          podman = true;
+          dockerCompat = true;
+          dockerSocket = true;
+        }
+        {
+          docker = false;
+          podman = true;
+          dockerCompat = true;
+          dockerSocket = true;
+        }
+      ];
+    };
+    testContainerSystemPackagesExcludeDocker = {
+      expr =
+        let
+          disallowedPackages = [
+            "docker"
+            "docker-compose"
+            "docker-client"
+          ];
+          packageNames = host: map lib.getName host.config.environment.systemPackages;
+        in
         builtins.all
-          (host: !(host.config.virtualisation.docker.enable && host.config.virtualisation.podman.enable))
+          (host: builtins.all (name: !(builtins.elem name (packageNames host))) disallowedPackages)
           [
             nixos
             nixos-wsl
@@ -98,11 +133,11 @@ let
       expected = {
         nixos = [
           "wheel"
-          "docker"
+          "podman"
         ];
         wsl = [
           "wheel"
-          "docker"
+          "podman"
         ];
       };
     };

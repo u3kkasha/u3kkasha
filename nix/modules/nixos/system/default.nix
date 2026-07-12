@@ -68,8 +68,7 @@ in
       extraGroups = [
         "wheel"
       ]
-      ++ lib.optional config.internal.podman.enable "podman"
-      ++ lib.optional config.internal.docker.enable "docker";
+      ++ lib.optional config.internal.podman.enable "podman";
     };
 
     programs.nix-ld.enable = true;

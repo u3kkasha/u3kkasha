@@ -39,10 +39,11 @@ pkgs.testers.runNixOSTest {
     machine.fail("which firefox")
     machine.fail("which wl-clipboard")
 
-    # Verify podman is functional in WSL
+    # Verify Podman is the runtime, with Docker-compatible CLI support for flakes that call docker.
     machine.succeed("podman --version")
+    machine.succeed("docker --version")
 
-    # The selected container runtime is exclusive.
+    # Docker Engine is not enabled.
     machine.fail("systemctl is-enabled docker.service")
   '';
 }

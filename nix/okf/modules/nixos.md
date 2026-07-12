@@ -11,7 +11,7 @@ timestamp: 2026-06-18T00:00:00+06:00
 
 `modules/nixos/default.nix` imports all system-level modules discovered by [/architecture/module-auto-discovery](/architecture/module-auto-discovery.md).
 
-The repository currently includes shared NixOS module areas for system configuration, desktop configuration, Podman, and Docker. These modules are pulled into `nixosModules.core` in [/architecture/flake-entry-point](/architecture/flake-entry-point.md), then reused by both host configurations in [/systems](/systems/). WSL support is host-scoped under `systems/x86_64-linux/nixos-wsl`. Docker and Podman are mutually exclusive, and each host's user groups follow its selected runtime.
+The repository currently includes shared NixOS module areas for system configuration, desktop configuration, gaming, and Podman. These modules are pulled into `nixosModules.core` in [/architecture/flake-entry-point](/architecture/flake-entry-point.md), then reused by both host configurations in [/systems](/systems/). WSL support is host-scoped under `systems/x86_64-linux/nixos-wsl`. Hosts use Podman as the container runtime, with Docker-compatible CLI and socket support provided by Podman.
 
 # Citations
 

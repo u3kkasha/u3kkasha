@@ -16,8 +16,8 @@ in
   config = lib.mkIf cfg.enable {
     virtualisation.podman = {
       enable = true;
-      dockerCompat = lib.mkDefault (!config.internal.docker.enable);
-      dockerSocket.enable = lib.mkDefault (!config.internal.docker.enable);
+      dockerCompat = true;
+      dockerSocket.enable = true;
       defaultNetwork.settings.dns_enabled = true;
       autoPrune = {
         enable = true;

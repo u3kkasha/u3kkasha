@@ -27,10 +27,11 @@ pkgs.testers.runNixOSTest {
     # Check if the user was created correctly with the right shell
     machine.succeed("getent passwd ukasha | grep /bin/nu")
 
-    # Check if podman is available
+    # Check if Podman is available with Docker-compatible CLI support.
     machine.succeed("podman --version")
+    machine.succeed("docker --version")
 
-    # The selected container runtime is exclusive.
+    # Docker Engine is not enabled.
     machine.fail("systemctl is-enabled docker.service")
 
     # Check if desktop services are configured
