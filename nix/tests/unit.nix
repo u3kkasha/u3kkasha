@@ -14,7 +14,10 @@ let
     builtins.readFile homeConfig.xdg.configFile."nixd/config.json".source
   );
   discoveredPaths =
-    root: map (path: lib.removePrefix "${toString root}/" (toString path)) (internal.scanPaths root);
+    root:
+    lib.sort builtins.lessThan (
+      map (path: lib.removePrefix "${toString root}/" (toString path)) (internal.scanPaths root)
+    );
 
   testResults = lib.runTests {
     testHomeScanPathsDiscoversModules = {
@@ -23,6 +26,7 @@ let
         "antigravity.nix"
         "bash.nix"
         "cli.nix"
+        "codegraph.nix"
         "codex.nix"
         "direnv.nix"
         "ghostty.nix"

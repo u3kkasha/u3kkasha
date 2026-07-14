@@ -44,6 +44,7 @@ in
       direnv.enable = lib.mkDefault true;
       antigravity.enable = lib.mkDefault true;
       codex.enable = lib.mkDefault true;
+      codegraph.enable = lib.mkDefault true;
       ghostty.enable = lib.mkDefault config.internal.gui.enable;
       helix.enable = lib.mkDefault true;
       nushell.enable = lib.mkDefault true;
