@@ -46,7 +46,13 @@ in
   config = mkIf cfg.enable {
     home.packages = [ pkgs.nixd ];
 
-    xdg.configFile."nixd/config.json".source = nixdConfig;
-    xdg.dataFile."nixd/locked-inputs".source = lockedInputs;
+    xdg.configFile."nixd/config.json" = {
+      source = nixdConfig;
+      force = true;
+    };
+    xdg.dataFile."nixd/locked-inputs" = {
+      source = lockedInputs;
+      force = true;
+    };
   };
 }

@@ -1,6 +1,4 @@
 {
-  pkgs,
-  inputs,
   config,
   lib,
   ...
@@ -32,11 +30,6 @@
       display = "side-by-side";
     };
   };
-
-  # hunk is a standalone diff viewer; no git/lazygit integration.
-  home.packages = [
-    inputs.hunk.packages.${pkgs.stdenv.hostPlatform.system}.hunk
-  ];
 
   programs.gh = {
     enable = true;

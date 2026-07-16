@@ -44,12 +44,23 @@ in
   config = mkIf cfg.enable {
     home.packages = [ pkgs.snip ];
 
-    # Deploy declarative filter files to ~/.config/snip/filters/
     home.file = {
-      ".config/snip/filters/nix.yaml".text = builtins.toJSON (mkNixFilter "nix");
-      ".config/snip/filters/nh.yaml".text = builtins.toJSON (mkNixFilter "nh");
-      ".config/snip/filters/nixos-rebuild.yaml".text = builtins.toJSON (mkNixFilter "nixos-rebuild");
-      ".config/snip/filters/home-manager.yaml".text = builtins.toJSON (mkNixFilter "home-manager");
+      ".config/snip/filters/nix.yaml" = {
+        text = builtins.toJSON (mkNixFilter "nix");
+        force = true;
+      };
+      ".config/snip/filters/nh.yaml" = {
+        text = builtins.toJSON (mkNixFilter "nh");
+        force = true;
+      };
+      ".config/snip/filters/nixos-rebuild.yaml" = {
+        text = builtins.toJSON (mkNixFilter "nixos-rebuild");
+        force = true;
+      };
+      ".config/snip/filters/home-manager.yaml" = {
+        text = builtins.toJSON (mkNixFilter "home-manager");
+        force = true;
+      };
     };
   };
 }
