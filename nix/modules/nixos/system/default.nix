@@ -77,7 +77,7 @@ in
     home-manager = {
       useGlobalPkgs = true;
       useUserPackages = true;
-      backupFileExtension = "backup";
+      backupCommand = "bash -c 'rm -rf \"$1.backup\" && mv \"$1\" \"$1.backup\"' --";
       users.${username} = import ../../home/default.nix;
     };
   };

@@ -22,7 +22,5 @@ in
       enableMcpIntegration = true;
       inherit package;
     };
-
-    home.file.".gemini/config/mcp_config.json".force = true;
   };
 }
