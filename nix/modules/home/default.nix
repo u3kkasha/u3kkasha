@@ -61,7 +61,11 @@ in
 
     home.username = username;
     home.homeDirectory = "/home/${username}";
-    home.pointerCursor.enable = true;
+    home.pointerCursor = {
+      enable = true;
+      name = "Bibata-Modern-Classic";
+      package = pkgs.bibata-cursors;
+    };
 
     home.sessionVariables = {
       EDITOR = lib.internal.defaultEditor;
