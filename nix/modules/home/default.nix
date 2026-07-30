@@ -72,7 +72,7 @@ in
       VISUAL = lib.internal.defaultEditor;
     };
 
-    nix.package = lib.mkDefault pkgs.lix;
+    nix.package = lib.mkDefault pkgs.nix;
 
     home.stateVersion = homeStateVersion;
 
