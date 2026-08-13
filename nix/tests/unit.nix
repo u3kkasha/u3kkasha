@@ -23,7 +23,6 @@ let
     testHomeScanPathsDiscoversModules = {
       expr = discoveredPaths ../modules/home;
       expected = [
-        "antigravity.nix"
         "bash.nix"
         "cli.nix"
         "codegraph.nix"
@@ -38,6 +37,7 @@ let
         "nushell.nix"
         "opencode.nix"
         "snip.nix"
+        "spec-kit.nix"
         "utils.nix"
         "wlsunset.nix"
         "wsl.nix"
@@ -228,15 +228,25 @@ let
     };
     testAgentPackages = {
       expr = {
-        antigravity = homeConfig.programs.antigravity-cli.package.pname;
         codex = homeConfig.programs.codex.package.pname;
         opencode = homeConfig.programs.opencode.package.pname;
+        specKit = lib.getName (
+          lib.findFirst (package: lib.getName package == "spec-kit") null homeConfig.home.packages
+        );
       };
       expected = {
-        antigravity = "antigravity-cli";
         codex = "codex";
         opencode = "opencode";
+        specKit = "spec-kit";
       };
+    };
+    testDuckDbCliPackage = {
+      expr = builtins.any (package: lib.getName package == "duckdb") homeConfig.home.packages;
+      expected = true;
+    };
+    testAntigravityCliPackageRemoved = {
+      expr = builtins.any (package: lib.getName package == "antigravity-cli") homeConfig.home.packages;
+      expected = false;
     };
     testWslHostName = {
       expr = nixos-wsl.config.networking.hostName;

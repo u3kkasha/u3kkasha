@@ -63,6 +63,7 @@ in
         mdr
         dotnet-sdk_10
         dust
+        duckdb
         lazydocker
         ctop
       ]

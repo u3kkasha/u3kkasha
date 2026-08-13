@@ -27,7 +27,7 @@ This repository contains a modular NixOS and Home Manager configuration specific
 - **Single Container Runtime**: Hosts select Podman as the only container runtime. Docker Engine is disabled, while Podman's Docker-compatible CLI and socket are enabled so project flakes that call `docker` continue to work against Podman.
 - **Minimal Nix Trust**: Only `root` is a trusted Nix daemon user; wheel membership does not grant cache or unsigned-NAR privileges.
 - **Host-Specific Entry Points**: Located in the `systems/` directory to support diverse environments (WSL, NixOS).
-- **Explicit Agent Packages**: Codex, OpenCode, Antigravity, and Semble are selected directly from the locked `llm-agents.nix` input. They are not injected into nixpkgs with global package-replacement overlays.
+- **Explicit Agent Packages**: Codex, OpenCode, Spec Kit, and Semble are selected directly from the locked `llm-agents.nix` input. They are not injected into nixpkgs with global package-replacement overlays.
 - **Central MCP Registry**: Packaged MCP servers are declared through `mcp-servers-nix`; hosted servers remain explicit entries in `programs.mcp.servers`. Local MCP commands must resolve to packaged store binaries rather than runtime dependency resolvers. All MCP-aware clients consume the same Home Manager registry.
 - **Scoped Credentials**: GitHub credentials are retrieved by the GitHub MCP wrapper with `gh auth token`; authentication tokens are not exported globally during shell startup.
 - **Nushell Functions**: Multi-step maintenance commands in Nushell are defined as `def` functions instead of aliases to prevent accidental execution during shell initialization.

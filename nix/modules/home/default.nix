@@ -42,7 +42,6 @@ in
       bash.enable = lib.mkDefault true;
       cli.enable = lib.mkDefault true;
       direnv.enable = lib.mkDefault true;
-      antigravity.enable = lib.mkDefault true;
       codex.enable = lib.mkDefault true;
       codegraph.enable = lib.mkDefault true;
       ghostty.enable = lib.mkDefault config.internal.gui.enable;
@@ -54,6 +53,7 @@ in
       wlsunset.enable = lib.mkDefault config.internal.gui.enable;
       utils.enable = lib.mkDefault true;
       snip.enable = lib.mkDefault true;
+      specKit.enable = lib.mkDefault true;
       wsl.enable = lib.mkDefault false;
       yazi.enable = lib.mkDefault true;
       zellij.enable = lib.mkDefault true;

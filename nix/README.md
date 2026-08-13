@@ -34,6 +34,10 @@ This project uses `nh` (nix-helper) for maintenance tasks. Enter the development
 
 See [AGENTS.md](AGENTS.md) for full details on the workflow.
 
+## Engineering Reviews
+
+- [Nix best-practices and clean-code review](docs/nix-code-review-2026-08-13.md) — open findings recorded on 2026-08-13.
+
 ## CI & Binary Caching
 
 - **Cachix**: This project uses [Cachix](https://www.cachix.org/) for binary caching. The cache is named `u3kkasha`.
