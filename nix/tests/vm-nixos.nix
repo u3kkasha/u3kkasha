@@ -4,6 +4,9 @@
   specialArgs,
 }:
 
+let
+  username = specialArgs.lib.internal.username;
+in
 pkgs.testers.runNixOSTest {
   name = "nixos-system-test";
 
@@ -17,7 +20,7 @@ pkgs.testers.runNixOSTest {
       ];
 
       internal.system.enable = true;
-      internal.podman.enable = true;
+      internal.docker.enable = true;
       internal.desktop.enable = true;
     };
 
@@ -25,17 +28,19 @@ pkgs.testers.runNixOSTest {
     machine.wait_for_unit("multi-user.target")
 
     # Check if the user was created correctly with the right shell
-    machine.succeed("getent passwd ukasha | grep /bin/nu")
+    machine.succeed("getent passwd ${username} | grep /bin/nu")
 
-    # Check if Podman is available with Docker-compatible CLI support.
-    machine.succeed("podman --version")
+    # Verify conventional Docker Engine and Compose are available without Podman.
     machine.succeed("docker --version")
-
-    # Docker Engine is not enabled.
-    machine.fail("systemctl is-enabled docker.service")
+    machine.succeed("docker compose version")
+    machine.wait_for_unit("docker.service")
+    machine.succeed("systemctl is-active docker.service")
+    machine.succeed("su - ${username} -c 'docker info'")
+    machine.fail("command -v podman")
 
     # Check if desktop services are configured
     machine.wait_for_unit("display-manager.service")
     machine.succeed("systemctl status display-manager.service")
+    machine.succeed("test -x /run/current-system/sw/bin/niri")
   '';
 }

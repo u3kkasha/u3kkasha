@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-13
 
-**Status**: Backlog
+**Status**: Implemented with one operator-deferred finding
 
 **Input**: Migrated open findings from the 2026-08-13 Nix engineering review.
 
@@ -33,7 +33,7 @@ supported host, reproducibility, declarative ownership, or recovery behavior.
 | -------------------------------- | --------- | ----------------------------------------------------------- |
 | `nixos` host                     | Yes       | Security, desktop correctness, and recovery improvements    |
 | `nixos-wsl` host                 | Yes       | Package closure, shared settings, and recovery improvements |
-| Shared NixOS modules             | Yes       | Podman, system, cache, and host-boundary hardening          |
+| Shared NixOS modules             | Yes       | Docker, system, cache, and host-boundary hardening          |
 | Shared Home Manager modules      | Yes       | Niri, Git, GUI, and nixd corrections                        |
 | Developer shell or agent tooling | No        | No presently identified outcome                             |
 | CI, caching, or verification     | Yes       | Honest unit/integration separation and added validation     |
@@ -53,8 +53,9 @@ the affected hosts.
 
 **Acceptance Scenarios**:
 
-1. **Given** Podman compatibility is enabled, **When** the host is evaluated, **Then** its
-   socket and group privilege match an explicitly accepted, tested security policy.
+1. **Given** conventional Docker is selected as the sole container engine, **When** the
+   host is evaluated, **Then** Docker and Compose work for the configured user, Podman is
+   absent, and root-equivalent `docker` group access is explicitly documented and tested.
 2. **Given** the Niri session resumes, **When** monitors are powered on, **Then** the
    configured command is available in that session and uses Niri's native interface.
 
@@ -70,12 +71,13 @@ activation tests or an explicit procedure prove backup retention.
 
 **Acceptance Scenarios**:
 
-1. **Given** a clean installation, **When** Git configuration is generated, **Then** the
-   shared identity is applied declaratively.
+1. **Given** a clean installation, **When** Git configuration is generated, **Then** no
+   global name or email is set because identity is configured per repository.
 2. **Given** GUI support is disabled, **When** the Home Manager closure is evaluated,
    **Then** GUI-only cursor assets are absent.
-3. **Given** repeated activation with conflicting files, **When** backups are produced,
-   **Then** the prior recovery copy is not silently destroyed.
+3. Backup rotation remains unchanged by explicit operator decision; destructive replacement
+   of the single `.backup` copy remains a documented limitation rather than an acceptance
+   criterion for the implemented slices.
 
 ### User Story 3 - Make Verification and Boundaries Honest (Priority: P3)
 
@@ -96,8 +98,8 @@ and both host builds remain successful.
 
 ### Edge Cases
 
-- Projects requiring the Docker-compatible socket may need a documented compatibility
-  path rather than unconditional removal.
+- Docker's daemon socket and `docker` group are root-equivalent; this exposure is accepted
+  to provide conventional Docker and Compose behavior without Podman compatibility layers.
 - Preserving nixd dependency context may expose an evaluation cycle that requires a tested,
   documented alternative.
 
@@ -105,11 +107,13 @@ and both host builds remain successful.
 
 ### Functional Requirements
 
-- **FR-001**: Podman compatibility MUST have an explicit least-privilege policy.
+- **FR-001**: Docker MUST be the sole container engine, with conventional Docker and Compose
+  behavior and an explicit root-equivalent group-access policy.
 - **FR-002**: Niri runtime commands MUST resolve to tools provided by the Niri session.
 - **FR-003**: Shared Git identity MUST be applied or unused declarations MUST be removed.
 - **FR-004**: Disabling GUI configuration MUST exclude GUI-only cursor assets.
-- **FR-005**: Activation backup behavior MUST preserve a recoverable previous copy.
+- **FR-005**: Activation backup behavior SHOULD preserve a recoverable previous copy; this
+  requirement is intentionally deferred by the operator and remains a known limitation.
 - **FR-006**: Quick unit checks MUST be separated from integration-sized closure checks.
 - **FR-007**: nixd's locked-input dependency edge MUST be explicit or documented and tested.
 - **FR-008**: Physical-host settings MUST live in the relevant host configuration.
@@ -119,15 +123,15 @@ and both host builds remain successful.
 ### Invariants
 
 - **INV-001**: Both supported host configurations MUST continue to build.
-- **INV-002**: Podman MUST remain the only container engine unless a later specification
-  explicitly changes that decision.
+- **INV-002**: Docker MUST be the only container engine, superseding the original Podman
+  invariant by explicit operator decision on 2026-08-13.
 - **INV-003**: State versions MUST remain unchanged.
 
 ### Security and State
 
 - **SEC-001**: Root-equivalent socket and group access MUST be explicitly minimized or
   accepted with documented verification.
-- **STATE-001**: Backup changes MUST include a recovery and rollback procedure.
+- **STATE-001**: Any future backup change MUST include a recovery and rollback procedure.
 
 ## Success Criteria
 
@@ -143,7 +147,8 @@ and both host builds remain successful.
 - **Claims to update**: Capability matrix, architecture, security, verification, and known
   limitations as individual slices are implemented.
 - **Limitations resolved or introduced**: The corresponding items in
-  `.specify/memory/current-system.md`; none are resolved by this backlog specification.
+  `.specify/memory/current-system.md`; destructive single-backup replacement remains by
+  explicit operator decision.
 
 ## Assumptions
 

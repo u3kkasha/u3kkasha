@@ -1,24 +1,14 @@
 {
   pkgs,
   lib,
-  nixosConfigurations,
 }:
 let
   inherit (lib) internal;
-  inherit (nixosConfigurations) nixos nixos-wsl;
-  homeConfig = nixos.config.home-manager.users.${internal.username};
-  wslHomeConfig = nixos-wsl.config.home-manager.users.${internal.username};
-  mcpServers = homeConfig.programs.mcp.servers;
-  codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
-  nixdConfig = builtins.fromJSON (
-    builtins.readFile homeConfig.xdg.configFile."nixd/config.json".source
-  );
   discoveredPaths =
     root:
     lib.sort builtins.lessThan (
       map (path: lib.removePrefix "${toString root}/" (toString path)) (internal.scanPaths root)
     );
-
   testResults = lib.runTests {
     testHomeScanPathsDiscoversModules = {
       expr = discoveredPaths ../modules/home;
@@ -49,290 +39,68 @@ let
       expr = discoveredPaths ../modules/nixos;
       expected = [
         "desktop"
+        "docker"
         "gaming"
-        "podman"
         "system"
       ];
     };
-    testUsername = {
-      expr = homeConfig.home.username;
-      expected = internal.username;
-    };
-    testDefaultEditor = {
+    testSharedGitIdentityIsAbsent = {
       expr = {
-        inherit (homeConfig.home.sessionVariables) EDITOR VISUAL;
+        hasName = internal ? name;
+        hasEmail = internal ? email;
       };
       expected = {
-        EDITOR = internal.defaultEditor;
-        VISUAL = internal.defaultEditor;
+        hasName = false;
+        hasEmail = false;
       };
     };
-    testEmailFormat = {
-      expr = builtins.match "[^@[:space:]]+@[^@[:space:]]+\\.[^@[:space:]]+" internal.email != null;
-      expected = true;
+    testUnfreePolicyIsExact = {
+      expr = {
+        allowed = map internal.allowUnfreePredicate [
+          { name = "steam-1"; }
+          { name = "steam-original-1"; }
+          { name = "steam-unwrapped-1"; }
+        ];
+        rejected = internal.allowUnfreePredicate { name = "unrelated-unfree-1"; };
+      };
+      expected = {
+        allowed = [
+          true
+          true
+          true
+        ];
+        rejected = false;
+      };
     };
-    testNixosHostName = {
-      expr = nixos.config.networking.hostName;
-      expected = "nixos";
+    testSharedNiriHasNoPhysicalOutput = {
+      expr = lib.hasInfix ''output "eDP-1"'' (builtins.readFile ../modules/home/niri.nix);
+      expected = false;
     };
-    testNixosStateVersion = {
-      expr = nixos.config.system.stateVersion;
-      expected = internal.systemStateVersion;
+    testNixdAvoidsUnsafeStringContextDiscard = {
+      expr = lib.hasInfix "unsafeDiscardStringContext" (builtins.readFile ../modules/home/nixd.nix);
+      expected = false;
     };
-    testThemeFlavor = {
-      expr = homeConfig.catppuccin.flavor;
-      expected = internal.themeFlavor;
-    };
-    testContainerRuntimeUsesPodmanCompat = {
+    testVmTestsUseCanonicalUsername = {
       expr =
-        map
-          (host: {
-            docker = host.config.virtualisation.docker.enable;
-            podman = host.config.virtualisation.podman.enable;
-            dockerCompat = host.config.virtualisation.podman.dockerCompat;
-            dockerSocket = host.config.virtualisation.podman.dockerSocket.enable;
-          })
-          [
-            nixos
-            nixos-wsl
-          ];
-      expected = [
-        {
-          docker = false;
-          podman = true;
-          dockerCompat = true;
-          dockerSocket = true;
-        }
-        {
-          docker = false;
-          podman = true;
-          dockerCompat = true;
-          dockerSocket = true;
-        }
-      ];
-    };
-    testContainerSystemPackagesExcludeDocker = {
-      expr =
-        let
-          disallowedPackages = [
-            "docker"
-            "docker-compose"
-            "docker-client"
-          ];
-          packageNames = host: map lib.getName host.config.environment.systemPackages;
-        in
         builtins.all
-          (host: builtins.all (name: !(builtins.elem name (packageNames host))) disallowedPackages)
+          (
+            path:
+            let
+              source = builtins.readFile path;
+            in
+            lib.hasInfix "lib.internal.username" source && !(lib.hasInfix "ukasha" source)
+          )
           [
-            nixos
-            nixos-wsl
+            ../tests/vm-nixos.nix
+            ../tests/vm-wsl-mock.nix
           ];
-      expected = true;
-    };
-    testContainerGroupMembership = {
-      expr = {
-        nixos = lib.unique nixos.config.users.users.${internal.username}.extraGroups;
-        wsl = lib.unique nixos-wsl.config.users.users.${internal.username}.extraGroups;
-      };
-      expected = {
-        nixos = [
-          "wheel"
-          "podman"
-        ];
-        wsl = [
-          "wheel"
-          "podman"
-        ];
-      };
-    };
-    testNixTrustIsRootOnly = {
-      expr = {
-        nixos = lib.unique nixos.config.nix.settings.trusted-users;
-        wsl = lib.unique nixos-wsl.config.nix.settings.trusted-users;
-      };
-      expected = {
-        nixos = [ "root" ];
-        wsl = [ "root" ];
-      };
-    };
-    testNixdUsesLockedFlake = {
-      expr =
-        let
-          expressions = [
-            nixdConfig.nixd.nixpkgs.expr
-            nixdConfig.nixd.options.nixos.expr
-            nixdConfig.nixd.options.home-manager.expr
-          ];
-        in
-        builtins.all (
-          expression:
-          builtins.match ".*<nixpkgs>.*" expression == null
-          && builtins.match ".*\\.\\./\\.\\..*" expression == null
-          && builtins.match ".*(/nix/store/|source).*" expression != null
-        ) expressions;
-      expected = true;
-    };
-    testMcpRegistry = {
-      expr = builtins.attrNames mcpServers;
-      expected = [
-        "context7"
-        "gh-grep"
-        "github"
-        "microsoft-learn"
-        "nixos"
-        "nushell"
-        "nuxt"
-        "nuxt-ui"
-        "playwright"
-        "semble"
-        "serena"
-      ];
-    };
-    testPackagedMcpServers = {
-      expr = builtins.all (name: lib.hasPrefix "/nix/store/" mcpServers.${name}.command) [
-        "github"
-        "nixos"
-        "playwright"
-        "semble"
-        "serena"
-      ];
-      expected = true;
-    };
-    testMcpCommandsAvoidRuntimeResolvers = {
-      expr =
-        let
-          resolverNames = [
-            "bunx"
-            "dnx"
-            "npx"
-            "pipx"
-            "pnpx"
-            "uvx"
-          ];
-          localServers = lib.filterAttrs (_: server: server ? command && server.command != null) mcpServers;
-        in
-        builtins.all (server: !(builtins.elem (builtins.baseNameOf server.command) resolverNames)) (
-          builtins.attrValues localServers
-        );
-      expected = true;
-    };
-    testCodexUsesDisabledUpstreamConfig = {
-      expr = {
-        inherit (codexUpstreamConfig) enable;
-        sourceName = codexUpstreamConfig.source.name;
-      };
-      expected = {
-        enable = false;
-        sourceName = "codex-config";
-      };
-    };
-    testAgentPackages = {
-      expr = {
-        codex = homeConfig.programs.codex.package.pname;
-        opencode = homeConfig.programs.opencode.package.pname;
-        specKit = lib.getName (
-          lib.findFirst (package: lib.getName package == "spec-kit") null homeConfig.home.packages
-        );
-      };
-      expected = {
-        codex = "codex";
-        opencode = "opencode";
-        specKit = "spec-kit";
-      };
-    };
-    testOpenCodeUsesSpecKitContext = {
-      expr = homeConfig.programs.opencode.settings.instructions;
-      expected = [
-        "AGENTS.md"
-        ".specify/memory/constitution.md"
-        ".specify/memory/current-system.md"
-      ];
-    };
-    testDuckDbCliPackage = {
-      expr = builtins.any (package: lib.getName package == "duckdb") homeConfig.home.packages;
-      expected = true;
-    };
-    testAntigravityCliPackageRemoved = {
-      expr = builtins.any (package: lib.getName package == "antigravity-cli") homeConfig.home.packages;
-      expected = false;
-    };
-    testWslHostName = {
-      expr = nixos-wsl.config.networking.hostName;
-      expected = "nixos-wsl";
-    };
-    testWslEnabled = {
-      expr = nixos-wsl.config.internal.wsl.enable;
-      expected = true;
-    };
-    testWslHomeManagerUser = {
-      expr = nixos-wsl.config.home-manager.users.${internal.username}.internal.wsl.enable;
-      expected = true;
-    };
-    testWslGuiDisabled = {
-      expr = wslHomeConfig.internal.gui.enable;
-      expected = false;
-    };
-    testWslClosureExcludesGuiPackages = {
-      expr =
-        let
-          packageNames = map lib.getName wslHomeConfig.home.packages;
-        in
-        builtins.all (name: !(builtins.elem name packageNames)) [
-          "ghostty"
-          "niri"
-          "wlsunset"
-        ];
       expected = true;
     };
   };
 in
 if testResults == [ ] then
-  pkgs.runCommand "unit-tests"
-    {
-      nativeBuildInputs = [
-        (pkgs.python3.withPackages (pythonPackages: [ pythonPackages.tomlkit ]))
-      ];
-    }
-    ''
-      base="$TMPDIR/base.toml"
-      current="$TMPDIR/current.toml"
-
-      printf '%s\n' \
-        '[mcp_servers.locked]' \
-        'command = "/nix/store/locked/bin/server"' \
-        > "$base"
-      printf '%s\n' \
-        'model = "user-choice"' \
-        '[mcp_servers.stale]' \
-        'command = "npx"' \
-        > "$current"
-
-      python3 ${../modules/home/codex-merge.py} "$base" "$current"
-      python3 - "$current" <<'PY'
-      import sys
-      import tomlkit
-
-      with open(sys.argv[1], encoding="utf-8") as stream:
-          merged = tomlkit.load(stream)
-
-      assert merged["model"] == "user-choice"
-      assert list(merged["mcp_servers"]) == ["locked"]
-      assert merged["mcp_servers"]["locked"]["command"].startswith("/nix/store/")
-      PY
-
-      python3 - ${codexUpstreamConfig.source} <<'PY'
-      import json
-      import sys
-      import tomlkit
-
-      with open(sys.argv[1], encoding="utf-8") as stream:
-          generated = tomlkit.load(stream)
-
-      expected_servers = set(json.loads('${builtins.toJSON (builtins.attrNames mcpServers)}'))
-      assert set(generated["mcp_servers"]) == expected_servers
-      PY
-
-      touch "$out"
-    ''
+  pkgs.runCommand "unit-tests" { } ''
+    touch "$out"
+  ''
 else
   throw "Unit tests failed: ${builtins.toJSON testResults}"

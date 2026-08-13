@@ -5,7 +5,7 @@
 
   ${namespace} = {
     system.enable = true;
-    podman.enable = true;
+    docker.enable = true;
     wsl.enable = true;
   };
 

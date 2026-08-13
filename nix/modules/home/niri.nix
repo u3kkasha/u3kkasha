@@ -12,6 +12,11 @@ in
 {
   options.internal.niri = {
     enable = mkEnableOption "Niri configuration";
+    outputConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = "Host-owned physical output configuration appended to the shared Niri configuration.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -37,10 +42,7 @@ in
           }
       }
 
-      output "eDP-1" {
-          mode "1920x1080@60.000"
-          scale 1.0
-      }
+      ${cfg.outputConfig}
 
       layout {
           gaps 16
@@ -305,7 +307,7 @@ in
       general {
         lock_cmd = pidof hyprlock || hyprlock
         before_sleep_cmd = loginctl lock-session
-        after_sleep_cmd = hyprctl dispatch dpms on
+        after_sleep_cmd = niri msg action power-on-monitors
       }
 
       listener {

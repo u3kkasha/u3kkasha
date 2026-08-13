@@ -6,17 +6,17 @@ that evidence. Update it only when implemented behavior changes.
 
 ## Capability Status
 
-| Capability                    | Status            | Supported path                                                | Verification                                   |
-| ----------------------------- | ----------------- | ------------------------------------------------------------- | ---------------------------------------------- |
-| Bare-metal NixOS host         | Operational       | `nixosConfigurations.nixos`                                   | `nix build .#nixos-build`                      |
-| WSL NixOS host                | Operational       | `nixosConfigurations.nixos-wsl`                               | `nix build .#nixos-wsl-build`                  |
-| Shared Home Manager layer     | Operational       | Home Manager as a NixOS module for the configured user        | `nix build .#unit-tests`                       |
-| Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees     | Exact discovered-path unit tests               |
-| Podman container runtime      | Operational       | Podman with Docker-compatible CLI and system socket           | Unit assertions and both VM/build targets      |
-| Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients            | Generated-configuration unit assertions        |
-| Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt, Gitleaks, and pre-push checks | `nix flake check`                              |
-| VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                      | `nix build .#vm-test-nixos .#vm-test-wsl-mock` |
-| Spec-driven change governance | Operational       | Spec Kit Codex skills, Nix templates, and system-memory hook  | `.specify/scripts/bash/validate-project.sh`    |
+| Capability                    | Status            | Supported path                                                | Verification                                       |
+| ----------------------------- | ----------------- | ------------------------------------------------------------- | -------------------------------------------------- |
+| Bare-metal NixOS host         | Operational       | `nixosConfigurations.nixos`                                   | `nix build .#nixos-build`                          |
+| WSL NixOS host                | Operational       | `nixosConfigurations.nixos-wsl`                               | `nix build .#nixos-wsl-build`                      |
+| Shared Home Manager layer     | Operational       | Home Manager as a NixOS module for the configured user        | `nix build .#configuration-tests`                  |
+| Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees     | Exact discovered-path unit tests                   |
+| Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2             | Configuration assertions and both VM/build targets |
+| Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients            | Generated-configuration unit assertions            |
+| Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt, Gitleaks, and pre-push checks | `nix flake check`                                  |
+| VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                      | `nix build .#vm-test-nixos .#vm-test-wsl-mock`     |
+| Spec-driven change governance | Operational       | Spec Kit Codex skills, Nix templates, and system-memory hook  | `.specify/scripts/bash/validate-project.sh`        |
 
 Status vocabulary: **Operational** is supported and verifiable; **Partial** works with a
 documented limitation; **Planned** is accepted but not implemented; **Retired** is
@@ -39,7 +39,7 @@ The shared NixOS core combines:
 Host entrypoints live under `systems/x86_64-linux/`:
 
 - `nixos` is the bare-metal graphical host. It owns hardware, EFI/systemd-boot, desktop,
-  gaming, Podman, and its host-specific Noctalia Home Manager import.
+  gaming, Docker, its physical Niri output, and its host-specific Noctalia Home Manager import.
 - `nixos-wsl` is the WSL host. It owns the upstream NixOS-WSL import, disables graphical
   Home Manager defaults, and enables WSL-specific user behavior.
 
@@ -52,17 +52,23 @@ containing a `default.nix`. Both `modules/nixos/default.nix` and
 `modules/home/default.nix` use this helper. Unit tests freeze the complete discovered
 lists, so adding or removing a module requires an explicit expected-list update.
 
-`lib/internal/default.nix` owns the configured identity, default editor and terminal,
-theme flavor, system and Home Manager state versions, and discovery helper. Both state
-versions are `26.05`. They remain fixed until an intentional, release-note-informed state
-migration is specified.
+`lib/internal/default.nix` owns the configured username, default editor and terminal,
+theme flavor, cache projection, exact unfree-package policy, system and Home Manager state
+versions, and discovery helper. Git name and email are intentionally repository-local rather
+than global. Both state versions are `26.05`. They remain fixed until an intentional,
+release-note-informed state migration is specified.
 
 ## Home Manager and Agent Tooling
 
 Home Manager owns user configuration and treats generated runtime files as read-only.
 Shared defaults enable shells, CLI utilities, direnv, editors, terminal/session tools,
 Codex, OpenCode, CodeGraph, Spec Kit, and the central MCP integration. GUI-aware modules
-follow `internal.gui.enable`; the WSL host disables it.
+follow `internal.gui.enable`; the WSL host disables it, including pointer cursor configuration
+and the Bibata cursor package.
+
+The reusable Niri module owns compositor behavior but no physical output identity. The
+bare-metal host supplies its `eDP-1` mode and scale through the module's host fragment. Niri's
+idle resume action uses `niri msg action power-on-monitors`.
 
 Agent applications are selected explicitly from the pinned `llm-agents.nix` input.
 Packaged MCP servers come from `mcp-servers-nix`; hosted servers remain explicit registry
@@ -72,18 +78,23 @@ similar runtime resolvers. GitHub credentials are obtained by the GitHub MCP wra
 
 Codex consumes the generated Home Manager MCP configuration through a tested merge path
 that keeps the user-owned `config.toml` writable. OpenCode reads `AGENTS.md`, the Spec Kit
-constitution, and this document.
+constitution, and this document. nixd generates its locked-input configuration through a
+reference-bearing derivation, so the locked-input link farm is an explicit closure dependency;
+no string context is discarded.
 
 ## Configuration, Caching, and Trust
 
-Flake inputs are locked. Public nix-community, Numtide, and Noctalia caches accelerate
-local builds; the `u3kkasha` Cachix cache is pushed by CI. Only `root` is trusted by the
-Nix daemon. Wheel membership alone does not grant unsigned-NAR or cache privileges.
+Flake inputs are locked. `lib/internal/cache.nix` is the single source for the public
+nix-community, Numtide, and Noctalia daemon caches. The `u3kkasha` Cachix cache is pushed by
+CI. Only `root` is trusted by the Nix daemon. Wheel membership alone does not grant
+unsigned-NAR or cache privileges. Unfree evaluation is limited to the exact Steam package
+family: `steam`, `steam-original`, and `steam-unwrapped`.
 
-Podman is the sole container engine. Docker Engine is disabled, while Podman's
-Docker-compatible CLI and system socket are enabled for projects that invoke `docker`.
-Membership in the `podman` group therefore remains an intentional root-equivalent
-privilege boundary pending a future hardening decision.
+Docker is the sole container engine. Both hosts enable the conventional rootful Docker daemon
+and Compose v2; Podman is not enabled or installed by the configuration. The configured user is
+in the `docker` group. This is an explicitly accepted root-equivalent privilege boundary chosen
+for maximum Compose, privileged-container, device, and networking compatibility. Podman runtime
+state is not migrated automatically.
 
 ## Maintenance and Verification
 
@@ -102,31 +113,24 @@ The verification ladder is:
 ```bash
 nix build .#checks.x86_64-linux.formatting --no-link
 nix build .#unit-tests --no-link
+nix build .#configuration-tests --no-link
 nix build .#nixos-build .#nixos-wsl-build --no-link
 nix build .#vm-test-nixos .#vm-test-wsl-mock
 ```
 
-Formatting, unit assertions, and Gitleaks are flake checks. The pre-push hook runs the
-flake checks and both host builds using pure evaluation. VM tests are intentionally CI
-oriented because of their cost. CI also checks Spec Kit governance and periodically
-builds important outputs with flake-configured extra caches disabled.
+Formatting, quick source/internal-library unit assertions, generated-configuration assertions,
+and Gitleaks are flake checks. `unit-tests` is the quick target. `configuration-tests` evaluates
+both supported hosts, generated files, package closures, and the Codex merge path, so it has
+medium-to-heavy closure cost. The pre-push hook runs the flake checks and both host builds using
+pure evaluation. VM tests are intentionally CI oriented because of their cost. CI also checks
+Spec Kit governance and periodically builds important outputs with extra caches disabled.
 
 ## Known Limitations and Planned Hardening
 
 These are current limitations, not implemented capabilities. Their intended outcomes are
 preserved in `specs/001-repository-hardening/spec.md`.
 
-- The Podman Docker-compatible system socket and `podman` group grant root-equivalent
-  access.
-- The unit-test derivation realizes an integration-sized closure.
-- Niri's resume command calls `hyprctl` instead of Niri's native monitor action.
-- Shared Git identity values are declared but are not applied to Git configuration.
-- Disabling GUI configuration still installs the pointer cursor package.
-- nixd discards Nix string dependency context and relies on an implicit closure edge.
 - Repeated Home Manager activation replaces the previous `.backup` recovery copy.
-- Some physical-display configuration remains in a shared Home Manager module.
-- Cache declarations are duplicated, unfree packages are broadly allowed, and one VM
-  script hard-codes the configured username.
 
 ## Memory Update Contract
 

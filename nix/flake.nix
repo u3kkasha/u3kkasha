@@ -1,19 +1,6 @@
 {
   description = "Multi-System Nix Flake";
 
-  nixConfig = {
-    extra-substituters = [
-      "https://nix-community.cachix.org"
-      "https://cache.numtide.com"
-      "https://noctalia.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
-    ];
-  };
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
@@ -90,7 +77,7 @@
                     ];
                   };
                 }
-                { nixpkgs.config.allowUnfree = true; }
+                { nixpkgs.config.allowUnfreePredicate = extendedLib.internal.allowUnfreePredicate; }
               ];
             };
             nixos-wsl = inputs.nixpkgs.lib.nixosSystem {
@@ -100,7 +87,7 @@
                 inputs.self.nixosModules.core
                 inputs.nixos-wsl.nixosModules.default
                 ./systems/x86_64-linux/nixos-wsl/default.nix
-                { nixpkgs.config.allowUnfree = true; }
+                { nixpkgs.config.allowUnfreePredicate = extendedLib.internal.allowUnfreePredicate; }
               ];
             };
           };
@@ -148,18 +135,24 @@
             vm-test-nixos = import ./tests/vm-nixos.nix {
               pkgs = import inputs.nixpkgs {
                 inherit system;
-                config.allowUnfree = true;
+                config.allowUnfreePredicate = extendedLib.internal.allowUnfreePredicate;
               };
               inherit inputs specialArgs;
             };
             vm-test-wsl-mock = import ./tests/vm-wsl-mock.nix {
               pkgs = import inputs.nixpkgs {
                 inherit system;
-                config.allowUnfree = true;
+                config.allowUnfreePredicate = extendedLib.internal.allowUnfreePredicate;
               };
               inherit inputs specialArgs;
             };
+            # Quick source and internal-library assertions.
             unit-tests = import ./tests/unit.nix {
+              inherit pkgs;
+              lib = extendedLib;
+            };
+            # Generated host configuration and closure assertions (medium/heavy).
+            configuration-tests = import ./tests/configuration.nix {
               inherit pkgs;
               lib = extendedLib;
               inherit (inputs.self) nixosConfigurations;
@@ -167,7 +160,13 @@
           };
           checks = {
             formatting = treefmt.config.build.check inputs.self;
+            # Quick source and internal-library assertions.
             unit-tests = import ./tests/unit.nix {
+              inherit pkgs;
+              lib = extendedLib;
+            };
+            # Generated host configuration and closure assertions (medium/heavy).
+            configuration-tests = import ./tests/configuration.nix {
               inherit pkgs;
               lib = extendedLib;
               inherit (inputs.self) nixosConfigurations;

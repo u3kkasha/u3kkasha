@@ -4,6 +4,9 @@
   specialArgs,
 }:
 
+let
+  username = specialArgs.lib.internal.username;
+in
 pkgs.testers.runNixOSTest {
   name = "wsl-isolation-test";
 
@@ -32,18 +35,18 @@ pkgs.testers.runNixOSTest {
     machine.fail("systemctl is-active pipewire.service")
 
     # Verify the user and shell still work
-    machine.succeed("getent passwd ukasha | grep /bin/nu")
-    machine.succeed("test -e /etc/profiles/per-user/ukasha/bin/nu")
+    machine.succeed("getent passwd ${username} | grep /bin/nu")
+    machine.succeed("test -e /etc/profiles/per-user/${username}/bin/nu")
 
     # Verify GUI packages are absent
     machine.fail("which firefox")
     machine.fail("which wl-clipboard")
 
-    # Verify Podman is the runtime, with Docker-compatible CLI support for flakes that call docker.
-    machine.succeed("podman --version")
+    # Verify conventional Docker Engine and Compose are available without Podman.
     machine.succeed("docker --version")
-
-    # Docker Engine is not enabled.
-    machine.fail("systemctl is-enabled docker.service")
+    machine.succeed("docker compose version")
+    machine.wait_for_unit("docker.service")
+    machine.succeed("su - ${username} -c 'docker info'")
+    machine.fail("command -v podman")
   '';
 }

@@ -1,8 +1,18 @@
 { lib }:
+let
+  cache = import ./cache.nix;
+  unfreePackageNames = [
+    "steam"
+    "steam-original"
+    "steam-unwrapped"
+  ];
+in
 {
   username = "ukasha";
-  name = "Fida Waseque Choudhury";
-  email = "fida.waseque@gmail.com";
+  cacheSubstituters = cache.substituters;
+  cachePublicKeys = cache.publicKeys;
+  inherit unfreePackageNames;
+  allowUnfreePredicate = package: builtins.elem (lib.getName package) unfreePackageNames;
   defaultEditor = "hx";
   defaultTerminal = "ghostty";
   themeFlavor = "mocha";

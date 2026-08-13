@@ -7,7 +7,12 @@
 }:
 
 let
-  inherit (lib.internal) username systemStateVersion;
+  inherit (lib.internal)
+    username
+    systemStateVersion
+    cacheSubstituters
+    cachePublicKeys
+    ;
   cfg = config.internal.system;
   nushell = pkgs.nushell.override {
     additionalFeatures = features: features ++ [ "mcp" ];
@@ -29,16 +34,8 @@ in
       trusted-users = [
         "root"
       ];
-      substituters = [
-        "https://nix-community.cachix.org"
-        "https://cache.numtide.com"
-        "https://noctalia.cachix.org"
-      ];
-      trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-        "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
-      ];
+      substituters = cacheSubstituters;
+      trusted-public-keys = cachePublicKeys;
       min-free = 5 * 1024 * 1024 * 1024; # 5GB
       max-free = 10 * 1024 * 1024 * 1024; # 10GB
     };
@@ -68,7 +65,7 @@ in
       extraGroups = [
         "wheel"
       ]
-      ++ lib.optional config.internal.podman.enable "podman";
+      ++ lib.optional config.internal.docker.enable "docker";
     };
 
     programs.nix-ld.enable = true;

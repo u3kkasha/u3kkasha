@@ -1,4 +1,9 @@
-{ namespace, inputs, ... }:
+{
+  namespace,
+  inputs,
+  lib,
+  ...
+}:
 
 {
   imports = [
@@ -17,8 +22,15 @@
     system.enable = true;
     desktop.enable = true;
     gaming.enable = true;
-    podman.enable = true;
+    docker.enable = true;
   };
 
   networking.hostName = "nixos";
+
+  home-manager.users.${lib.internal.username}.internal.niri.outputConfig = ''
+    output "eDP-1" {
+        mode "1920x1080@60.000"
+        scale 1.0
+    }
+  '';
 }

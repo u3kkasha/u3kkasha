@@ -61,7 +61,7 @@ in
 
     home.username = username;
     home.homeDirectory = "/home/${username}";
-    home.pointerCursor = {
+    home.pointerCursor = lib.mkIf config.internal.gui.enable {
       enable = true;
       name = "Bibata-Modern-Classic";
       package = pkgs.bibata-cursors;
