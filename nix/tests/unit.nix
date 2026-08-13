@@ -240,6 +240,14 @@ let
         specKit = "spec-kit";
       };
     };
+    testOpenCodeUsesSpecKitContext = {
+      expr = homeConfig.programs.opencode.settings.instructions;
+      expected = [
+        "AGENTS.md"
+        ".specify/memory/constitution.md"
+        ".specify/memory/current-system.md"
+      ];
+    };
     testDuckDbCliPackage = {
       expr = builtins.any (package: lib.getName package == "duckdb") homeConfig.home.packages;
       expected = true;

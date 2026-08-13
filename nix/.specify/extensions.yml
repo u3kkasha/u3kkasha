@@ -1,0 +1,14 @@
+installed:
+  - system-memory
+settings:
+  auto_execute_hooks: true
+hooks:
+  after_implement:
+    - extension: system-memory
+      command: speckit.system-memory.sync
+      enabled: true
+      optional: false
+      priority: 10
+      prompt: Execute speckit.system-memory.sync?
+      description: Reconcile implemented behavior into canonical current-system memory
+      condition: null

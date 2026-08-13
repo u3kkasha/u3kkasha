@@ -19,4 +19,16 @@ _: {
     "*.yml"
     "*.json"
   ];
+  # Spec Kit verifies its installed integration files by checksum. Format only
+  # project-owned memory, overrides, extension sources, and feature artifacts.
+  settings.formatter.prettier.excludes = [
+    ".agents/skills/speckit-*/**"
+    ".specify/*.json"
+    ".specify/extensions/system-memory/**"
+    ".specify/integrations/**"
+    ".specify/memory/.constitution-template.json"
+    ".specify/templates/*.md"
+    ".specify/workflows/speckit/**"
+    ".specify/workflows/*.json"
+  ];
 }

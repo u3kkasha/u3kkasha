@@ -25,7 +25,8 @@ in
         "$schema" = "https://opencode.ai/config.json";
         instructions = [
           "AGENTS.md"
-          "CONTEXT.md"
+          ".specify/memory/constitution.md"
+          ".specify/memory/current-system.md"
         ];
         plugin = [
           "opencode-snip@latest"

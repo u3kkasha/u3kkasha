@@ -38,8 +38,8 @@ jobs:
       - name: Flake Check
         run: nix flake check ./nix
 
-      - name: Validate OKF documentation
-        run: bash ./nix/.agents/skills/okf-open-knowledge-format/scripts/validate.sh ./nix/okf
+      - name: Validate Spec Kit governance
+        run: bash ./nix/.specify/scripts/bash/validate-project.sh
 
   build:
     needs: verify

@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "extensions": {
+    "system-memory": {
+      "version": "1.0.0",
+      "source": "local",
+      "manifest_hash": "sha256:0d5ca99636784ebc92c8a0ee07d16be988f81d96edc609067bc8f71b23312c6e",
+      "enabled": true,
+      "priority": 10,
+      "registered_commands": {
+        "codex": [
+          "speckit.system-memory.sync"
+        ]
+      },
+      "registered_skills": [
+        "speckit-system-memory-sync"
+      ],
+      "installed_at": "2026-08-13T04:09:59.933708+00:00"
+    }
+  }
+}

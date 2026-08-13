@@ -1,0 +1,33 @@
+schema_version: "1.0"
+
+extension:
+  id: system-memory
+  name: "System Memory"
+  version: "1.0.0"
+  description: "Reconcile completed brownfield changes into canonical current-system memory"
+  category: "documentation"
+  effect: "read-write"
+  author: "u3kkasha"
+  repository: "https://github.com/u3kkasha/u3kkasha"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=0.16.0"
+
+provides:
+  commands:
+    - name: speckit.system-memory.sync
+      file: commands/speckit.system-memory.sync.md
+      description: "Update current-system memory from verified implementation evidence"
+
+hooks:
+  after_implement:
+    command: speckit.system-memory.sync
+    optional: false
+    description: "Reconcile implemented behavior into canonical current-system memory"
+
+tags:
+  - "brownfield"
+  - "documentation"
+  - "governance"
+  - "architecture"
