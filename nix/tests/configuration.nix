@@ -9,6 +9,7 @@ let
   homeConfig = nixos.config.home-manager.users.${internal.username};
   wslHomeConfig = nixos-wsl.config.home-manager.users.${internal.username};
   mcpServers = homeConfig.programs.mcp.servers;
+  antigravityMcpConfig = homeConfig.home.file.".gemini/config/mcp_config.json";
   codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
   nixdConfigPath = builtins.toString homeConfig.xdg.configFile."nixd/config.json".source;
   niriConfig = builtins.readFile homeConfig.xdg.configFile."niri/config.kdl".source;
@@ -231,9 +232,39 @@ let
       expr = builtins.any (package: lib.getName package == "duckdb") homeConfig.home.packages;
       expected = true;
     };
-    testAntigravityCliPackageRemoved = {
-      expr = builtins.any (package: lib.getName package == "antigravity-cli") homeConfig.home.packages;
-      expected = false;
+    testAntigravityCliIntegration = {
+      expr =
+        map
+          (config: {
+            inherit (config.programs.antigravity-cli) enable enableMcpIntegration;
+            package = config.programs.antigravity-cli.package.pname;
+          })
+          [
+            homeConfig
+            wslHomeConfig
+          ];
+      expected = [
+        {
+          enable = true;
+          enableMcpIntegration = true;
+          package = "antigravity-cli";
+        }
+        {
+          enable = true;
+          enableMcpIntegration = true;
+          package = "antigravity-cli";
+        }
+      ];
+    };
+    testAntigravityCliMcpRegistry = {
+      expr = map (config: builtins.attrNames config.programs.antigravity-cli.mcpServers) [
+        homeConfig
+        wslHomeConfig
+      ];
+      expected = map (_: builtins.attrNames mcpServers) [
+        1
+        2
+      ];
     };
     testWslHostName = {
       expr = nixos-wsl.config.networking.hostName;
@@ -324,6 +355,19 @@ if testResults == [ ] then
 
       expected_servers = set(json.loads('${builtins.toJSON (builtins.attrNames mcpServers)}'))
       assert set(generated["mcp_servers"]) == expected_servers
+      PY
+
+      python3 - ${antigravityMcpConfig.source} <<'PY'
+      import json
+      import sys
+
+      with open(sys.argv[1], encoding="utf-8") as stream:
+          generated = json.load(stream)
+
+      expected_servers = set(json.loads('${builtins.toJSON (builtins.attrNames mcpServers)}'))
+      assert set(generated["mcpServers"]) == expected_servers
+      assert generated["mcpServers"]["context7"]["serverUrl"] == "${mcpServers.context7.url}"
+      assert "url" not in generated["mcpServers"]["context7"]
       PY
 
       touch "$out"

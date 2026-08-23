@@ -62,9 +62,9 @@ release-note-informed state migration is specified.
 
 Home Manager owns user configuration and treats generated runtime files as read-only.
 Shared defaults enable shells, CLI utilities, direnv, editors, terminal/session tools,
-Codex, OpenCode, CodeGraph, Spec Kit, and the central MCP integration. GUI-aware modules
-follow `internal.gui.enable`; the WSL host disables it, including pointer cursor configuration
-and the Bibata cursor package.
+Codex, OpenCode, Antigravity CLI, CodeGraph, Spec Kit, and the central MCP integration.
+GUI-aware modules follow `internal.gui.enable`; the WSL host disables it, including pointer
+cursor configuration and the Bibata cursor package.
 
 The reusable Niri module owns compositor behavior but no physical output identity. The
 bare-metal host supplies its `eDP-1` mode and scale through the module's host fragment. Niri's
@@ -77,7 +77,9 @@ similar runtime resolvers. GitHub credentials are obtained by the GitHub MCP wra
 `gh auth token` instead of being exported at shell startup.
 
 Codex consumes the generated Home Manager MCP configuration through a tested merge path
-that keeps the user-owned `config.toml` writable. OpenCode reads `AGENTS.md`, the Spec Kit
+that keeps the user-owned `config.toml` writable. OpenCode and Antigravity CLI also consume
+the central MCP registry through their Home Manager integrations; Antigravity's integration
+generates `~/.gemini/config/mcp_config.json`. OpenCode reads `AGENTS.md`, the Spec Kit
 constitution, and this document. nixd generates its locked-input configuration through a
 reference-bearing derivation, so the locked-input link farm is an explicit closure dependency;
 no string context is discarded.
