@@ -50,10 +50,11 @@
         };
       };
       git = {
-        pagers = [
+        diffRenderers = [
           {
             # difftastic is the default lazygit pager (press | to cycle).
-            externalDiffCommand = "difft --color=always --background=dark --display=side-by-side";
+            type = "extDiff";
+            command = "difft --color=always --background=dark --display=side-by-side";
           }
         ];
       };
