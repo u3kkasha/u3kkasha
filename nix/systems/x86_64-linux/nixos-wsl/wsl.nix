@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   config,
   ...
@@ -18,5 +19,13 @@ in
     wsl.defaultUser = username;
     wsl.interop.includePath = true;
     wsl.wslConf.interop.appendWindowsPath = true;
+
+    services.gnome.gnome-keyring.enable = true;
+
+    environment.systemPackages = with pkgs; [
+      libsecret
+    ];
+
+    programs.seahorse.enable = true;
   };
 }

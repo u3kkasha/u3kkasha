@@ -41,7 +41,8 @@ Host entrypoints live under `systems/x86_64-linux/`:
 - `nixos` is the bare-metal graphical host. It owns hardware, EFI/systemd-boot, desktop,
   gaming, Docker, its physical Niri output, and its host-specific Noctalia Home Manager import.
 - `nixos-wsl` is the WSL host. It owns the upstream NixOS-WSL import, disables graphical
-  Home Manager defaults, and enables WSL-specific user behavior.
+  Home Manager defaults, and enables WSL-specific user behavior including GNOME Keyring,
+  libsecret, and Seahorse.
 
 The upstream WSL module is intentionally absent from the shared core.
 
