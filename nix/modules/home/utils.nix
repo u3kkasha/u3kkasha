@@ -10,6 +10,7 @@ let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.internal.utils;
   antigravityCli = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.antigravity-cli;
+  skillsCli = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.skills;
 in
 {
   options.internal.utils = {
@@ -74,6 +75,7 @@ in
         duckdb
         lazydocker
         ctop
+        skillsCli
       ]
       ++ lib.optionals config.internal.gui.enable [
         wl-clipboard

@@ -63,7 +63,8 @@ release-note-informed state migration is specified.
 
 Home Manager owns user configuration and treats generated runtime files as read-only.
 Shared defaults enable shells, CLI utilities, direnv, editors, terminal/session tools,
-Codex, OpenCode, Antigravity CLI, CodeGraph, Spec Kit, and the central MCP integration.
+Codex, OpenCode, Antigravity CLI, CodeGraph, Spec Kit, the Vercel Skills CLI, and the
+central MCP integration.
 GUI-aware modules follow `internal.gui.enable`; the WSL host disables it, including pointer
 cursor configuration and the Bibata cursor package.
 

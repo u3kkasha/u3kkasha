@@ -213,11 +213,15 @@ let
         specKit = lib.getName (
           lib.findFirst (package: lib.getName package == "spec-kit") null homeConfig.home.packages
         );
+        skills = lib.getName (
+          lib.findFirst (package: lib.getName package == "skills") null homeConfig.home.packages
+        );
       };
       expected = {
         codex = "codex";
         opencode = "opencode";
         specKit = "spec-kit";
+        skills = "skills";
       };
     };
     testOpenCodeUsesSpecKitContext = {
