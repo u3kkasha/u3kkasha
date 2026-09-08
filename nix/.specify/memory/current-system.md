@@ -6,17 +6,17 @@ that evidence. Update it only when implemented behavior changes.
 
 ## Capability Status
 
-| Capability                    | Status            | Supported path                                                | Verification                                       |
-| ----------------------------- | ----------------- | ------------------------------------------------------------- | -------------------------------------------------- |
-| Bare-metal NixOS host         | Operational       | `nixosConfigurations.nixos`                                   | `nix build .#nixos-build`                          |
-| WSL NixOS host                | Operational       | `nixosConfigurations.nixos-wsl`                               | `nix build .#nixos-wsl-build`                      |
-| Shared Home Manager layer     | Operational       | Home Manager as a NixOS module for the configured user        | `nix build .#configuration-tests`                  |
-| Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees     | Exact discovered-path unit tests                   |
-| Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2             | Configuration assertions and both VM/build targets |
-| Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients            | Generated-configuration unit assertions            |
-| Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt, Gitleaks, and pre-push checks | `nix flake check`                                  |
-| VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                      | `nix build .#vm-test-nixos .#vm-test-wsl-mock`     |
-| Spec-driven change governance | Operational       | Spec Kit Codex skills, Nix templates, and system-memory hook  | `.specify/scripts/bash/validate-project.sh`        |
+| Capability                    | Status            | Supported path                                                      | Verification                                       |
+| ----------------------------- | ----------------- | ------------------------------------------------------------------- | -------------------------------------------------- |
+| Bare-metal NixOS host         | Operational       | `nixosConfigurations.nixos`                                         | `nix build .#nixos-build`                          |
+| WSL NixOS host                | Operational       | `nixosConfigurations.nixos-wsl`                                     | `nix build .#nixos-wsl-build`                      |
+| Shared Home Manager layer     | Operational       | Home Manager as a NixOS module for the configured user              | `nix build .#configuration-tests`                  |
+| Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees           | Exact discovered-path unit tests                   |
+| Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2                   | Configuration assertions and both VM/build targets |
+| Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                  | Generated-configuration unit assertions            |
+| Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt, Actionlint, Gitleaks, and Git hooks | `nix flake check`                                  |
+| VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                            | `nix build .#vm-test-nixos .#vm-test-wsl-mock`     |
+| Spec-driven change governance | Operational       | Spec Kit Codex skills, Nix templates, and system-memory hook        | `.specify/scripts/bash/validate-project.sh`        |
 
 Status vocabulary: **Operational** is supported and verifiable; **Partial** works with a
 documented limitation; **Planned** is accepted but not implemented; **Retired** is
@@ -89,10 +89,18 @@ no string context is discarded.
 ## Configuration, Caching, and Trust
 
 Flake inputs are locked. `lib/internal/cache.nix` is the single source for the public
-nix-community, Numtide, and Noctalia daemon caches. The `u3kkasha` Cachix cache is pushed by
-CI. Only `root` is trusted by the Nix daemon. Wheel membership alone does not grant
+nix-community, Numtide, and Noctalia daemon caches. Pull-request CI consumes the public
+`u3kkasha` Cachix cache without credentials or publishing; only trusted default-branch push and
+manual jobs receive its write token. Read-only CI checkouts do not persist GitHub credentials.
+Only `root` is trusted by the Nix daemon. Wheel membership alone does not grant
 unsigned-NAR or cache privileges. Unfree evaluation is limited to the exact Steam package
 family: `steam`, `steam-original`, and `steam-unwrapped`.
+
+GitHub repository policy requires full commit-SHA Action references and permits GitHub-owned
+Actions plus only the checked-in Determinate Systems, Cachix, and Gitleaks Actions. Dependabot
+security updates, secret scanning with push protection, and weekly CodeQL default analysis for
+GitHub Actions and Python are enabled. The default-branch ruleset requires the aggregate `CI Gate`
+status with strict branch freshness.
 
 Docker is the sole container engine. Both hosts enable the conventional rootful Docker daemon
 and Compose v2; Podman is not enabled or installed by the configuration. The configured user is
@@ -116,18 +124,26 @@ The verification ladder is:
 
 ```bash
 nix build .#checks.x86_64-linux.formatting --no-link
+nix build .#checks.x86_64-linux.actionlint --no-link
 nix build .#unit-tests --no-link
 nix build .#configuration-tests --no-link
 nix build .#nixos-build .#nixos-wsl-build --no-link
 nix build .#vm-test-nixos .#vm-test-wsl-mock
 ```
 
-Formatting, quick source/internal-library unit assertions, generated-configuration assertions,
-and Gitleaks are flake checks. `unit-tests` is the quick target. `configuration-tests` evaluates
-both supported hosts, generated files, package closures, and the Codex merge path, so it has
-medium-to-heavy closure cost. The pre-push hook runs the flake checks and both host builds using
-pure evaluation. VM tests are intentionally CI oriented because of their cost. CI also checks
-Spec Kit governance and periodically builds important outputs with extra caches disabled.
+Formatting, Actionlint, quick source/internal-library unit assertions, generated-configuration
+assertions, and Gitleaks are flake checks. Actionlint is supplied by the pinned package set and
+validates the repository-root GitHub workflows; the pre-commit hook runs it beside formatting and
+Gitleaks. `unit-tests` is the quick target. `configuration-tests` evaluates both supported hosts,
+generated files, package closures, and the Codex merge path, so it has medium-to-heavy closure cost.
+The pre-push hook runs the flake checks and both host builds using pure evaluation. VM tests are
+intentionally CI oriented because of their cost.
+
+CI jobs have explicit timeouts, and the lock updater serializes access to its shared update branch.
+Required evaluation plus all four system/VM matrix builds feed the failure-aware `CI Gate` required
+by the default-branch ruleset. Automated lock-update PRs publish an `nvd` bare-metal closure diff in
+the run summary. CI also checks Spec Kit governance and builds important outputs monthly and on
+manual dispatch using only the official Nix cache.
 
 ## Known Limitations and Planned Hardening
 

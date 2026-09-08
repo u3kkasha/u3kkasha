@@ -115,6 +115,7 @@
               enable = true;
               pre-commit.text = ''
                 nix build ./nix#checks.${system}.formatting --no-link
+                nix build ./nix#checks.${system}.actionlint --no-link
                 gitleaks git --staged --redact --no-banner
               '';
               pre-push.text = ''
@@ -125,6 +126,7 @@
             packages = [
               pkgs.nh
               pkgs.nvd
+              pkgs.actionlint
               pkgs.gitleaks
             ];
           };
@@ -160,6 +162,15 @@
           };
           checks = {
             formatting = treefmt.config.build.check inputs.self;
+            actionlint =
+              pkgs.runCommand "actionlint"
+                {
+                  nativeBuildInputs = [ pkgs.actionlint ];
+                }
+                ''
+                  actionlint ${../.github/workflows}/*.yml
+                  touch $out
+                '';
             # Quick source and internal-library assertions.
             unit-tests = import ./tests/unit.nix {
               inherit pkgs;

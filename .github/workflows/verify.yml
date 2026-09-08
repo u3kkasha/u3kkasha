@@ -4,6 +4,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    - cron: "0 3 1 * *" # Monthly cache-independent verification
   workflow_dispatch:
 
 concurrency:
@@ -15,11 +17,14 @@ permissions:
 
 jobs:
   verify:
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Secret Scanning (Gitleaks)
         if: github.actor != 'nektos/act'
@@ -30,7 +35,15 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
         with:
           extra-conf: "accept-flake-config = true"
-      - uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
+      - name: Configure Cachix (read-only)
+        if: github.event_name == 'pull_request'
+        uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
+        with:
+          name: u3kkasha
+          skipPush: true
+      - name: Configure Cachix (publish)
+        if: github.event_name != 'pull_request'
+        uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
         with:
           name: u3kkasha
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
@@ -44,34 +57,70 @@ jobs:
   build:
     needs: verify
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
         target: [nixos-build, nixos-wsl-build, vm-test-nixos, vm-test-wsl-mock]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
         with:
           extra-conf: "accept-flake-config = true"
-      - uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
+      - name: Configure Cachix (read-only)
+        if: github.event_name == 'pull_request'
+        uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
+        with:
+          name: u3kkasha
+          skipPush: true
+      - name: Configure Cachix (publish)
+        if: github.event_name != 'pull_request'
+        uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866 # v17
         with:
           name: u3kkasha
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Build ${{ matrix.target }}
-        run: nix build ./nix#${{ matrix.target }}
+        run: nix build ./nix#${{ matrix.target }} --out-link result
+
+      - name: Summarize NixOS closure changes
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.head_ref == 'update_flake_lock_action' &&
+          matrix.target == 'nixos-build'
+        env:
+          BASE_REV: ${{ github.event.pull_request.base.sha }}
+        run: |
+          nix build \
+            "git+file://${GITHUB_WORKSPACE}?rev=${BASE_REV}&dir=nix#nixos-build" \
+            --out-link result-before
+          {
+            echo "## NixOS closure diff"
+            echo '```text'
+            nix develop ./nix --command nvd diff result-before result
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
   cache-independent:
     needs: verify
-    if: github.event_name == 'workflow_dispatch'
+    if: >-
+      always() &&
+      (github.event_name == 'schedule' ||
+       (github.event_name == 'workflow_dispatch' && needs.verify.result == 'success'))
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
         target: [unit-tests, nixos-build, nixos-wsl-build]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
 
@@ -80,3 +129,18 @@ jobs:
           nix build ./nix#${{ matrix.target }}
           --no-accept-flake-config
           --option substituters https://cache.nixos.org
+
+  gate:
+    name: CI Gate
+    if: always() && github.event_name != 'schedule'
+    needs: [verify, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require verification and builds
+        env:
+          VERIFY_RESULT: ${{ needs.verify.result }}
+          BUILD_RESULT: ${{ needs.build.result }}
+        run: |
+          test "$VERIFY_RESULT" = success
+          test "$BUILD_RESULT" = success
