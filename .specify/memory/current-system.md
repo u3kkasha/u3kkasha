@@ -89,10 +89,13 @@ the real Kompress ONNX and local embedding models with build-sandbox networking 
 
 The central registry launches `headroom mcp serve` for Codex, OpenCode, and Antigravity CLI.
 Its mutable state is user-scoped under XDG config/data directories, and MCP compression and exact
-retrieval work without a running proxy. `codex-headroom` is a separate opt-in command: it creates
-a temporary Headroom home and memory database, starts a `127.0.0.1:8787` proxy, waits for health,
-passes Codex a process-local `openai_base_url`, and removes the proxy and temporary state when
-Codex exits. Normal `codex`, `agy`, and `opencode` commands retain direct provider routing.
+retrieval work without a running proxy. The shared savings ledger path (`HEADROOM_SAVINGS_EVENTS_PATH`)
+is declared in the user session and explicitly exported by the launcher so `headroom savings`
+reports unified history. `codex-headroom` is a separate opt-in command: it creates a temporary
+Headroom home and memory database, starts a `127.0.0.1:8787` proxy, waits for health, passes Codex a
+process-local `openai_base_url`, and removes the proxy and temporary state when Codex exits,
+preserving only the shared savings ledger. Normal `codex`, `agy`, and `opencode` commands retain
+direct provider routing.
 
 Codex consumes the generated Home Manager MCP configuration through a tested merge path
 that keeps the user-owned `config.toml` writable. OpenCode and Antigravity CLI also consume

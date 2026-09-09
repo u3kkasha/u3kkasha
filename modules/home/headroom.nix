@@ -13,6 +13,8 @@ let
   package = inputs.self.packages.${system}.headroom;
   codexPackage = config.programs.codex.package;
   proxyPort = 8787;
+  headroomDataDir = "${config.xdg.dataHome}/headroom";
+  savingsEventsPath = "${headroomDataDir}/savings_events.jsonl";
 
   codexHeadroom = pkgs.writeShellApplication {
     name = "codex-headroom";
@@ -25,6 +27,7 @@ let
       mkdir -p "$work_dir/state" "$work_dir/config"
       export HEADROOM_WORKSPACE_DIR="$work_dir/state"
       export HEADROOM_CONFIG_DIR="$work_dir/config"
+      export HEADROOM_SAVINGS_EVENTS_PATH="${savingsEventsPath}"
       # Keep interactive startup bounded. Headroom leaves every model enabled
       # and lazily loads any model that cannot preload within this budget.
       export HEADROOM_EAGER_PRELOAD_TIMEOUT_SECONDS=30
@@ -88,6 +91,8 @@ in
   options.internal.headroom.enable = mkEnableOption "Headroom context optimization tooling";
 
   config = mkIf cfg.enable {
+    home.sessionVariables.HEADROOM_SAVINGS_EVENTS_PATH = savingsEventsPath;
+
     home.packages = [
       package
       codexHeadroom

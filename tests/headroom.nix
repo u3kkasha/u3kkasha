@@ -20,6 +20,7 @@ pkgs.runCommand "headroom-tests"
     export XDG_DATA_HOME="$TMPDIR/data"
     export HEADROOM_WORKSPACE_DIR="$TMPDIR/workspace"
     export HEADROOM_CONFIG_DIR="$TMPDIR/headroom-config"
+    export HEADROOM_SAVINGS_EVENTS_PATH="$XDG_DATA_HOME/headroom/savings_events.jsonl"
     export HF_HOME=${headroom.headroom-models}
     export HF_HUB_CACHE=${headroom.headroom-models}/hub
     export HF_HUB_OFFLINE=1
@@ -119,5 +120,32 @@ pkgs.runCommand "headroom-tests"
 
     kill "$HEADROOM_MCP_PID" 2>/dev/null || true
     wait "$HEADROOM_MCP_PID" 2>/dev/null || true
+
+    python3 - <<'PY'
+    from headroom.savings_ledger import record_savings_event
+
+    assert record_savings_event(
+        tokens_before=80,
+        tokens_after=50,
+        model="unknown",
+        client="codex",
+        source="mcp",
+    )
+    assert record_savings_event(
+        tokens_before=100,
+        tokens_after=40,
+        model="unknown",
+        client="codex",
+        source="proxy",
+    )
+    PY
+
+    rm -rf -- "$HEADROOM_WORKSPACE_DIR"
+    headroom savings --json > "$TMPDIR/savings.json"
+    jq -e \
+      --arg path "$HEADROOM_SAVINGS_EVENTS_PATH" \
+      '.path == $path and .lifetime.calls >= 2 and .lifetime.tokens_saved >= 60' \
+      "$TMPDIR/savings.json"
+
     touch "$out"
   ''

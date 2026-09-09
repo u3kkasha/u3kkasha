@@ -11,6 +11,9 @@ let
   mcpServers = homeConfig.programs.mcp.servers;
   antigravityMcpConfig = homeConfig.home.file.".gemini/config/mcp_config.json";
   codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
+  codexHeadroom = lib.findFirst (
+    package: lib.getName package == "codex-headroom"
+  ) null homeConfig.home.packages;
   nixdConfigPath = builtins.toString homeConfig.xdg.configFile."nixd/config.json".source;
   niriConfig = builtins.readFile homeConfig.xdg.configFile."niri/config.kdl".source;
   hypridleConfig = builtins.readFile homeConfig.xdg.configFile."hypr/hypridle.conf".source;
@@ -238,6 +241,7 @@ let
             hasGlobalProviderOverride =
               builtins.hasAttr "OPENAI_BASE_URL" config.home.sessionVariables
               || builtins.hasAttr "ANTHROPIC_BASE_URL" config.home.sessionVariables;
+            savingsEventsPath = config.home.sessionVariables.HEADROOM_SAVINGS_EVENTS_PATH or null;
           })
           [
             homeConfig
@@ -255,6 +259,7 @@ let
             hasPackage = true;
             hasLauncher = true;
             hasGlobalProviderOverride = false;
+            savingsEventsPath = "${homeConfig.xdg.dataHome}/headroom/savings_events.jsonl";
           })
           [
             1
@@ -418,6 +423,15 @@ if testResults == [ ] then
       assert generated["mcpServers"]["context7"]["serverUrl"] == "${mcpServers.context7.url}"
       assert "url" not in generated["mcpServers"]["context7"]
       PY
+
+      launcher=${codexHeadroom}/bin/codex-headroom
+      grep -F 'export HEADROOM_WORKSPACE_DIR="$work_dir/state"' "$launcher"
+      grep -F 'export HEADROOM_CONFIG_DIR="$work_dir/config"' "$launcher"
+      grep -F 'export HEADROOM_SAVINGS_EVENTS_PATH="${homeConfig.xdg.dataHome}/headroom/savings_events.jsonl"' "$launcher"
+      grep -F '${pkgs.coreutils}/bin/rm -rf -- "$work_dir"' "$launcher"
+      grep -F -- '--host 127.0.0.1' "$launcher"
+      grep -F -- '--no-telemetry' "$launcher"
+      grep -F -- '--no-subscription-tracking' "$launcher"
 
       touch "$out"
     ''
