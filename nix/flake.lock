@@ -127,6 +127,23 @@
         "type": "github"
       }
     },
+    "headroom-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787199299,
+        "narHash": "sha256-0sMu0EDCY+pd38nBBXTNDUUfE8Nx6lvUP46I403yMz8=",
+        "owner": "headroomlabs-ai",
+        "repo": "headroom",
+        "rev": "b88b9078d8eda7b91e1543b33fa44d793869afa6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "headroomlabs-ai",
+        "ref": "v0.36.0",
+        "repo": "headroom",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -359,6 +376,7 @@
         "catppuccin": "catppuccin",
         "devshell": "devshell",
         "flake-parts": "flake-parts",
+        "headroom-src": "headroom-src",
         "home-manager": "home-manager",
         "llm-agents": "llm-agents",
         "mcp-servers-nix": "mcp-servers-nix",

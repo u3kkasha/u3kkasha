@@ -17,6 +17,10 @@
     catppuccin.url = "github:catppuccin/nix";
     noctalia-shell.url = "github:noctalia-dev/noctalia-shell";
     llm-agents.url = "github:numtide/llm-agents.nix";
+    headroom-src = {
+      url = "github:headroomlabs-ai/headroom/v0.36.0";
+      flake = false;
+    };
     mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
     mcp-servers-nix.inputs.nixpkgs.follows = "nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -96,6 +100,15 @@
         { pkgs, system, ... }:
         let
           treefmt = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+          headroomPkgs = import inputs.nixpkgs {
+            inherit system;
+            config.allowUnfreePredicate = extendedLib.internal.allowUnfreePredicate;
+          };
+          headroom-models = headroomPkgs.callPackage ./packages/headroom-models.nix { };
+          headroom = headroomPkgs.callPackage ./packages/headroom.nix {
+            inherit (inputs) headroom-src;
+            inherit headroom-models;
+          };
         in
         {
           formatter = treefmt.config.build.wrapper;
@@ -131,6 +144,10 @@
             ];
           };
           packages = {
+            inherit headroom headroom-models;
+            headroom-tests = import ./tests/headroom.nix {
+              inherit pkgs headroom;
+            };
             nixos-build = inputs.self.nixosConfigurations.nixos.config.system.build.toplevel;
             nixos-wsl-build = inputs.self.nixosConfigurations.nixos-wsl.config.system.build.toplevel;
             # Integration Tests (Heavy - CI Only)
@@ -181,6 +198,9 @@
               inherit pkgs;
               lib = extendedLib;
               inherit (inputs.self) nixosConfigurations;
+            };
+            headroom-tests = import ./tests/headroom.nix {
+              inherit pkgs headroom;
             };
             gitleaks =
               pkgs.runCommand "gitleaks"

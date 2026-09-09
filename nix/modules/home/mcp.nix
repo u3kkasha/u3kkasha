@@ -9,6 +9,7 @@
 let
   inherit (lib) getExe getExe';
   semble = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.semble;
+  headroom = inputs.self.packages.${pkgs.stdenv.hostPlatform.system}.headroom;
 in
 {
   # Packaged MCP servers. mcp-servers-nix evaluates these modules and merges
@@ -47,6 +48,20 @@ in
       };
 
       gh-grep.url = "https://mcp.grep.app";
+
+      headroom = {
+        command = getExe headroom;
+        args = [
+          "mcp"
+          "serve"
+        ];
+        env = {
+          HEADROOM_CONFIG_DIR = "${config.xdg.configHome}/headroom";
+          HEADROOM_WORKSPACE_DIR = "${config.xdg.dataHome}/headroom";
+          DO_NOT_TRACK = "1";
+          OTEL_SDK_DISABLED = "true";
+        };
+      };
 
       microsoft-learn.url = "https://learn.microsoft.com/api/mcp";
 

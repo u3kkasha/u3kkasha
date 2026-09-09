@@ -14,6 +14,7 @@ that evidence. Update it only when implemented behavior changes.
 | Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees           | Exact discovered-path unit tests                   |
 | Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2                   | Configuration assertions and both VM/build targets |
 | Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                  | Generated-configuration unit assertions            |
+| Full Headroom integration     | Operational       | Pinned `[all]` package, shared MCP tools, and opt-in Codex proxy    | `nix build .#headroom-tests` and both VM targets   |
 | Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt, Actionlint, Gitleaks, and Git hooks | `nix flake check`                                  |
 | VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                            | `nix build .#vm-test-nixos .#vm-test-wsl-mock`     |
 | Spec-driven change governance | Operational       | Spec Kit Codex skills, Nix templates, and system-memory hook        | `.specify/scripts/bash/validate-project.sh`        |
@@ -78,6 +79,21 @@ entries. Local MCP commands resolve to Nix store binaries rather than `npx`, `uv
 similar runtime resolvers. GitHub credentials are obtained by the GitHub MCP wrapper from
 `gh auth token` instead of being exported at shell startup.
 
+Headroom 0.36.0 is built from a pinned source and Cargo lock with its official `[all]`
+capability closure. Private Python overrides keep the package compatible without changing the
+global nixpkgs package set. Default Kompress, routing, image, embedding, and tokenizer assets are
+fixed Nix derivations exposed through read-only Hugging Face and tiktoken caches; runtime model
+downloads are disabled. The package wrapper also supplies the `ast-grep`, `difft`, and `scc`
+helper binaries from the store. `headroom-tests` imports every bundled dependency group and runs
+the real Kompress ONNX and local embedding models with build-sandbox networking disabled.
+
+The central registry launches `headroom mcp serve` for Codex, OpenCode, and Antigravity CLI.
+Its mutable state is user-scoped under XDG config/data directories, and MCP compression and exact
+retrieval work without a running proxy. `codex-headroom` is a separate opt-in command: it creates
+a temporary Headroom home and memory database, starts a `127.0.0.1:8787` proxy, waits for health,
+passes Codex a process-local `openai_base_url`, and removes the proxy and temporary state when
+Codex exits. Normal `codex`, `agy`, and `opencode` commands retain direct provider routing.
+
 Codex consumes the generated Home Manager MCP configuration through a tested merge path
 that keeps the user-owned `config.toml` writable. OpenCode and Antigravity CLI also consume
 the central MCP registry through their Home Manager integrations; Antigravity's integration
@@ -95,6 +111,11 @@ manual jobs receive its write token. Read-only CI checkouts do not persist GitHu
 Only `root` is trusted by the Nix daemon. Wheel membership alone does not grant
 unsigned-NAR or cache privileges. Unfree evaluation is limited to the exact Steam package
 family: `steam`, `steam-original`, and `steam-unwrapped`.
+
+Headroom external telemetry, OpenTelemetry export, update checks, and runtime model-network access
+are disabled by default. The opt-in Codex proxy has no persistent service or global provider URL;
+it receives existing Codex credentials only in process and binds only to loopback. No credential,
+trust, unfree-policy, state-version, or host-boundary change accompanies the integration.
 
 GitHub repository policy requires full commit-SHA Action references and permits GitHub-owned
 Actions plus only the checked-in Determinate Systems, Cachix, and Gitleaks Actions. Dependabot
@@ -127,6 +148,7 @@ nix build .#checks.x86_64-linux.formatting --no-link
 nix build .#checks.x86_64-linux.actionlint --no-link
 nix build .#unit-tests --no-link
 nix build .#configuration-tests --no-link
+nix build .#headroom-tests --no-link
 nix build .#nixos-build .#nixos-wsl-build --no-link
 nix build .#vm-test-nixos .#vm-test-wsl-mock
 ```
@@ -136,6 +158,8 @@ assertions, and Gitleaks are flake checks. Actionlint is supplied by the pinned 
 validates the repository-root GitHub workflows; the pre-commit hook runs it beside formatting and
 Gitleaks. `unit-tests` is the quick target. `configuration-tests` evaluates both supported hosts,
 generated files, package closures, and the Codex merge path, so it has medium-to-heavy closure cost.
+`headroom-tests` is an integration-sized offline model and MCP check; its initial closure includes
+CPU PyTorch, ONNX Runtime, Transformers, and multiple pinned model snapshots.
 The pre-push hook runs the flake checks and both host builds using pure evaluation. VM tests are
 intentionally CI oriented because of their cost.
 
@@ -151,6 +175,13 @@ These are current limitations, not implemented capabilities. Their intended outc
 preserved in `specs/001-repository-hardening/spec.md`.
 
 - Repeated Home Manager activation replaces the previous `.backup` recovery copy.
+- Antigravity CLI receives Headroom's complete MCP tool integration, but its Cloud Code provider
+  traffic is not routed through the transparent proxy because that protocol is not a supported
+  Headroom proxy target.
+- A first `codex-headroom` launch may spend roughly two minutes warming the complete local
+  ML/parser stack on CPU before Codex starts. Software-emulated VM tests therefore verify MCP
+  integration but do not run the full proxy launcher; its health, cleanup, and config immutability
+  are smoke-tested on the live host.
 
 ## Memory Update Contract
 

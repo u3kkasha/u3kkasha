@@ -158,6 +158,7 @@ let
         "context7"
         "gh-grep"
         "github"
+        "headroom"
         "microsoft-learn"
         "nixos"
         "nushell"
@@ -171,6 +172,7 @@ let
     testPackagedMcpServers = {
       expr = builtins.all (name: lib.hasPrefix "/nix/store/" mcpServers.${name}.command) [
         "github"
+        "headroom"
         "nixos"
         "playwright"
         "semble"
@@ -223,6 +225,41 @@ let
         specKit = "spec-kit";
         skills = "skills";
       };
+    };
+    testHeadroomIntegration = {
+      expr =
+        map
+          (config: {
+            enabled = config.internal.headroom.enable;
+            mcpCommand = config.programs.mcp.servers.headroom.command;
+            mcpArgs = config.programs.mcp.servers.headroom.args;
+            hasPackage = builtins.any (package: lib.getName package == "headroom-ai") config.home.packages;
+            hasLauncher = builtins.any (package: lib.getName package == "codex-headroom") config.home.packages;
+            hasGlobalProviderOverride =
+              builtins.hasAttr "OPENAI_BASE_URL" config.home.sessionVariables
+              || builtins.hasAttr "ANTHROPIC_BASE_URL" config.home.sessionVariables;
+          })
+          [
+            homeConfig
+            wslHomeConfig
+          ];
+      expected =
+        map
+          (_: {
+            enabled = true;
+            mcpCommand = mcpServers.headroom.command;
+            mcpArgs = [
+              "mcp"
+              "serve"
+            ];
+            hasPackage = true;
+            hasLauncher = true;
+            hasGlobalProviderOverride = false;
+          })
+          [
+            1
+            2
+          ];
     };
     testOpenCodeUsesSpecKitContext = {
       expr = homeConfig.programs.opencode.settings.instructions;
@@ -359,6 +396,10 @@ if testResults == [ ] then
 
       expected_servers = set(json.loads('${builtins.toJSON (builtins.attrNames mcpServers)}'))
       assert set(generated["mcp_servers"]) == expected_servers
+      assert generated["mcp_servers"]["headroom"]["command"].startswith("/nix/store/")
+      assert generated["mcp_servers"]["headroom"]["args"] == ["mcp", "serve"]
+      assert generated["mcp_servers"]["headroom"]["env"]["HEADROOM_WORKSPACE_DIR"].endswith("/.local/share/headroom")
+      assert generated["mcp_servers"]["headroom"]["env"]["DO_NOT_TRACK"] == "1"
       PY
 
       python3 - ${antigravityMcpConfig.source} <<'PY'
@@ -370,6 +411,10 @@ if testResults == [ ] then
 
       expected_servers = set(json.loads('${builtins.toJSON (builtins.attrNames mcpServers)}'))
       assert set(generated["mcpServers"]) == expected_servers
+      assert generated["mcpServers"]["headroom"]["command"].startswith("/nix/store/")
+      assert generated["mcpServers"]["headroom"]["args"] == ["mcp", "serve"]
+      assert generated["mcpServers"]["headroom"]["env"]["HEADROOM_WORKSPACE_DIR"].endswith("/.local/share/headroom")
+      assert generated["mcpServers"]["headroom"]["env"]["DO_NOT_TRACK"] == "1"
       assert generated["mcpServers"]["context7"]["serverUrl"] == "${mcpServers.context7.url}"
       assert "url" not in generated["mcpServers"]["context7"]
       PY
