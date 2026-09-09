@@ -127,13 +127,13 @@
             git.hooks = {
               enable = true;
               pre-commit.text = ''
-                nix build ./nix#checks.${system}.formatting --no-link
-                nix build ./nix#checks.${system}.actionlint --no-link
+                nix build .#checks.${system}.formatting --no-link
+                nix build .#checks.${system}.actionlint --no-link
                 gitleaks git --staged --redact --no-banner
               '';
               pre-push.text = ''
-                nix flake check ./nix
-                nix build ./nix#nixos-build ./nix#nixos-wsl-build --no-link
+                nix flake check .
+                nix build .#nixos-build .#nixos-wsl-build --no-link
               '';
             };
             packages = [
@@ -185,7 +185,7 @@
                   nativeBuildInputs = [ pkgs.actionlint ];
                 }
                 ''
-                  actionlint ${../.github/workflows}/*.yml
+                  actionlint ${./.github/workflows}/*.yml
                   touch $out
                 '';
             # Quick source and internal-library assertions.

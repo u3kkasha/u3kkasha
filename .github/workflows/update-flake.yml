@@ -22,7 +22,6 @@ jobs:
           extra-conf: "accept-flake-config = true"
       - uses: DeterminateSystems/update-flake-lock@834c491b2ece4de0bbd00d85214bb5e83b4da5c6 # v28
         with:
-          path-to-flake-dir: nix
           pr-title: "chore(nix): update flake.lock"
           pr-labels: |
             dependencies

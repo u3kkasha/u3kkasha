@@ -49,10 +49,10 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Flake Check
-        run: nix flake check ./nix
+        run: nix flake check .
 
       - name: Validate Spec Kit governance
-        run: bash ./nix/.specify/scripts/bash/validate-project.sh
+        run: bash ./.specify/scripts/bash/validate-project.sh
 
   build:
     needs: verify
@@ -85,7 +85,7 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Build ${{ matrix.target }}
-        run: nix build ./nix#${{ matrix.target }} --out-link result
+        run: nix build .#${{ matrix.target }} --out-link result
 
       - name: Summarize NixOS closure changes
         if: >-
@@ -96,12 +96,12 @@ jobs:
           BASE_REV: ${{ github.event.pull_request.base.sha }}
         run: |
           nix build \
-            "git+file://${GITHUB_WORKSPACE}?rev=${BASE_REV}&dir=nix#nixos-build" \
+            "git+file://${GITHUB_WORKSPACE}?rev=${BASE_REV}#nixos-build" \
             --out-link result-before
           {
             echo "## NixOS closure diff"
             echo '```text'
-            nix develop ./nix --command nvd diff result-before result
+            nix develop . --command nvd diff result-before result
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -126,7 +126,7 @@ jobs:
 
       - name: Build ${{ matrix.target }} without configured extra caches
         run: >-
-          nix build ./nix#${{ matrix.target }}
+          nix build .#${{ matrix.target }}
           --no-accept-flake-config
           --option substituters https://cache.nixos.org
 

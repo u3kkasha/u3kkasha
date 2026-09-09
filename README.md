@@ -5,6 +5,7 @@
 </p>
 
 ### 🚀 Systems Architect, Full-Stack Engineer & AI Agent Developer
+
 Software engineer specializing in **Functional Programming**, **Cloud-Native Distributed Systems**, **Declarative Infrastructure**, and **AI Agent Development**. I build resilient, scalable applications and agentic systems using modern ecosystems like **.NET**, **Python**, **Nix** and **TypeScript**.
 
 ---
@@ -12,6 +13,7 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
 ### 🛠️ Tech Stack & Ecosystems
 
 #### **Backend & Distributed Systems**
+
 <table>
   <tr>
     <td align="center" width="96">
@@ -58,6 +60,7 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
 **Distributed & Cloud-Native:** .NET Aspire, Dapr, Podman, Docker.
 
 #### **AI Agent Development**
+
 <table>
   <tr>
     <td align="center" width="96">
@@ -82,6 +85,7 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
 **Agentic AI:** RAG systems, tool-using agents, workflow orchestration, and vector search with Qdrant.
 
 #### **Frontend & Web**
+
 <table>
   <tr>
     <td align="center" width="96">
@@ -112,6 +116,7 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
 </table>
 
 #### **Infrastructure & Declarative Environments**
+
 <table>
   <tr>
     <td align="center" width="96">
@@ -134,6 +139,7 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
 ---
 
 ### 🤝 Connect with Me
+
 <p align="left">
   <a href="https://linkedin.com/in/u3kkasha" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />

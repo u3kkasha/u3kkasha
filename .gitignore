@@ -1,4 +1,5 @@
-result
-result-*
+/.direnv/
+/result
+/result-*
 /.pre-commit-config.yaml
-/nix/.specify/extensions/.cache/
+/.specify/extensions/.cache/
