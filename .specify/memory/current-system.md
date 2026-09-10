@@ -121,7 +121,8 @@ it receives existing Codex credentials only in process and binds only to loopbac
 trust, unfree-policy, state-version, or host-boundary change accompanies the integration.
 
 GitHub repository policy requires full commit-SHA Action references and permits GitHub-owned
-Actions plus only the checked-in Determinate Systems, Cachix, and Gitleaks Actions. Dependabot
+Actions plus the checked-in Determinate Systems, Cachix, and Gitleaks Actions (along with
+the pinned sub-actions required by DeterminateSystems/update-flake-lock). Dependabot
 security updates, secret scanning with push protection, and weekly CodeQL default analysis for
 GitHub Actions and Python are enabled. The default-branch ruleset requires the aggregate `CI Gate`
 status with strict branch freshness.
