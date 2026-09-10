@@ -20,7 +20,6 @@ let
         "direnv.nix"
         "ghostty.nix"
         "git.nix"
-        "headroom.nix"
         "helix.nix"
         "mcp.nix"
         "niri.nix"

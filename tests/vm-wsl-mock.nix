@@ -6,7 +6,6 @@
 
 let
   username = specialArgs.lib.internal.username;
-  headroomMcpSmoke = import ./headroom-mcp-smoke.nix { inherit pkgs; };
 in
 pkgs.testers.runNixOSTest {
   name = "wsl-isolation-test";
@@ -49,13 +48,5 @@ pkgs.testers.runNixOSTest {
     machine.wait_for_unit("docker.service")
     machine.succeed("su - ${username} -c 'docker info'")
     machine.fail("command -v podman")
-
-    # The WSL profile receives the same immutable Headroom MCP integration.
-    machine.succeed("su - ${username} -c 'headroom --version | grep 0.36.0'")
-    machine.succeed("su - ${username} -c 'which codex-headroom'")
-    machine.succeed("su - ${username} -c 'grep -q headroom ~/.codex/config.toml'")
-    machine.succeed("su - ${username} -c 'grep -q headroom ~/.gemini/config/mcp_config.json'")
-    machine.succeed("su - ${username} -c '${headroomMcpSmoke}'")
-
   '';
 }

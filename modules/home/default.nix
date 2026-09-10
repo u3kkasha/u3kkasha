@@ -45,7 +45,6 @@ in
       codex.enable = lib.mkDefault true;
       codegraph.enable = lib.mkDefault true;
       ghostty.enable = lib.mkDefault config.internal.gui.enable;
-      headroom.enable = lib.mkDefault true;
       helix.enable = lib.mkDefault true;
       nushell.enable = lib.mkDefault true;
       opencode.enable = lib.mkDefault true;

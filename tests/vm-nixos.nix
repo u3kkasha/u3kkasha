@@ -6,7 +6,6 @@
 
 let
   username = specialArgs.lib.internal.username;
-  headroomMcpSmoke = import ./headroom-mcp-smoke.nix { inherit pkgs; };
 in
 pkgs.testers.runNixOSTest {
   name = "nixos-system-test";
@@ -43,14 +42,5 @@ pkgs.testers.runNixOSTest {
     machine.wait_for_unit("display-manager.service")
     machine.succeed("systemctl status display-manager.service")
     machine.succeed("test -x /run/current-system/sw/bin/niri")
-
-    # Headroom is store-owned, projected to every MCP client, and its complete
-    # local MCP compress/retrieve path works without an upstream proxy.
-    machine.succeed("su - ${username} -c 'headroom --version | grep 0.36.0'")
-    machine.succeed("su - ${username} -c 'which codex-headroom'")
-    machine.succeed("su - ${username} -c 'grep -q headroom ~/.codex/config.toml'")
-    machine.succeed("su - ${username} -c 'grep -q headroom ~/.gemini/config/mcp_config.json'")
-    machine.succeed("su - ${username} -c '${headroomMcpSmoke}'")
-
   '';
 }
