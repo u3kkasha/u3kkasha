@@ -11,6 +11,7 @@ let
   mcpServers = homeConfig.programs.mcp.servers;
   antigravityMcpConfig = homeConfig.home.file.".gemini/config/mcp_config.json";
   codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
+  expectedAgentInstructions = builtins.readFile ../modules/home/agent-instructions.md;
   nixdConfigPath = builtins.toString homeConfig.xdg.configFile."nixd/config.json".source;
   niriConfig = builtins.readFile homeConfig.xdg.configFile."niri/config.kdl".source;
   hypridleConfig = builtins.readFile homeConfig.xdg.configFile."hypr/hypridle.conf".source;
@@ -206,6 +207,28 @@ let
         sourceName = "codex-config";
       };
     };
+    testSharedAgentInstructions = {
+      expr =
+        map
+          (config: {
+            codex = builtins.readFile config.home.file.".codex/AGENTS.md".source;
+            gemini = builtins.readFile config.home.file.".gemini/GEMINI.md".source;
+          })
+          [
+            homeConfig
+            wslHomeConfig
+          ];
+      expected =
+        map
+          (_: {
+            codex = expectedAgentInstructions;
+            gemini = expectedAgentInstructions;
+          })
+          [
+            1
+            2
+          ];
+    };
     testAgentPackages = {
       expr = {
         codex = homeConfig.programs.codex.package.pname;
@@ -231,6 +254,14 @@ let
         ".specify/memory/constitution.md"
         ".specify/memory/current-system.md"
       ];
+    };
+    testAgentInstructionsRequireFrequentConventionalCommits = {
+      expr =
+        lib.hasInfix "Commit work frequently at appropriate milestones" expectedAgentInstructions
+        && lib.hasInfix "Keep each commit focused" expectedAgentInstructions
+        && lib.hasInfix "Commit messages MUST use Conventional" expectedAgentInstructions
+        && lib.hasInfix "Commits format." expectedAgentInstructions;
+      expected = true;
     };
     testDuckDbCliPackage = {
       expr = builtins.any (package: lib.getName package == "duckdb") homeConfig.home.packages;

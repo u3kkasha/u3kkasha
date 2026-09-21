@@ -13,6 +13,7 @@ let
     testHomeScanPathsDiscoversModules = {
       expr = discoveredPaths ../modules/home;
       expected = [
+        "agent-instructions.nix"
         "bash.nix"
         "cli.nix"
         "codegraph.nix"

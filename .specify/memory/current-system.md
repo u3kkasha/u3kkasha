@@ -66,6 +66,8 @@ Home Manager owns user configuration and treats generated runtime files as read-
 Shared defaults enable shells, CLI utilities, direnv, editors, terminal/session tools,
 Codex, OpenCode, Antigravity CLI, CodeGraph, Spec Kit, the Vercel Skills CLI, and the
 central MCP integration.
+The shared Home Manager layer generates identical global instructions for Codex at
+`~/.codex/AGENTS.md` and Gemini at `~/.gemini/GEMINI.md` from one host-neutral source.
 GUI-aware modules follow `internal.gui.enable`; the WSL host disables it, including pointer
 cursor configuration and the Bibata cursor package.
 
