@@ -2,9 +2,21 @@
 
 This is a Nix system. If a required CLI tool is unavailable, obtain it by prefixing the command with Nix Comma (`,`).
 
+DuckDB is installed as a system CLI for interactive SQL and local analytical queries.
+
 # Python Scripts
 
-Use `uv` with PEP 723 for Python scripts.
+Use `uv` with PEP 723 for Python scripts. Declare script dependencies in the
+PEP 723 metadata block; for example, use `polars` there when a script needs
+DataFrame processing:
+
+```python
+# /// script
+# dependencies = ["polars"]
+# ///
+
+import polars as pl
+```
 
 # Git Commits
 
