@@ -56,11 +56,6 @@ in
       # Semble is packaged by llm-agents.nix and exposes a dedicated MCP entry
       # point, so it needs no Python environment or runtime dependency resolver.
       semble.command = getExe' semble "semble-mcp";
-
-      nushell = {
-        command = getExe config.programs.nushell.package;
-        args = [ "--mcp" ];
-      };
     };
   };
 }

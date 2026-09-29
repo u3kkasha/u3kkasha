@@ -14,9 +14,6 @@ let
     cachePublicKeys
     ;
   cfg = config.internal.system;
-  nushell = pkgs.nushell.override {
-    additionalFeatures = features: features ++ [ "mcp" ];
-  };
 in
 {
   options.internal.system = {
@@ -53,15 +50,15 @@ in
     i18n.defaultLocale = "en_GB.UTF-8";
 
     environment.systemPackages = [
-      nushell
+      pkgs.nushell
       pkgs.git # Explicitly ensure git is available at system level too
     ];
 
-    environment.shells = [ nushell ];
+    environment.shells = [ pkgs.nushell ];
 
     users.users.${username} = {
       isNormalUser = true;
-      shell = nushell;
+      shell = pkgs.nushell;
       extraGroups = [
         "wheel"
       ]

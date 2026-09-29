@@ -161,7 +161,6 @@ let
         "github"
         "microsoft-learn"
         "nixos"
-        "nushell"
         "nuxt"
         "nuxt-ui"
         "playwright"
