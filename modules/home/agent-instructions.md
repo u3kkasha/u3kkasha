@@ -22,7 +22,8 @@ import polars as pl
 
 Commit work frequently at appropriate milestones. Keep each commit focused, and commit
 only changes that belong to the current task. Commit messages MUST use Conventional
-Commits format.
+Commits format. The commit summary/subject MUST concisely state what changed, and the
+commit body MUST explain why it changed and mention important implications.
 
 # Snip - CLI Token Optimizer
 
