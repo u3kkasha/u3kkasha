@@ -134,8 +134,27 @@
                 gitleaks git --staged --redact --no-banner
               '';
               pre-push.text = ''
-                nix flake check .
-                nix build .#nixos-build .#nixos-wsl-build --no-link
+                host="''${NIXOS_HOST:-$(hostname)}"
+                case "$host" in
+                  nixos)
+                    hostBuild=".#nixos-build"
+                    ;;
+                  nixos-wsl)
+                    hostBuild=".#nixos-wsl-build"
+                    ;;
+                  *)
+                    echo "Unsupported host for pre-push checks: $host" >&2
+                    echo "Set NIXOS_HOST to nixos or nixos-wsl to select a supported host." >&2
+                    exit 1
+                    ;;
+                esac
+                nix build \
+                  .#checks.${system}.formatting \
+                  .#checks.${system}.actionlint \
+                  .#checks.${system}.unit-tests \
+                  .#checks.${system}.gitleaks \
+                  "$hostBuild" \
+                  --no-link
               '';
             };
             packages = [

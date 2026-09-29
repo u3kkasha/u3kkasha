@@ -15,7 +15,7 @@ that evidence. Update it only when implemented behavior changes.
 | Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2                   | Configuration assertions and both VM/build targets |
 | Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                  | Generated-configuration unit assertions            |
 | Headroom integration          | Retired           | Intentionally removed; MCP server, proxy, and packages pruned       | Removed from configuration                         |
-| Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt, Actionlint, Gitleaks, and Git hooks | `nix flake check`                                  |
+| Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt, Actionlint, Gitleaks, and Git hooks | Targeted checks and host-specific pre-push build   |
 | VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                            | `nix build .#vm-test-nixos .#vm-test-wsl-mock`     |
 | Spec-driven change governance | Operational       | Spec Kit Codex skills, Nix templates, and system-memory hook        | `.specify/scripts/bash/validate-project.sh`        |
 
@@ -142,8 +142,9 @@ assertions, and Gitleaks are flake checks. Actionlint is supplied by the pinned 
 validates the repository-root GitHub workflows; the pre-commit hook runs it beside formatting and
 Gitleaks. `unit-tests` is the quick target. `configuration-tests` evaluates both supported hosts,
 generated files, package closures, and the Codex merge path, so it has medium-to-heavy closure cost.
-The pre-push hook runs the flake checks and both host builds using pure evaluation. VM tests are
-intentionally CI oriented because of their cost.
+The pre-push hook runs formatting, Actionlint, unit tests, Gitleaks, and only the host build selected
+by `hostname` (`nixos` or `nixos-wsl`). Set `NIXOS_HOST` to one of those names to override detection.
+Cross-host configuration assertions and VM tests remain CI-oriented because of their cost.
 
 CI jobs have explicit timeouts, and the lock updater serializes access to its shared update branch.
 Required evaluation plus all four system/VM matrix builds feed the failure-aware `CI Gate` required
