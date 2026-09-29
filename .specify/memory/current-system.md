@@ -91,8 +91,10 @@ no string context is discarded.
 
 ## Configuration, Caching, and Trust
 
-Flake inputs are locked. `lib/internal/cache.nix` is the single source for the public
-nix-community, Numtide, and Noctalia daemon caches. Pull-request CI consumes the public
+Flake inputs are locked. `lib/internal/cache.nix` is the canonical source for the public
+nix-community, Numtide, and Noctalia daemon caches. The flake also exposes matching
+literal `nixConfig` bootstrap hints so a fresh system can use those caches before the
+NixOS module is activated. Pull-request CI consumes the public
 `u3kkasha` Cachix cache without credentials or publishing; only trusted default-branch push and
 manual jobs receive its write token. Read-only CI checkouts do not persist GitHub credentials.
 Only `root` is trusted by the Nix daemon. Wheel membership alone does not grant
