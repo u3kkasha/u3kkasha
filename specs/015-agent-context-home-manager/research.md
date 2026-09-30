@@ -3,7 +3,7 @@
 ## Decision: Use native context options for configured clients
 
 - **Decision**: Configure `programs.codex.context` and `programs.opencode.context` with the shared instructions Markdown source.
-- **Rationale**: The live Home Manager option index documents both options as accepting inline content or a file path and writing the respective global context file. The repository's locked Home Manager input must still be evaluated to confirm support before implementation is complete.
+- **Rationale**: The live Home Manager option index documents both options as accepting inline content or a file path and writing the respective global context file. Evaluation against the repository's locked Home Manager input confirms both options exist and generate the expected context paths.
 - **Alternatives considered**: Keep `home.file` mappings in a custom adapter, rejected because the two clients already expose native context options.
 
 ## Decision: Remove Gemini alongside Antigravity CLI

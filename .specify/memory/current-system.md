@@ -64,11 +64,13 @@ release-note-informed state migration is specified.
 
 Home Manager owns user configuration and treats generated runtime files as read-only.
 Shared defaults enable shells, CLI utilities including devenv, direnv, editors,
-terminal/session tools, Codex, OpenCode, Antigravity CLI, CodeGraph, Spec Kit, the Vercel
-Skills CLI, and the central MCP integration. Git is installed and configured by the
-shared Home Manager `programs.git` module for the configured user.
-The shared Home Manager layer generates identical global instructions for Codex at
-`~/.codex/AGENTS.md` and Gemini at `~/.gemini/GEMINI.md` from one host-neutral source.
+terminal/session tools, Codex, OpenCode, CodeGraph, Spec Kit, the Vercel Skills CLI,
+and the central MCP integration. Git is installed and configured by the shared Home
+Manager `programs.git` module for the configured user.
+The shared Home Manager layer configures identical global instructions for Codex at
+`~/.codex/AGENTS.md` and OpenCode at `~/.config/opencode/AGENTS.md` through their native
+context options, using one host-neutral source. OpenCode also loads the repository's
+`AGENTS.md`, the Spec Kit constitution, and current-system document.
 GUI-aware modules follow `internal.gui.enable`; the WSL host disables it, including pointer
 cursor configuration and the Bibata cursor package.
 
@@ -83,10 +85,8 @@ similar runtime resolvers. GitHub credentials are obtained by the GitHub MCP wra
 `gh auth token` instead of being exported at shell startup.
 
 Codex consumes the generated Home Manager MCP configuration through a tested merge path
-that keeps the user-owned `config.toml` writable. OpenCode and Antigravity CLI also consume
-the central MCP registry through their Home Manager integrations; Antigravity's integration
-generates `~/.gemini/config/mcp_config.json`. OpenCode reads `AGENTS.md`, the Spec Kit
-constitution, and this document. nixd generates its locked-input configuration through a
+that keeps the user-owned `config.toml` writable. OpenCode consumes the central MCP
+registry through its Home Manager integration. nixd generates its locked-input configuration through a
 reference-bearing derivation, so the locked-input link farm is an explicit closure dependency;
 no string context is discarded.
 

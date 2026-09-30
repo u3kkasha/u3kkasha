@@ -21,6 +21,7 @@ in
       enable = true;
       enableMcpIntegration = true;
       inherit package;
+      context = ./agent-instructions.md;
       settings = {
         "$schema" = "https://opencode.ai/config.json";
         instructions = [

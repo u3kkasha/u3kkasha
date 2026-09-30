@@ -35,18 +35,18 @@ description: "Nix configuration implementation tasks"
 
 **Independent Test**: Both hosts evaluate to identical Codex and OpenCode global context content from `modules/home/agent-instructions.md`.
 
-- [ ] T006 [US2] Configure `programs.codex.context` from the shared Markdown source in `modules/home/codex.nix`.
-- [ ] T007 [US2] Configure `programs.opencode.context` from the same shared Markdown source in `modules/home/opencode.nix`, preserving repository instruction paths.
-- [ ] T008 [US2] Replace linked-file context assertions with shared-source and project-instruction assertions in `tests/configuration.nix`.
-- [ ] T009 [US2] Delete `modules/home/agent-instructions.nix` and remove its filename from the exact discovered-module list in `tests/unit.nix`.
+- [x] T006 [US2] Configure `programs.codex.context` from the shared Markdown source in `modules/home/codex.nix`.
+- [x] T007 [US2] Configure `programs.opencode.context` from the same shared Markdown source in `modules/home/opencode.nix`, preserving repository instruction paths.
+- [x] T008 [US2] Replace linked-file context assertions with generated shared-source and project-instruction assertions in `tests/configuration.nix`.
+- [x] T009 [US2] Delete `modules/home/agent-instructions.nix` and remove its filename from the exact discovered-module list in `tests/unit.nix`.
 
 **Checkpoint**: Both configured clients consume one shared instruction source through native Home Manager options.
 
 ## Final Phase: Cross-Target Verification and Memory
 
-- [ ] T010 Run formatting, unit assertions, and generated configuration assertions for both supported hosts with `nix build .#checks.x86_64-linux.formatting .#unit-tests .#configuration-tests --no-link`.
-- [ ] T011 Reconcile `.specify/memory/current-system.md` through the mandatory `speckit.system-memory.sync` hook using the verified implementation evidence.
-- [ ] T012 Run `.specify/scripts/bash/validate-project.sh`.
+- [x] T010 Run formatting, unit assertions, and generated configuration assertions for both supported hosts with `nix build .#checks.x86_64-linux.formatting .#unit-tests .#configuration-tests --no-link`.
+- [x] T011 Reconcile `.specify/memory/current-system.md` through the mandatory `speckit.system-memory.sync` hook using the verified implementation evidence.
+- [x] T012 Run `.specify/scripts/bash/validate-project.sh`.
 
 ## Dependencies and Execution
 

@@ -209,8 +209,10 @@ let
       expr =
         map
           (config: {
-            codex = builtins.readFile config.home.file.".codex/AGENTS.md".source;
-            geminiFileExists = builtins.hasAttr ".gemini/GEMINI.md" config.home.file;
+            codexContext = builtins.readFile config.programs.codex.context;
+            codexOutput = builtins.readFile config.home.file.".codex/AGENTS.md".source;
+            opencodeContext = builtins.readFile config.programs.opencode.context;
+            opencodeOutput = builtins.readFile config.xdg.configFile."opencode/AGENTS.md".source;
           })
           [
             homeConfig
@@ -219,8 +221,10 @@ let
       expected =
         map
           (_: {
-            codex = expectedAgentInstructions;
-            geminiFileExists = false;
+            codexContext = expectedAgentInstructions;
+            codexOutput = expectedAgentInstructions;
+            opencodeContext = expectedAgentInstructions;
+            opencodeOutput = expectedAgentInstructions;
           })
           [
             1
@@ -246,12 +250,21 @@ let
       };
     };
     testOpenCodeUsesSpecKitContext = {
-      expr = homeConfig.programs.opencode.settings.instructions;
-      expected = [
-        "AGENTS.md"
-        ".specify/memory/constitution.md"
-        ".specify/memory/current-system.md"
+      expr = map (config: config.programs.opencode.settings.instructions) [
+        homeConfig
+        wslHomeConfig
       ];
+      expected =
+        map
+          (_: [
+            "AGENTS.md"
+            ".specify/memory/constitution.md"
+            ".specify/memory/current-system.md"
+          ])
+          [
+            1
+            2
+          ];
     };
     testAgentInstructionsRequireFrequentConventionalCommits = {
       expr =
@@ -266,13 +279,27 @@ let
       expected = true;
     };
     testAntigravityCliDisabled = {
-      expr = map (config: config.programs.antigravity-cli.enable) [
-        homeConfig
-        wslHomeConfig
-      ];
+      expr =
+        map
+          (config: {
+            enabled = config.programs.antigravity-cli.enable;
+            packagePresent = builtins.any (
+              package: lib.getName package == "antigravity-cli"
+            ) config.home.packages;
+          })
+          [
+            homeConfig
+            wslHomeConfig
+          ];
       expected = [
-        false
-        false
+        {
+          enabled = false;
+          packagePresent = false;
+        }
+        {
+          enabled = false;
+          packagePresent = false;
+        }
       ];
     };
     testGeminiGeneratedFilesAbsent = {

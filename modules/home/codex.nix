@@ -32,6 +32,7 @@ in
       enable = true;
       inherit package;
       enableMcpIntegration = true;
+      context = ./agent-instructions.md;
     };
 
     # Keep Home Manager's canonical generated config as the merge source, but
