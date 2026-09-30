@@ -59,6 +59,7 @@ in
       bash.enable = lib.mkDefault true;
       cli.enable = lib.mkDefault true;
       direnv.enable = lib.mkDefault true;
+      devtools.enable = lib.mkDefault true;
       codex.enable = lib.mkDefault true;
       codegraph.enable = lib.mkDefault true;
       ghostty.enable = lib.mkDefault config.internal.gui.enable;

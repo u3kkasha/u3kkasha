@@ -35,9 +35,9 @@ description: "Nix configuration implementation tasks"
 
 **Independent Test**: Unit and configuration assertions pass, and generated Niri configuration contains the host fragment.
 
-- [ ] T006 [US2] Move the shared Niri KDL string to `modules/home/niri.kdl` and append `internal.niri.outputConfig` from `modules/home/niri.nix`.
-- [ ] T007 [US2] Move Node.js, .NET, DuckDB, `uv`, `mdr`, and Skills CLI ownership into `modules/home/devtools.nix`; retain GUI conditions and default enablement in `modules/home/default.nix`.
-- [ ] T008 [US2] Update the exact Home Manager module discovery list in `tests/unit.nix` for `devtools.nix` and verify package-preserving assertions in `tests/configuration.nix`.
+- [x] T006 [US2] Move the shared Niri KDL string to `modules/home/niri.kdl` and substitute `internal.niri.outputConfig` at its marker from `modules/home/niri.nix`.
+- [x] T007 [US2] Move Node.js, .NET, DuckDB, `uv`, `mdr`, and Skills CLI ownership into `modules/home/devtools.nix`; retain GUI conditions and default enablement in `modules/home/default.nix`.
+- [x] T008 [US2] Update the exact Home Manager module discovery list in `tests/unit.nix` for `devtools.nix` and verify package-preserving assertions in `tests/configuration.nix`.
 - [ ] T009 [US2] Bind `unit-tests` and `configuration-tests` once in `flake.nix` and reuse the values in `packages` and `checks`.
 - [ ] T010 [US2] Run `nix fmt -- --ci`, `nix build .#unit-tests .#configuration-tests .#nixos-build .#nixos-wsl-build --no-link`, and `nix flake check`.
 

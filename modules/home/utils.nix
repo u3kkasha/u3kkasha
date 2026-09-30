@@ -2,14 +2,12 @@
   pkgs,
   lib,
   config,
-  inputs,
   ...
 }:
 
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.internal.utils;
-  skillsCli = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.skills;
 in
 {
   options.internal.utils = {
@@ -17,9 +15,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.bat = {
-      enable = true;
-    };
+    programs.bat.enable = true;
 
     programs.fzf = {
       enable = true;
@@ -41,17 +37,8 @@ in
       icons = "auto";
     };
 
-    programs.bottom = {
-      enable = true;
-    };
-
-    programs.fastfetch = {
-      enable = true;
-    };
-
-    programs.uv = {
-      enable = true;
-    };
+    programs.bottom.enable = true;
+    programs.fastfetch.enable = true;
 
     home.packages =
       with pkgs;
@@ -61,14 +48,9 @@ in
         fd
         file
         jq
-        nodejs_22
-        mdr
-        dotnet-sdk_10
         dust
-        duckdb
         lazydocker
         ctop
-        skillsCli
       ]
       ++ lib.optionals config.internal.gui.enable [
         wl-clipboard

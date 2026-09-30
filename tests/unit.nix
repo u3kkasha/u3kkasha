@@ -17,6 +17,7 @@ let
         "cli.nix"
         "codegraph.nix"
         "codex.nix"
+        "devtools.nix"
         "direnv.nix"
         "ghostty.nix"
         "git.nix"
@@ -73,7 +74,7 @@ let
       };
     };
     testSharedNiriHasNoPhysicalOutput = {
-      expr = lib.hasInfix ''output "eDP-1"'' (builtins.readFile ../modules/home/niri.nix);
+      expr = lib.hasInfix ''output "eDP-1"'' (builtins.readFile ../modules/home/niri.kdl);
       expected = false;
     };
     testNixdAvoidsUnsafeStringContextDiscard = {
