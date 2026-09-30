@@ -20,9 +20,9 @@ import polars as pl
 
 # Git Commits
 
-Commit work frequently at appropriate milestones. Each commit MUST be atomic, containing
-one focused, independently reviewable change. Commit messages MUST use Conventional
-Commits format, with a concise subject stating what changed and a body explaining why it
+Commit work frequently at appropriate milestones. Keep each commit focused, atomic, and
+independently reviewable. Commit messages MUST use Conventional
+Commits format. Use a concise subject stating what changed and a body explaining why it
 changed and mentioning important implications. The subject and body MUST each be one
 sentence.
 
