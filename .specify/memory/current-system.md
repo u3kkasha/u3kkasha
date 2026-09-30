@@ -6,18 +6,18 @@ that evidence. Update it only when implemented behavior changes.
 
 ## Capability Status
 
-| Capability                    | Status            | Supported path                                                      | Verification                                       |
-| ----------------------------- | ----------------- | ------------------------------------------------------------------- | -------------------------------------------------- |
-| Bare-metal NixOS host         | Operational       | `nixosConfigurations.nixos`                                         | `nix build .#nixos-build`                          |
-| WSL NixOS host                | Operational       | `nixosConfigurations.nixos-wsl`                                     | `nix build .#nixos-wsl-build`                      |
-| Shared Home Manager layer     | Operational       | Home Manager as a NixOS module for the configured user              | `nix build .#configuration-tests`                  |
-| Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees           | Exact discovered-path unit tests                   |
-| Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2                   | Configuration assertions and both VM/build targets |
-| Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                  | Generated-configuration unit assertions            |
-| Headroom integration          | Retired           | Intentionally removed; MCP server, proxy, and packages pruned       | Removed from configuration                         |
-| Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt, Actionlint, Gitleaks, and Git hooks | Targeted checks and host-specific pre-push build   |
-| VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                            | `nix build .#vm-test-nixos .#vm-test-wsl-mock`     |
-| Spec-driven change governance | Operational       | Spec Kit Codex skills, Nix templates, and system-memory hook        | `.specify/scripts/bash/validate-project.sh`        |
+| Capability                    | Status            | Supported path                                                                               | Verification                                       |
+| ----------------------------- | ----------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| Bare-metal NixOS host         | Operational       | `nixosConfigurations.nixos`                                                                  | `nix build .#nixos-build`                          |
+| WSL NixOS host                | Operational       | `nixosConfigurations.nixos-wsl`                                                              | `nix build .#nixos-wsl-build`                      |
+| Shared Home Manager layer     | Operational       | Home Manager as a NixOS module for the configured user                                       | `nix build .#configuration-tests`                  |
+| Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees                                    | Exact discovered-path unit tests                   |
+| Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2                                            | Configuration assertions and both VM/build targets |
+| Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                                           | Generated-configuration unit assertions            |
+| Headroom integration          | Retired           | Intentionally removed; MCP server, proxy, and packages pruned                                | Removed from configuration                         |
+| Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt (excluding `.serena/**`), Actionlint, Gitleaks, and Git hooks | Targeted checks and host-specific pre-push build   |
+| VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                                                     | `nix build .#vm-test-nixos .#vm-test-wsl-mock`     |
+| Spec-driven change governance | Operational       | Spec Kit Codex skills, Nix templates, and system-memory hook                                 | `.specify/scripts/bash/validate-project.sh`        |
 
 Status vocabulary: **Operational** is supported and verifiable; **Partial** works with a
 documented limitation; **Planned** is accepted but not implemented; **Retired** is
@@ -63,9 +63,9 @@ release-note-informed state migration is specified.
 ## Home Manager and Agent Tooling
 
 Home Manager owns user configuration and treats generated runtime files as read-only.
-Shared defaults enable shells, CLI utilities, direnv, editors, terminal/session tools,
-Codex, OpenCode, Antigravity CLI, CodeGraph, Spec Kit, the Vercel Skills CLI, and the
-central MCP integration.
+Shared defaults enable shells, CLI utilities including devenv, direnv, editors,
+terminal/session tools, Codex, OpenCode, Antigravity CLI, CodeGraph, Spec Kit, the Vercel
+Skills CLI, and the central MCP integration.
 The shared Home Manager layer generates identical global instructions for Codex at
 `~/.codex/AGENTS.md` and Gemini at `~/.gemini/GEMINI.md` from one host-neutral source.
 GUI-aware modules follow `internal.gui.enable`; the WSL host disables it, including pointer

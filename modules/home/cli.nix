@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 
@@ -14,6 +15,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    home.packages = [ pkgs.devenv ];
+
     programs.carapace.enable = true;
     programs.television.enable = true;
     programs.nix-index = {

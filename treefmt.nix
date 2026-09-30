@@ -2,6 +2,9 @@ _: {
   # Used to find the project root
   projectRootFile = "flake.nix";
 
+  # Serena owns its project-local configuration.
+  settings.excludes = [ ".serena/**" ];
+
   # Nix
   # Format Nix files
   programs.nixfmt.enable = true;

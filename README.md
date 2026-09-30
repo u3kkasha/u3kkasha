@@ -134,7 +134,7 @@ Software engineer specializing in **Functional Programming**, **Cloud-Native Dis
   </tr>
 </table>
 
-**Tools:** Flox, Helix, Zellij, Nushell.
+**Tools:** devenv, Helix, Zellij, Nushell.
 
 ---
 
