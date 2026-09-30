@@ -42,18 +42,12 @@
   outputs =
     inputs:
     let
-      internalLib = import ./lib/internal/default.nix { inherit (inputs.nixpkgs) lib; };
-      extendedLib = inputs.nixpkgs.lib.extend (
-        _final: _prev: {
-          internal = internalLib;
-          inherit (inputs.home-manager.lib) hm;
-        }
-      );
+      internal = import ./lib/internal/default.nix { inherit (inputs.nixpkgs) lib; };
       specialArgs = {
         inherit (inputs) self;
-        inherit inputs;
+        inherit inputs internal;
+        hm = inputs.home-manager.lib.hm;
         namespace = "internal";
-        lib = extendedLib;
       };
     in
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
@@ -90,13 +84,13 @@
                 inputs.self.nixosModules.core
                 ./systems/x86_64-linux/nixos/default.nix
                 {
-                  home-manager.users.${extendedLib.internal.username} = {
+                  home-manager.users.${internal.username} = {
                     imports = [
                       ./modules/home/noctalia/config.nix
                     ];
                   };
                 }
-                { nixpkgs.config.allowUnfreePredicate = extendedLib.internal.allowUnfreePredicate; }
+                { nixpkgs.config.allowUnfreePredicate = internal.allowUnfreePredicate; }
               ];
             };
             nixos-wsl = inputs.nixpkgs.lib.nixosSystem {
@@ -106,7 +100,7 @@
                 inputs.self.nixosModules.core
                 inputs.nixos-wsl.nixosModules.default
                 ./systems/x86_64-linux/nixos-wsl/default.nix
-                { nixpkgs.config.allowUnfreePredicate = extendedLib.internal.allowUnfreePredicate; }
+                { nixpkgs.config.allowUnfreePredicate = internal.allowUnfreePredicate; }
               ];
             };
           };
@@ -175,26 +169,28 @@
             vm-test-nixos = import ./tests/vm-nixos.nix {
               pkgs = import inputs.nixpkgs {
                 inherit system;
-                config.allowUnfreePredicate = extendedLib.internal.allowUnfreePredicate;
+                config.allowUnfreePredicate = internal.allowUnfreePredicate;
               };
               inherit inputs specialArgs;
             };
             vm-test-wsl-mock = import ./tests/vm-wsl-mock.nix {
               pkgs = import inputs.nixpkgs {
                 inherit system;
-                config.allowUnfreePredicate = extendedLib.internal.allowUnfreePredicate;
+                config.allowUnfreePredicate = internal.allowUnfreePredicate;
               };
               inherit inputs specialArgs;
             };
             # Quick source and internal-library assertions.
             unit-tests = import ./tests/unit.nix {
               inherit pkgs;
-              lib = extendedLib;
+              lib = inputs.nixpkgs.lib;
+              inherit internal;
             };
             # Generated host configuration and closure assertions (medium/heavy).
             configuration-tests = import ./tests/configuration.nix {
               inherit pkgs;
-              lib = extendedLib;
+              lib = inputs.nixpkgs.lib;
+              inherit internal;
               inherit (inputs.self) nixosConfigurations;
             };
           };
@@ -212,12 +208,14 @@
             # Quick source and internal-library assertions.
             unit-tests = import ./tests/unit.nix {
               inherit pkgs;
-              lib = extendedLib;
+              lib = inputs.nixpkgs.lib;
+              inherit internal;
             };
             # Generated host configuration and closure assertions (medium/heavy).
             configuration-tests = import ./tests/configuration.nix {
               inherit pkgs;
-              lib = extendedLib;
+              lib = inputs.nixpkgs.lib;
+              inherit internal;
               inherit (inputs.self) nixosConfigurations;
             };
             gitleaks =

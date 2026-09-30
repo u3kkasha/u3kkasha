@@ -1,5 +1,6 @@
 {
   lib,
+  internal,
   config,
   ...
 }:
@@ -19,7 +20,7 @@ in
       enableCompletion = true;
       shellAliases = { };
       sessionVariables = {
-        EDITOR = lib.internal.defaultEditor;
+        EDITOR = internal.defaultEditor;
       };
     };
   };

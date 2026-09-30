@@ -1,10 +1,10 @@
 {
   pkgs,
   lib,
+  internal,
   nixosConfigurations,
 }:
 let
-  inherit (lib) internal;
   inherit (nixosConfigurations) nixos nixos-wsl;
   homeConfig = nixos.config.home-manager.users.${internal.username};
   wslHomeConfig = nixos-wsl.config.home-manager.users.${internal.username};

@@ -1,5 +1,6 @@
 {
   lib,
+  internal,
   config,
   ...
 }:
@@ -33,7 +34,7 @@ in
     };
 
     home.sessionVariables = {
-      TERMINAL = lib.internal.defaultTerminal;
+      TERMINAL = internal.defaultTerminal;
     };
   };
 }

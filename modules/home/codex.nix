@@ -3,6 +3,7 @@
   config,
   inputs,
   pkgs,
+  hm,
   ...
 }:
 
@@ -39,7 +40,7 @@ in
     # do not link it over the user-owned writable file.
     home.file.${codexConfigTarget}.enable = false;
 
-    home.activation.copyCodexConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    home.activation.copyCodexConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
       configFile="$HOME/${codexConfigTarget}"
       configDir="$(dirname "$configFile")"
       baseConfig="${upstreamConfigToml}"

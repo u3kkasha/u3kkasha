@@ -5,7 +5,7 @@
 }:
 
 let
-  username = specialArgs.lib.internal.username;
+  username = specialArgs.internal.username;
 in
 pkgs.testers.runNixOSTest {
   name = "wsl-isolation-test";

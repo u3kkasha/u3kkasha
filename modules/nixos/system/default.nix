@@ -1,13 +1,14 @@
 {
   pkgs,
   lib,
+  internal,
   config,
   self,
   ...
 }:
 
 let
-  inherit (lib.internal)
+  inherit (internal)
     username
     systemStateVersion
     cacheSubstituters

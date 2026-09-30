@@ -1,5 +1,5 @@
-{ lib, ... }:
+{ internal, ... }:
 {
-  imports = lib.internal.scanPaths ./.;
+  imports = internal.scanPaths ./.;
 
 }

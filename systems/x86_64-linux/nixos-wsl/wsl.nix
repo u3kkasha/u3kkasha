@@ -1,12 +1,13 @@
 {
   pkgs,
   lib,
+  internal,
   config,
   ...
 }:
 
 let
-  inherit (lib.internal) username;
+  inherit (internal) username;
   cfg = config.internal.wsl;
 in
 {

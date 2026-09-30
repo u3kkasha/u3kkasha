@@ -1,9 +1,9 @@
 {
   pkgs,
   lib,
+  internal,
 }:
 let
-  inherit (lib) internal;
   discoveredPaths =
     root:
     lib.sort builtins.lessThan (
@@ -88,7 +88,7 @@ let
             let
               source = builtins.readFile path;
             in
-            lib.hasInfix "lib.internal.username" source && !(lib.hasInfix "ukasha" source)
+            lib.hasInfix "specialArgs.internal.username" source && !(lib.hasInfix "ukasha" source)
           )
           [
             ../tests/vm-nixos.nix

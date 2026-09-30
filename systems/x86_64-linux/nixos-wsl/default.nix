@@ -1,4 +1,4 @@
-{ namespace, lib, ... }:
+{ namespace, internal, ... }:
 
 {
   imports = [ ./wsl.nix ];
@@ -9,7 +9,7 @@
     wsl.enable = true;
   };
 
-  home-manager.users.${lib.internal.username}.internal = {
+  home-manager.users.${internal.username}.internal = {
     gui.enable = false;
     wsl.enable = true;
   };

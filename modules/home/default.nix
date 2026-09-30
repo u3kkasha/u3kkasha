@@ -2,12 +2,13 @@
   pkgs,
   config,
   lib,
+  internal,
   osConfig ? null,
   ...
 }:
 
 let
-  inherit (lib.internal)
+  inherit (internal)
     username
     homeStateVersion
     scanPaths
@@ -84,8 +85,8 @@ in
     };
 
     home.sessionVariables = {
-      EDITOR = lib.internal.defaultEditor;
-      VISUAL = lib.internal.defaultEditor;
+      EDITOR = internal.defaultEditor;
+      VISUAL = internal.defaultEditor;
     };
 
     nix.package = lib.mkDefault pkgs.nix;
