@@ -80,6 +80,7 @@ tests/unit.nix                 # Exact auto-discovered Home Manager module list
 | Native Codex and OpenCode contexts                                      | Configuration assertions compare both contents to the single source                                          |
 | Preserved OpenCode project instructions and Codex/OpenCode MCP behavior | Configuration assertions for project instructions, both enabled integrations, and generated Codex MCP output |
 | Nix source and docs                                                     | Flake formatting check                                                                                       |
+| Shared behavior on supported hosts                                      | Bare-metal and WSL system builds                                                                             |
 
 ## Complexity Tracking
 

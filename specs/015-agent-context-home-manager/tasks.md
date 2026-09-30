@@ -47,12 +47,13 @@ description: "Nix configuration implementation tasks"
 - [x] T010 Run formatting, unit assertions, and generated configuration assertions for both supported hosts with `nix build .#checks.x86_64-linux.formatting .#unit-tests .#configuration-tests --no-link`.
 - [x] T011 Reconcile `.specify/memory/current-system.md` through the mandatory `speckit.system-memory.sync` hook using the verified implementation evidence.
 - [x] T012 Run `.specify/scripts/bash/validate-project.sh`.
+- [x] T013 Build both supported host systems with `nix build .#nixos-build .#nixos-wsl-build --no-link`.
 
 ## Dependencies and Execution
 
 - T001-T002 precede the removal work.
 - Complete T003-T005 before T006-T008 to preserve the explicitly requested removal-then-migration sequence.
-- T010 depends on all implementation work; T011 and T012 follow successful verification.
+- T010 and T013 depend on all implementation work; T011 and T012 follow successful verification.
 - Tasks changing the same file are sequential; no safe parallel work is identified.
 
 ## Completion Rules
