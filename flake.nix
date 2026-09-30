@@ -32,6 +32,9 @@
     catppuccin.url = "github:catppuccin/nix";
     noctalia-shell.url = "github:noctalia-dev/noctalia-shell";
     llm-agents.url = "github:numtide/llm-agents.nix";
+    nix-skills.url = "github:olafkfreund/nix-skills";
+    nix-skills.inputs.nixpkgs.follows = "nixpkgs";
+    nix-skills.inputs.home-manager.follows = "home-manager";
     mcp-servers-nix.url = "github:natsukium/mcp-servers-nix";
     mcp-servers-nix.inputs.nixpkgs.follows = "nixpkgs";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -60,6 +63,7 @@
           sharedHomeModules = [
             inputs.catppuccin.homeModules.catppuccin
             inputs.mcp-servers-nix.homeManagerModules.default
+            inputs.nix-skills.homeManagerModules.default
             inputs.nix-index-database.homeModules.nix-index
             inputs.noctalia-shell.homeModules.default
           ];

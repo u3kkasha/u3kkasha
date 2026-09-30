@@ -65,7 +65,11 @@ release-note-informed state migration is specified.
 Home Manager owns user configuration and treats generated runtime files as read-only.
 Shared defaults enable shells, CLI utilities including devenv, direnv, editors,
 terminal/session tools, Codex, OpenCode, CodeGraph, Spec Kit, the Vercel Skills CLI,
-and the central MCP integration. Git is installed and configured by the shared Home
+and six pinned Nix agent skills (`nix-language`, `nix-workflow`,
+`nixpkgs-development`, `nixos-operations`, `home-manager`, and `devenv-project`) for
+Codex and OpenCode through the `olafkfreund/nix-skills` Home Manager module. The Vercel
+Skills CLI remains available for project-specific discovery and use. The central MCP
+integration provides agent tools. Git is installed and configured by the shared Home
 Manager `programs.git` module for the configured user.
 The shared Home Manager layer configures identical global instructions for Codex at
 `~/.codex/AGENTS.md` and OpenCode at `~/.config/opencode/AGENTS.md` through their native

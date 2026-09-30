@@ -38,6 +38,22 @@ in
   };
 
   config = {
+    programs.nix-skills = {
+      enable = true;
+      agents = [
+        "codex"
+        "opencode"
+      ];
+      skills = [
+        "nix-language"
+        "nix-workflow"
+        "nixpkgs-development"
+        "nixos-operations"
+        "home-manager"
+        "devenv-project"
+      ];
+    };
+
     internal = {
       bash.enable = lib.mkDefault true;
       cli.enable = lib.mkDefault true;
