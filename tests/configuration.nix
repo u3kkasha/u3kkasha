@@ -11,7 +11,7 @@ let
   mcpServers = homeConfig.programs.mcp.servers;
   codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
   expectedAgentInstructions = builtins.readFile ../modules/home/agent-instructions.md;
-  nixdConfigPath = builtins.toString homeConfig.xdg.configFile."nixd/config.json".source;
+  nixdConfig = builtins.readFile homeConfig.xdg.configFile."nixd/config.json".source;
   niriConfig = builtins.readFile homeConfig.xdg.configFile."niri/config.kdl".source;
   hypridleConfig = builtins.readFile homeConfig.xdg.configFile."hypr/hypridle.conf".source;
 
@@ -46,9 +46,25 @@ let
       expr = nixos.config.networking.hostName;
       expected = "nixos";
     };
-    testNixosStateVersion = {
-      expr = nixos.config.system.stateVersion;
-      expected = internal.systemStateVersion;
+    testSystemStateVersions = {
+      expr = map (host: host.config.system.stateVersion) [
+        nixos
+        nixos-wsl
+      ];
+      expected = [
+        internal.systemStateVersion
+        internal.systemStateVersion
+      ];
+    };
+    testHomeStateVersions = {
+      expr = map (config: config.home.stateVersion) [
+        homeConfig
+        wslHomeConfig
+      ];
+      expected = [
+        internal.homeStateVersion
+        internal.homeStateVersion
+      ];
     };
     testThemeFlavor = {
       expr = homeConfig.catppuccin.flavor;
@@ -148,8 +164,12 @@ let
         wsl = [ "root" ];
       };
     };
-    testNixdUsesLockedFlake = {
-      expr = lib.hasInfix "/nix/store/" nixdConfigPath && lib.hasInfix "nixd-config.json" nixdConfigPath;
+    testNixdConfigReferencesLockedInputs = {
+      expr =
+        lib.hasInfix "/nix/store/" nixdConfig
+        && lib.hasInfix "/nixpkgs { }" nixdConfig
+        && lib.hasInfix "nixosConfigurations.nixos.options" nixdConfig
+        && !(lib.hasInfix "unsafeDiscardStringContext" nixdConfig);
       expected = true;
     };
     testMcpRegistry = {
@@ -440,4 +460,4 @@ if testResults == [ ] then
       touch "$out"
     ''
 else
-  throw "Unit tests failed: ${builtins.toJSON testResults}"
+  throw "Configuration tests failed: ${builtins.toJSON testResults}"
