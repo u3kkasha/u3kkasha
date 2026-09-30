@@ -21,11 +21,11 @@
 
 ## Final Phase: Cross-Target Verification and Memory
 
-- [X] T004 Format the changed Nix source and evaluate both host package lists.
-- [X] T005 Confirm no Flox references remain in active configuration and that trust/cache
-  settings remain otherwise unchanged.
-- [X] T006 Reconcile `.specify/memory/current-system.md` from verified implementation
-  evidence and run `.specify/scripts/bash/validate-project.sh`.
+- [x] T004 Format the changed Nix source and evaluate both host package lists.
+- [x] T005 Confirm no Flox references remain in active configuration and that trust/cache
+      settings remain otherwise unchanged.
+- [x] T006 Reconcile `.specify/memory/current-system.md` from verified implementation
+      evidence and run `.specify/scripts/bash/validate-project.sh`.
 
 ## Dependencies and Execution
 
