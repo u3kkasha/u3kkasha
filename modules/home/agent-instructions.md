@@ -20,10 +20,19 @@ import polars as pl
 
 # Git Commits
 
-Commit work frequently at appropriate milestones. Keep each commit focused, and commit
-only changes that belong to the current task. Commit messages MUST use Conventional
-Commits format. The commit summary/subject MUST concisely state what changed, and the
-commit body MUST explain why it changed and mention important implications.
+Commit work frequently at appropriate milestones. Each commit MUST be atomic, containing
+one focused, independently reviewable change. Commit messages MUST use Conventional
+Commits format, with a concise subject stating what changed and a body explaining why it
+changed and mentioning important implications. The subject and body MUST each be one
+sentence.
+
+Example:
+
+```text
+feat(home): enable shell history synchronization
+
+Synchronize shell history across sessions so commands remain available after switching terminals.
+```
 
 # Snip - CLI Token Optimizer
 
