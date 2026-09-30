@@ -65,7 +65,8 @@ release-note-informed state migration is specified.
 Home Manager owns user configuration and treats generated runtime files as read-only.
 Shared defaults enable shells, CLI utilities including devenv, direnv, editors,
 terminal/session tools, Codex, OpenCode, Antigravity CLI, CodeGraph, Spec Kit, the Vercel
-Skills CLI, and the central MCP integration.
+Skills CLI, and the central MCP integration. Git is installed and configured by the
+shared Home Manager `programs.git` module for the configured user.
 The shared Home Manager layer generates identical global instructions for Codex at
 `~/.codex/AGENTS.md` and Gemini at `~/.gemini/GEMINI.md` from one host-neutral source.
 GUI-aware modules follow `internal.gui.enable`; the WSL host disables it, including pointer

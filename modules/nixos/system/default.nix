@@ -51,7 +51,6 @@ in
 
     environment.systemPackages = [
       pkgs.nushell
-      pkgs.git # Explicitly ensure git is available at system level too
     ];
 
     environment.shells = [ pkgs.nushell ];
