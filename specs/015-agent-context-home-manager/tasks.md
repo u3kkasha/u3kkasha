@@ -37,7 +37,7 @@ description: "Nix configuration implementation tasks"
 
 - [x] T006 [US2] Configure `programs.codex.context` from the shared Markdown source in `modules/home/codex.nix`.
 - [x] T007 [US2] Configure `programs.opencode.context` from the same shared Markdown source in `modules/home/opencode.nix`, preserving repository instruction paths.
-- [x] T008 [US2] Replace linked-file context assertions with generated shared-source and project-instruction assertions in `tests/configuration.nix`.
+- [x] T008 [US2] Replace linked-file context assertions with generated shared-source, project-instruction, and MCP integration assertions in `tests/configuration.nix`.
 - [x] T009 [US2] Delete `modules/home/agent-instructions.nix` and remove its filename from the exact discovered-module list in `tests/unit.nix`.
 
 **Checkpoint**: Both configured clients consume one shared instruction source through native Home Manager options.

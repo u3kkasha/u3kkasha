@@ -74,12 +74,12 @@ tests/unit.nix                 # Exact auto-discovered Home Manager module list
 
 ## Verification Matrix
 
-| Change                                                   | Verification                                                              |
-| -------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Removed Antigravity and Gemini outputs                   | Configuration assertions across NixOS and WSL host evaluations            |
-| Native Codex and OpenCode contexts                       | Configuration assertions compare both contents to the single source       |
-| Preserved OpenCode project instructions and MCP behavior | Configuration assertions and existing generated Codex/OpenCode MCP checks |
-| Nix source and docs                                      | Flake formatting check                                                    |
+| Change                                                                  | Verification                                                                                                 |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Removed Antigravity and Gemini outputs                                  | Configuration assertions across NixOS and WSL host evaluations                                               |
+| Native Codex and OpenCode contexts                                      | Configuration assertions compare both contents to the single source                                          |
+| Preserved OpenCode project instructions and Codex/OpenCode MCP behavior | Configuration assertions for project instructions, both enabled integrations, and generated Codex MCP output |
+| Nix source and docs                                                     | Flake formatting check                                                                                       |
 
 ## Complexity Tracking
 

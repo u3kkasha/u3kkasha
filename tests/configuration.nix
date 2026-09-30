@@ -205,6 +205,28 @@ let
         sourceName = "codex-config";
       };
     };
+    testAgentMcpIntegrationsRemainEnabled = {
+      expr =
+        map
+          (config: {
+            codex = config.programs.codex.enableMcpIntegration;
+            opencode = config.programs.opencode.enableMcpIntegration;
+          })
+          [
+            homeConfig
+            wslHomeConfig
+          ];
+      expected =
+        map
+          (_: {
+            codex = true;
+            opencode = true;
+          })
+          [
+            1
+            2
+          ];
+    };
     testSharedAgentInstructions = {
       expr =
         map
