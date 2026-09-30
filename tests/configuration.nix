@@ -9,7 +9,6 @@ let
   homeConfig = nixos.config.home-manager.users.${internal.username};
   wslHomeConfig = nixos-wsl.config.home-manager.users.${internal.username};
   mcpServers = homeConfig.programs.mcp.servers;
-  antigravityMcpConfig = homeConfig.home.file.".gemini/config/mcp_config.json";
   codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
   expectedAgentInstructions = builtins.readFile ../modules/home/agent-instructions.md;
   nixdConfigPath = builtins.toString homeConfig.xdg.configFile."nixd/config.json".source;
@@ -211,7 +210,7 @@ let
         map
           (config: {
             codex = builtins.readFile config.home.file.".codex/AGENTS.md".source;
-            gemini = builtins.readFile config.home.file.".gemini/GEMINI.md".source;
+            geminiFileExists = builtins.hasAttr ".gemini/GEMINI.md" config.home.file;
           })
           [
             homeConfig
@@ -221,7 +220,7 @@ let
         map
           (_: {
             codex = expectedAgentInstructions;
-            gemini = expectedAgentInstructions;
+            geminiFileExists = false;
           })
           [
             1
@@ -266,39 +265,37 @@ let
       expr = builtins.any (package: lib.getName package == "duckdb") homeConfig.home.packages;
       expected = true;
     };
-    testAntigravityCliIntegration = {
+    testAntigravityCliDisabled = {
+      expr = map (config: config.programs.antigravity-cli.enable) [
+        homeConfig
+        wslHomeConfig
+      ];
+      expected = [
+        false
+        false
+      ];
+    };
+    testGeminiGeneratedFilesAbsent = {
       expr =
         map
           (config: {
-            inherit (config.programs.antigravity-cli) enable enableMcpIntegration;
-            package = config.programs.antigravity-cli.package.pname;
+            instructions = builtins.hasAttr ".gemini/GEMINI.md" config.home.file;
+            mcp = builtins.hasAttr ".gemini/config/mcp_config.json" config.home.file;
           })
           [
             homeConfig
             wslHomeConfig
           ];
-      expected = [
-        {
-          enable = true;
-          enableMcpIntegration = true;
-          package = "antigravity-cli";
-        }
-        {
-          enable = true;
-          enableMcpIntegration = true;
-          package = "antigravity-cli";
-        }
-      ];
-    };
-    testAntigravityCliMcpRegistry = {
-      expr = map (config: builtins.attrNames config.programs.antigravity-cli.mcpServers) [
-        homeConfig
-        wslHomeConfig
-      ];
-      expected = map (_: builtins.attrNames mcpServers) [
-        1
-        2
-      ];
+      expected =
+        map
+          (_: {
+            instructions = false;
+            mcp = false;
+          })
+          [
+            1
+            2
+          ];
     };
     testWslHostName = {
       expr = nixos-wsl.config.networking.hostName;
@@ -389,19 +386,6 @@ if testResults == [ ] then
 
       expected_servers = set(json.loads('${builtins.toJSON (builtins.attrNames mcpServers)}'))
       assert set(generated["mcp_servers"]) == expected_servers
-      PY
-
-      python3 - ${antigravityMcpConfig.source} <<'PY'
-      import json
-      import sys
-
-      with open(sys.argv[1], encoding="utf-8") as stream:
-          generated = json.load(stream)
-
-      expected_servers = set(json.loads('${builtins.toJSON (builtins.attrNames mcpServers)}'))
-      assert set(generated["mcpServers"]) == expected_servers
-      assert generated["mcpServers"]["context7"]["serverUrl"] == "${mcpServers.context7.url}"
-      assert "url" not in generated["mcpServers"]["context7"]
       PY
 
       touch "$out"

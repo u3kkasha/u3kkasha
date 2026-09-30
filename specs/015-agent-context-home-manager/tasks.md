@@ -12,8 +12,8 @@ description: "Nix configuration implementation tasks"
 
 **Purpose**: Confirm the current generated configuration assertions and prepare updated assertions.
 
-- [ ] T001 Inspect `tests/configuration.nix` assertions covering Antigravity, Gemini, global agent files, and MCP outputs.
-- [ ] T002 Add configuration assertions for absent Antigravity and Gemini outputs in `tests/configuration.nix`.
+- [x] T001 Inspect `tests/configuration.nix` assertions covering Antigravity, Gemini, global agent files, and MCP outputs.
+- [x] T002 Add configuration assertions for absent Antigravity and Gemini outputs in `tests/configuration.nix`.
 
 **Checkpoint**: Removal assertions express the requested post-removal state.
 
@@ -23,9 +23,9 @@ description: "Nix configuration implementation tasks"
 
 **Independent Test**: Both supported host evaluations contain no Antigravity program/package or Gemini global file/configuration output.
 
-- [ ] T003 [US1] Remove the Antigravity CLI program and package binding from `modules/home/utils.nix`.
-- [ ] T004 [US1] Remove the Gemini instruction mapping from `modules/home/agent-instructions.nix` while retaining the Codex mapping until migration.
-- [ ] T005 [US1] Remove obsolete Antigravity and Gemini assertions from `tests/configuration.nix`.
+- [x] T003 [US1] Remove the Antigravity CLI program and package binding from `modules/home/utils.nix`.
+- [x] T004 [US1] Remove the Gemini instruction mapping from `modules/home/agent-instructions.nix` while retaining the Codex mapping until migration.
+- [x] T005 [US1] Remove obsolete Antigravity and Gemini assertions from `tests/configuration.nix`.
 
 **Checkpoint**: The unused client and all Gemini-specific generated outputs are absent.
 

@@ -9,7 +9,6 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.internal.utils;
-  antigravityCli = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.antigravity-cli;
   skillsCli = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.skills;
 in
 {
@@ -18,12 +17,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.antigravity-cli = {
-      enable = true;
-      enableMcpIntegration = true;
-      package = antigravityCli;
-    };
-
     programs.bat = {
       enable = true;
     };
