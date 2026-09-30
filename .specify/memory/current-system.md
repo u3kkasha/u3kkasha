@@ -26,9 +26,9 @@ intentionally removed and retained only in feature history.
 ## Architecture
 
 `flake.nix` is the configuration entrypoint and uses `flake-parts` for the
-`x86_64-linux` per-system outputs. It imports `lib/internal/default.nix`, extends
-`nixpkgs.lib` with the internal namespace, and passes the extended library through
-`specialArgs`.
+`x86_64-linux` per-system outputs. It imports `lib/internal/default.nix` and passes the
+repository values and Home Manager activation helper through named module arguments.
+Nixpkgs `lib` remains the standard module-system library.
 
 The shared NixOS core combines:
 
@@ -63,9 +63,10 @@ release-note-informed state migration is specified.
 ## Home Manager and Agent Tooling
 
 Home Manager owns user configuration and treats generated runtime files as read-only.
-Shared defaults enable shells, CLI utilities including devenv, direnv, editors,
-terminal/session tools, Codex, OpenCode, CodeGraph, Spec Kit, the Vercel Skills CLI,
-and six pinned Nix agent skills (`nix-language`, `nix-workflow`,
+Shared defaults enable shells, command-line utilities, development tools including `uv`,
+Node.js, .NET, DuckDB, and the Vercel Skills CLI, plus direnv, editors, terminal/session
+tools, Codex, OpenCode, CodeGraph, Spec Kit, and six pinned Nix agent skills
+(`nix-language`, `nix-workflow`,
 `nixpkgs-development`, `nixos-operations`, `home-manager`, and `devenv-project`) for
 Codex and OpenCode through the `olafkfreund/nix-skills` Home Manager module. The Vercel
 Skills CLI remains available for project-specific discovery and use. The central MCP
@@ -78,9 +79,10 @@ context options, using one host-neutral source. OpenCode also loads the reposito
 GUI-aware modules follow `internal.gui.enable`; the WSL host disables it, including pointer
 cursor configuration and the Bibata cursor package.
 
-The reusable Niri module owns compositor behavior but no physical output identity. The
-bare-metal host supplies its `eDP-1` mode and scale through the module's host fragment. Niri's
-idle resume action uses `niri msg action power-on-monitors`.
+The reusable Niri module owns compositor behavior but no physical output identity. Its
+checked-in `niri.kdl` source contains a marker where the bare-metal host supplies its
+`eDP-1` mode and scale through the module's output fragment. Niri's idle resume action uses
+`niri msg action power-on-monitors`.
 
 Agent applications are selected explicitly from the pinned `llm-agents.nix` input.
 Packaged MCP servers come from `mcp-servers-nix`; hosted servers remain explicit registry

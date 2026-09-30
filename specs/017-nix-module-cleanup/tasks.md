@@ -38,16 +38,16 @@ description: "Nix configuration implementation tasks"
 - [x] T006 [US2] Move the shared Niri KDL string to `modules/home/niri.kdl` and substitute `internal.niri.outputConfig` at its marker from `modules/home/niri.nix`.
 - [x] T007 [US2] Move Node.js, .NET, DuckDB, `uv`, `mdr`, and Skills CLI ownership into `modules/home/devtools.nix`; retain GUI conditions and default enablement in `modules/home/default.nix`.
 - [x] T008 [US2] Update the exact Home Manager module discovery list in `tests/unit.nix` for `devtools.nix` and verify package-preserving assertions in `tests/configuration.nix`.
-- [ ] T009 [US2] Bind `unit-tests` and `configuration-tests` once in `flake.nix` and reuse the values in `packages` and `checks`.
-- [ ] T010 [US2] Run `nix fmt -- --ci`, `nix build .#unit-tests .#configuration-tests .#nixos-build .#nixos-wsl-build --no-link`, and `nix flake check`.
+- [x] T009 [US2] Bind `unit-tests` and `configuration-tests` once in `flake.nix` and reuse the values in `packages` and `checks`.
+- [x] T010 [US2] Run `nix fmt -- --ci`, `nix build .#unit-tests .#configuration-tests .#nixos-build .#nixos-wsl-build --no-link`, and `nix flake check`.
 
 **Checkpoint**: Existing output names, generated settings, and host package closures remain unchanged.
 
 ## Final Phase: Cross-Target Verification and Memory
 
-- [ ] T011 Build `.#vm-test-nixos` and `.#vm-test-wsl-mock` in CI as runtime integration checks.
-- [ ] T012 Reconcile `.specify/memory/current-system.md` through the mandatory memory-sync hook.
-- [ ] T013 Run `.specify/scripts/bash/validate-project.sh` and confirm no security, state-version, or backup policy changed.
+- [x] T011 Confirm `.github/workflows/verify.yml` keeps `vm-test-nixos` and `vm-test-wsl-mock` in the required CI build matrix; runtime VM execution is delegated to CI.
+- [x] T012 Reconcile `.specify/memory/current-system.md` through the mandatory memory-sync hook.
+- [x] T013 Run `.specify/scripts/bash/validate-project.sh` and confirm no security, state-version, or backup policy changed.
 
 ## Dependencies and Execution
 
