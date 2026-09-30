@@ -109,6 +109,15 @@
         { pkgs, system, ... }:
         let
           treefmt = inputs.treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+          unitTests = import ./tests/unit.nix {
+            inherit pkgs internal;
+            lib = inputs.nixpkgs.lib;
+          };
+          configurationTests = import ./tests/configuration.nix {
+            inherit pkgs internal;
+            lib = inputs.nixpkgs.lib;
+            inherit (inputs.self) nixosConfigurations;
+          };
         in
         {
           formatter = treefmt.config.build.wrapper;
@@ -181,18 +190,9 @@
               inherit inputs specialArgs;
             };
             # Quick source and internal-library assertions.
-            unit-tests = import ./tests/unit.nix {
-              inherit pkgs;
-              lib = inputs.nixpkgs.lib;
-              inherit internal;
-            };
+            unit-tests = unitTests;
             # Generated host configuration and closure assertions (medium/heavy).
-            configuration-tests = import ./tests/configuration.nix {
-              inherit pkgs;
-              lib = inputs.nixpkgs.lib;
-              inherit internal;
-              inherit (inputs.self) nixosConfigurations;
-            };
+            configuration-tests = configurationTests;
           };
           checks = {
             formatting = treefmt.config.build.check inputs.self;
@@ -206,18 +206,9 @@
                   touch $out
                 '';
             # Quick source and internal-library assertions.
-            unit-tests = import ./tests/unit.nix {
-              inherit pkgs;
-              lib = inputs.nixpkgs.lib;
-              inherit internal;
-            };
+            unit-tests = unitTests;
             # Generated host configuration and closure assertions (medium/heavy).
-            configuration-tests = import ./tests/configuration.nix {
-              inherit pkgs;
-              lib = inputs.nixpkgs.lib;
-              inherit internal;
-              inherit (inputs.self) nixosConfigurations;
-            };
+            configuration-tests = configurationTests;
             gitleaks =
               pkgs.runCommand "gitleaks"
                 {
