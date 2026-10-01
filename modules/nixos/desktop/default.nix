@@ -15,6 +15,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    boot.kernelParams = [
+      "quiet"
+      "systemd.show_status=false"
+      "rd.systemd.show_status=false"
+      "udev.log_level=3"
+      "rd.udev.log_level=3"
+    ];
+
     networking.networkmanager.enable = true;
 
     # Niri Compositor
