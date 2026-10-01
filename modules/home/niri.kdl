@@ -59,7 +59,6 @@ window-rule {
     clip-to-geometry true
 }
 
-spawn-at-startup "noctalia"
 spawn-at-startup "nm-applet"
 spawn-at-startup "hypridle"
 spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
@@ -71,6 +70,7 @@ binds {
     // ──────────────────────────────────────────────
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+D { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
+    Mod+Shift+W { spawn "noctalia" "msg" "panel-toggle" "noctalia/wallhaven:browser"; }
     Mod+T { spawn "ghostty"; }
     Super+Alt+L { spawn "hyprlock"; }
 

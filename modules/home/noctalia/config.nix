@@ -1,4 +1,5 @@
-_: {
+{ config, ... }:
+{
   programs.noctalia = {
     enable = true;
     systemd.enable = true;
@@ -19,6 +20,18 @@ _: {
       location = {
         latitude = 23.8;
         longitude = 90.4;
+      };
+      wallpaper = {
+        enabled = true;
+        directory = "${config.home.homeDirectory}/Pictures/Wallpapers";
+        fill_mode = "crop";
+        transition_on_startup = true;
+        automation = {
+          enabled = false;
+          interval_seconds = 1800;
+          order = "random";
+          recursive = true;
+        };
       };
     };
   };
