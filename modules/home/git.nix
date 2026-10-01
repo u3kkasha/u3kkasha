@@ -45,9 +45,6 @@
         parseEmoji = true;
         sidePanelWidth = 0.3333;
         mainPanelSplitMode = "horizontal";
-        theme = {
-          optionsTextColor = [ "#cba6f7" ]; # Mauve (Purple) for better readability
-        };
       };
       git = {
         diffRenderers = [
