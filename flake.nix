@@ -59,7 +59,6 @@
             inputs.mcp-servers-nix.homeManagerModules.default
             inputs.nix-skills.homeManagerModules.default
             inputs.nix-index-database.homeModules.nix-index
-            inputs.noctalia-shell.homeModules.default
           ];
           sharedNixosModules = [
             ./modules/nixos/default.nix
