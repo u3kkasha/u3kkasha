@@ -144,7 +144,7 @@ nix build .#nixos-build .#nixos-wsl-build --no-link
 nix build .#vm-test-nixos .#vm-test-wsl-mock
 ```
 
-Formatting, Actionlint, quick source/internal-library unit assertions, generated-configuration
+Formatting, Actionlint, quick internal-library policy assertions, generated-configuration
 assertions, and Gitleaks are flake checks. Actionlint is supplied by the pinned package set and
 validates the repository-root GitHub workflows; the pre-commit hook runs it beside formatting and
 Gitleaks. `unit-tests` is the quick target. `configuration-tests` evaluates both supported hosts,

@@ -189,7 +189,7 @@
               };
               inherit inputs specialArgs;
             };
-            # Quick source and internal-library assertions.
+            # Quick internal-library policy assertions.
             unit-tests = unitTests;
             # Generated host configuration and closure assertions (medium/heavy).
             configuration-tests = configurationTests;
@@ -205,7 +205,7 @@
                   actionlint ${./.github/workflows}/*.yml
                   touch $out
                 '';
-            # Quick source and internal-library assertions.
+            # Quick internal-library policy assertions.
             unit-tests = unitTests;
             # Generated host configuration and closure assertions (medium/heavy).
             configuration-tests = configurationTests;

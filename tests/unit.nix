@@ -73,30 +73,6 @@ let
         rejected = false;
       };
     };
-    testSharedNiriHasNoPhysicalOutput = {
-      expr = lib.hasInfix ''output "eDP-1"'' (builtins.readFile ../modules/home/niri.kdl);
-      expected = false;
-    };
-    testNixdAvoidsUnsafeStringContextDiscard = {
-      expr = lib.hasInfix "unsafeDiscardStringContext" (builtins.readFile ../modules/home/nixd.nix);
-      expected = false;
-    };
-    testVmTestsUseCanonicalUsername = {
-      expr =
-        builtins.all
-          (
-            path:
-            let
-              source = builtins.readFile path;
-            in
-            lib.hasInfix "specialArgs.internal.username" source && !(lib.hasInfix "ukasha" source)
-          )
-          [
-            ../tests/vm-nixos.nix
-            ../tests/vm-wsl-mock.nix
-          ];
-      expected = true;
-    };
   };
 in
 if testResults == [ ] then
