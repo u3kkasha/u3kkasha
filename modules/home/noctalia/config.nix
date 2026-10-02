@@ -21,6 +21,9 @@
         latitude = 23.8;
         longitude = 90.4;
       };
+      backdrop = {
+        enabled = false;
+      };
       wallpaper = {
         enabled = true;
         directory = "${config.home.homeDirectory}/Pictures/Wallpapers";
