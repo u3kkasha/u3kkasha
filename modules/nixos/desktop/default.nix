@@ -29,7 +29,15 @@ in
     programs.niri.enable = true;
 
     # Login Manager
-    services.displayManager.regreet.enable = true;
+    services.greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd ${config.programs.niri.package}/bin/niri-session";
+          user = "greeter";
+        };
+      };
+    };
 
     # Let niri inherit the full PATH set up by niri-session
     systemd.user.services.niri.enableDefaultPath = false;
