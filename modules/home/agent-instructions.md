@@ -2,6 +2,8 @@
 
 This is a Nix system. If a required CLI tool is unavailable, obtain it by prefixing the command with Nix Comma (`,`).
 
+For example, run `, cowsay 'Nix Comma works!'` to use the `cowsay` CLI from nixpkgs for one command without adding it to the system configuration.
+
 DuckDB is installed as a system CLI for interactive SQL and local analytical queries.
 
 # Python Scripts
