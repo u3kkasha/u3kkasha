@@ -19,11 +19,8 @@ in
       enable = true;
       extraPackages = with pkgs; [
         nixfmt
+        nixd
         bash-language-server
-        pyright
-        vscode-langservers-extracted
-        prettier
-        roslyn-ls
       ];
       settings = {
         editor = {
@@ -78,27 +75,7 @@ in
               command = "nixfmt";
             };
           }
-          {
-            name = "json";
-            auto-format = true;
-            formatter = {
-              command = "prettier";
-              args = [
-                "--parser"
-                "json"
-              ];
-            };
-          }
-          {
-            name = "c-sharp";
-            language-servers = [ "roslyn" ];
-          }
         ];
-        language-server = {
-          roslyn = {
-            command = "Microsoft.CodeAnalysis.LanguageServer";
-          };
-        };
       };
     };
   };
