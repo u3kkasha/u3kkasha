@@ -222,7 +222,7 @@ let
       };
       expected = {
         enable = false;
-        sourceName = "codex-config";
+        sourceName = "codex-config.toml";
       };
     };
     testAgentMcpIntegrationsRemainEnabled = {
