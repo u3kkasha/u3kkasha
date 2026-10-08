@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 
@@ -14,6 +15,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    xdg.configFile."nushell/autoload/devenv-hook.nu".source = pkgs.runCommand "devenv-hook.nu" { } ''
+      ${pkgs.devenv}/bin/devenv hook nu > "$out"
+    '';
+
     programs.nushell = {
       enable = true;
       environmentVariables = config.home.sessionVariables;

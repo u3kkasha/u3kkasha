@@ -2,6 +2,7 @@
   lib,
   internal,
   config,
+  pkgs,
   ...
 }:
 
@@ -18,6 +19,9 @@ in
     programs.bash = {
       enable = true;
       enableCompletion = true;
+      initExtra = ''
+        eval "$(${pkgs.devenv}/bin/devenv hook bash)"
+      '';
       shellAliases = { };
       sessionVariables = {
         EDITOR = internal.defaultEditor;

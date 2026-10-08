@@ -98,6 +98,11 @@ no string context is discarded.
 
 ## Configuration, Caching, and Trust
 
+Home Manager enables native devenv auto-activation in Bash through its startup hook
+and in Nushell through a generated `nushell/autoload/devenv-hook.nu` file, alongside
+the existing direnv and nix-direnv integrations for both shells. Project trust remains
+explicit through `devenv allow` or `direnv allow`; use one activation method per project.
+
 Flake inputs are locked. `lib/internal/cache.nix` is the canonical source for the public
 nix-community, Numtide, and Noctalia daemon caches. The flake also exposes matching
 literal `nixConfig` bootstrap hints so a fresh system can use those caches before the
