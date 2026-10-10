@@ -1,7 +1,8 @@
-{ config, ... }:
+{ config, inputs, pkgs, ... }:
 {
   programs.noctalia = {
     enable = true;
+    package = inputs.noctalia.packages.${pkgs.system}.default;
     checkConfig = true;
     systemd.enable = true;
     settings = {
