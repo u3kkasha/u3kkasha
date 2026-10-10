@@ -149,7 +149,8 @@ let
             substituters = [ "https://niri.cachix.org" ] ++ internal.cacheSubstituters;
             publicKeys = [
               "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
-            ] ++ internal.cachePublicKeys;
+            ]
+            ++ internal.cachePublicKeys;
           })
           [
             1
