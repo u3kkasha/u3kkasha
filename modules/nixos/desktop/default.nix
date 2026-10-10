@@ -40,9 +40,6 @@ in
       };
     };
 
-    # Let niri inherit the full PATH set up by niri-session
-    systemd.user.services.niri.enableDefaultPath = false;
-
     # Unlock gnome-keyring on login
     security.pam.services.greetd.enableGnomeKeyring = true;
     services.gnome.gnome-keyring.enable = true;
