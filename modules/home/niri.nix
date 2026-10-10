@@ -21,6 +21,7 @@ in
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      config.programs.niri.package
       hyprpicker
       cliphist
       wofi
