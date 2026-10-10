@@ -8,11 +8,13 @@
       "https://nix-community.cachix.org"
       "https://cache.numtide.com"
       "https://noctalia.cachix.org"
+      "https://niri.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+      "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
     ];
   };
 
@@ -30,7 +32,8 @@
     devshell.inputs.nixpkgs.follows = "nixpkgs";
     flake-parts.url = "github:hercules-ci/flake-parts";
     catppuccin.url = "github:catppuccin/nix";
-    noctalia-shell.url = "github:noctalia-dev/noctalia-shell";
+    noctalia.url = "github:noctalia-dev/noctalia";
+    niri-flake.url = "github:sodiboo/niri-flake";
     llm-agents.url = "github:numtide/llm-agents.nix";
     nix-skills.url = "github:olafkfreund/nix-skills";
     nix-skills.inputs.nixpkgs.follows = "nixpkgs";
@@ -64,6 +67,10 @@
             ./modules/nixos/default.nix
             inputs.home-manager.nixosModules.home-manager
             inputs.nix-index-database.nixosModules.nix-index
+            inputs.niri-flake.nixosModules.niri
+            {
+              programs.niri.package = inputs.niri-flake.packages.x86_64-linux.niri-stable;
+            }
             {
               home-manager.extraSpecialArgs = specialArgs;
               home-manager.sharedModules = sharedHomeModules;
@@ -85,6 +92,7 @@
                 {
                   home-manager.users.${internal.username} = {
                     imports = [
+                      inputs.noctalia.homeModules.default
                       ./modules/home/noctalia/config.nix
                     ];
                   };

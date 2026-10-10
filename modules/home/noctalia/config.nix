@@ -2,6 +2,7 @@
 {
   programs.noctalia = {
     enable = true;
+    checkConfig = true;
     systemd.enable = true;
     settings = {
       theme = {

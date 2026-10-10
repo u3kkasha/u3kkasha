@@ -26,9 +26,9 @@ in
       wofi
     ];
 
-    xdg.configFile."niri/config.kdl".text =
-      builtins.replaceStrings [ "// HOST_OUTPUT_CONFIG" ] [ cfg.outputConfig ]
-        (builtins.readFile ./niri.kdl);
+    programs.niri.config = builtins.replaceStrings [ "// HOST_OUTPUT_CONFIG" ] [ cfg.outputConfig ] (
+      builtins.readFile ./niri.kdl
+    );
 
     xdg.configFile."hypr/hypridle.conf".text = ''
       general {

@@ -2,7 +2,6 @@
   pkgs,
   lib,
   config,
-  inputs,
   ...
 }:
 
@@ -25,8 +24,10 @@ in
 
     networking.networkmanager.enable = true;
 
-    # Niri Compositor
-    programs.niri.enable = true;
+    # Niri Compositor; the bare-metal host imports the Niri-flake module.
+    programs.niri = {
+      enable = true;
+    };
 
     # Login Manager
     services.greetd = {
@@ -49,7 +50,6 @@ in
     # Essential Desktop Utilities
     environment.systemPackages = with pkgs; [
       networkmanagerapplet
-      inputs.noctalia-shell.packages.${pkgs.stdenv.hostPlatform.system}.default
       wl-clipboard
       libnotify
       brightnessctl

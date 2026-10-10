@@ -12,7 +12,7 @@ let
   codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
   expectedAgentInstructions = builtins.readFile ../modules/home/agent-instructions.md;
   nixdConfig = builtins.readFile homeConfig.xdg.configFile."nixd/config.json".source;
-  niriConfig = builtins.readFile homeConfig.xdg.configFile."niri/config.kdl".source;
+  niriConfig = builtins.readFile homeConfig.xdg.configFile."niri-config".source;
   hypridleConfig = builtins.readFile homeConfig.xdg.configFile."hypr/hypridle.conf".source;
 
   testResults = lib.runTests {
@@ -146,8 +146,10 @@ let
       expected =
         map
           (_: {
-            substituters = internal.cacheSubstituters;
-            publicKeys = internal.cachePublicKeys;
+            substituters = [ "https://niri.cachix.org" ] ++ internal.cacheSubstituters;
+            publicKeys = [
+              "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
+            ] ++ internal.cachePublicKeys;
           })
           [
             1
