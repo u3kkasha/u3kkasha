@@ -143,11 +143,13 @@
             git.hooks = {
               enable = true;
               pre-commit.text = ''
+                set -euo pipefail
                 nix build .#checks.${system}.formatting --no-link
                 nix build .#checks.${system}.actionlint --no-link
                 gitleaks git --staged --redact --no-banner
               '';
               pre-push.text = ''
+                set -euo pipefail
                 host="''${NIXOS_HOST:-$(hostname)}"
                 case "$host" in
                   nixos)
