@@ -68,11 +68,9 @@
             inputs.home-manager.nixosModules.home-manager
             inputs.nix-index-database.nixosModules.nix-index
             inputs.niri-flake.nixosModules.niri
-            ({ pkgs, ... }:
-              {
-                nixpkgs.overlays = [ inputs.niri-flake.overlays.niri ];
-                programs.niri.package = pkgs.niri-stable;
-              })
+            {
+              programs.niri.package = inputs.niri-flake.packages.x86_64-linux.niri-stable;
+            }
             {
               home-manager.extraSpecialArgs = specialArgs;
               home-manager.sharedModules = sharedHomeModules;

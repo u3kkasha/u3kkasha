@@ -29,6 +29,9 @@ in
       enable = true;
     };
 
+    # Expose niri-flake's shipped user service to the user systemd manager.
+    systemd.user.packages = [ config.programs.niri.package ];
+
     # Login Manager
     services.greetd = {
       enable = true;
