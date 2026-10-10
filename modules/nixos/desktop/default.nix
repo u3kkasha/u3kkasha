@@ -27,6 +27,7 @@ in
     # Niri Compositor; the bare-metal host imports the Niri-flake module.
     programs.niri = {
       enable = true;
+      package = pkgs.niri;
     };
 
     # Login Manager

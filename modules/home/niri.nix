@@ -20,6 +20,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    programs.niri.package = pkgs.niri;
+
     home.packages = with pkgs; [
       config.programs.niri.package
       hyprpicker
