@@ -1,10 +1,25 @@
 {
   config,
+  inputs,
   lib,
+  pkgs,
   ...
 }:
 
 {
+  # Normalize the pinned theme before Lazygit loads immutable store files.
+  catppuccin.sources.lazygit =
+    let
+      upstream = (import inputs.catppuccin { inherit pkgs; }).packages.lazygit;
+    in
+    pkgs.runCommand "catppuccin-lazygit-current-schema" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
+      cp -r ${upstream} "$out"
+      chmod -R u+w "$out"
+      for theme in "$out"/*/*.yml; do
+        yq -i 'with(select(.gui.authorColors != null); .gui.theme.authorColors = .gui.authorColors | del(.gui.authorColors))' "$theme"
+      done
+    '';
+
   home.shellAliases = {
     lg = "lazygit";
   };
