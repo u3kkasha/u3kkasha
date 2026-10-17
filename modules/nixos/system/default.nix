@@ -22,6 +22,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # The canonical cache list below includes Niri's cache as well.
+    niri-flake.cache.enable = false;
+
     nix.package = pkgs.nix;
     nix.settings = {
       experimental-features = [

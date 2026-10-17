@@ -103,12 +103,13 @@ and in Nushell through a generated `nushell/autoload/devenv-hook.nu` file, along
 the existing direnv and nix-direnv integrations for both shells. Project trust remains
 explicit through `devenv allow` or `direnv allow`; use one activation method per project.
 
-Flake inputs are locked. `lib/internal/cache.nix` is the canonical source for the public
-nix-community, Numtide, and Noctalia daemon caches. The flake also exposes matching
-literal `nixConfig` bootstrap hints so a fresh system can use those caches before the
-NixOS module is activated. Pull-request CI consumes the public
-`u3kkasha` Cachix cache without credentials or publishing; only trusted default-branch push and
-manual jobs receive its write token. Read-only CI checkouts do not persist GitHub credentials.
+Flake inputs are locked. `lib/internal/cache.nix` is the single source for the public
+nix-community, Numtide, Noctalia, and Niri daemon caches used by both hosts. The Niri
+module's duplicate cache declaration is disabled. Cache settings apply after NixOS
+activation; the flake does not duplicate cache values as bootstrap hints. Pull-request CI
+consumes the public `u3kkasha` Cachix cache without credentials or publishing; only trusted
+default-branch push and manual jobs receive its write token. Read-only CI checkouts do not
+persist GitHub credentials.
 Only `root` is trusted by the Nix daemon. Wheel membership alone does not grant
 unsigned-NAR or cache privileges. Unfree evaluation is limited to the exact Steam package
 family: `steam`, `steam-original`, and `steam-unwrapped`.
