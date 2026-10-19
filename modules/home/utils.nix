@@ -54,7 +54,7 @@ in
       ]
       ++ lib.optionals config.internal.gui.enable [
         wl-clipboard
-        firefox
+        brave
       ];
   };
 }

@@ -39,7 +39,7 @@ pkgs.testers.runNixOSTest {
     machine.succeed("test -e /etc/profiles/per-user/${username}/bin/nu")
 
     # Verify GUI packages are absent
-    machine.fail("which firefox")
+    machine.fail("which brave")
     machine.fail("which wl-clipboard")
 
     # Verify conventional Docker Engine and Compose are available without Podman.

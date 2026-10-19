@@ -320,6 +320,18 @@ let
       expr = builtins.any (package: lib.getName package == "duckdb") homeConfig.home.packages;
       expected = true;
     };
+    testBraveReplacesFirefoxForGuiHost = {
+      expr =
+        let
+          guiPackages = map lib.getName homeConfig.home.packages;
+          wslPackages = map lib.getName wslHomeConfig.home.packages;
+        in
+        builtins.elem "brave" guiPackages
+        && !(builtins.elem "firefox" guiPackages)
+        && !(builtins.elem "brave" wslPackages)
+        && !(builtins.elem "firefox" wslPackages);
+      expected = true;
+    };
     testAntigravityCliDisabled = {
       expr =
         map

@@ -45,7 +45,7 @@ window-rule {
     default-column-width {}
 }
 window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id=r#"brave-browser$"# title="^Picture-in-Picture$"
     open-floating true
 }
 window-rule {
