@@ -162,8 +162,7 @@ Cross-host configuration assertions and VM tests remain CI-oriented because of t
 CI jobs have explicit timeouts, and the lock updater serializes access to its shared update branch.
 Required evaluation plus all four system/VM matrix builds feed the failure-aware `CI Gate` required
 by the default-branch ruleset. Automated lock-update PRs publish an `nvd` bare-metal closure diff in
-the run summary. CI also checks Spec Kit governance and builds important outputs monthly and on
-manual dispatch using only the official Nix cache.
+the run summary. CI also checks Spec Kit governance; the same full workflow can be started manually.
 
 ## Known Limitations and Planned Hardening
 

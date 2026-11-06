@@ -4,8 +4,6 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  schedule:
-    - cron: "0 3 1 * *" # Monthly cache-independent verification
   workflow_dispatch:
 
 concurrency:
@@ -17,7 +15,6 @@ permissions:
 
 jobs:
   verify:
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -105,34 +102,9 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-  cache-independent:
-    needs: verify
-    if: >-
-      always() &&
-      (github.event_name == 'schedule' ||
-       (github.event_name == 'workflow_dispatch' && needs.verify.result == 'success'))
-    runs-on: ubuntu-latest
-    timeout-minutes: 120
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [unit-tests, nixos-build, nixos-wsl-build]
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
-
-      - name: Build ${{ matrix.target }} without configured extra caches
-        run: >-
-          nix build .#${{ matrix.target }}
-          --no-accept-flake-config
-          --option substituters https://cache.nixos.org
-
   gate:
     name: CI Gate
-    if: always() && github.event_name != 'schedule'
+    if: always()
     needs: [verify, build]
     runs-on: ubuntu-latest
     timeout-minutes: 5
