@@ -184,7 +184,6 @@ let
         "nuxt-ui"
         "playwright"
         "semble"
-        "serena"
       ];
     };
     testPackagedMcpServers = {
@@ -193,7 +192,6 @@ let
         "nixos"
         "playwright"
         "semble"
-        "serena"
       ];
       expected = true;
     };

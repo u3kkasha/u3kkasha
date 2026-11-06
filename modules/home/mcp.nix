@@ -9,21 +9,6 @@
 let
   inherit (lib) getExe getExe';
   semble = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.semble;
-
-  # The pinned Serena release uses the MCP SDK v1 FastMCP API; nixpkgs' mcp now points to v2.
-  serena =
-    inputs.mcp-servers-nix.packages.${pkgs.stdenv.hostPlatform.system}.serena.overridePythonAttrs
-      (oldAttrs: {
-        dependencies = (lib.filter (dependency: lib.getName dependency != "mcp") oldAttrs.dependencies) ++ [
-          pkgs.python3Packages.mcp_1
-        ];
-        makeWrapperArgs = (oldAttrs.makeWrapperArgs or [ ]) ++ [
-          "--prefix"
-          "PATH"
-          ":"
-          (lib.makeBinPath [ pkgs.nixd ])
-        ];
-      });
 in
 {
   # Packaged MCP servers. mcp-servers-nix evaluates these modules and merges
@@ -42,12 +27,6 @@ in
 
     playwright.enable = true;
 
-    serena = {
-      enable = true;
-      context = "ide-assistant";
-      enableWebDashboard = false;
-      package = serena;
-    };
   };
 
   programs.mcp = {
