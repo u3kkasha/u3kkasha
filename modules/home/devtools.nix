@@ -20,7 +20,6 @@ in
     programs.uv.enable = true;
 
     home.packages = with pkgs; [
-      nodejs_22
       mdr
       duckdb
       skillsCli
