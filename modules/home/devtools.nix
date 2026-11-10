@@ -22,7 +22,6 @@ in
     home.packages = with pkgs; [
       nodejs_22
       mdr
-      dotnet-sdk_10
       duckdb
       skillsCli
     ];
