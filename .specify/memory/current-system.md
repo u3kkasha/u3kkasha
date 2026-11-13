@@ -110,9 +110,11 @@ activation; the flake does not duplicate cache values as bootstrap hints. Pull-r
 consumes the public `u3kkasha` Cachix cache without credentials or publishing; only trusted
 default-branch push and manual jobs receive its write token. Read-only CI checkouts do not
 persist GitHub credentials.
-Only `root` is trusted by the Nix daemon. Wheel membership alone does not grant
-unsigned-NAR or cache privileges. Unfree evaluation is limited to the exact Steam package
-family: `steam`, `steam-original`, and `steam-unwrapped`.
+The bare-metal NixOS host trusts only `root` in the Nix daemon. On WSL, NixOS-WSL also
+trusts `ukasha`; trusted-user status is root-equivalent because it allows specifying
+additional binary caches and importing unsigned store objects. Wheel membership alone does
+not grant those privileges. Unfree evaluation is limited to the exact Steam package family:
+`steam`, `steam-original`, and `steam-unwrapped`.
 
 GitHub repository policy requires full commit-SHA Action references and permits GitHub-owned
 Actions plus the checked-in Determinate Systems, Cachix, and Gitleaks Actions (along with
