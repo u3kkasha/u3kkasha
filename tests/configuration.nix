@@ -154,14 +154,17 @@ let
             2
           ];
     };
-    testNixTrustIsRootOnly = {
+    testNixTrustedUsers = {
       expr = {
         nixos = lib.unique nixos.config.nix.settings.trusted-users;
         wsl = lib.unique nixos-wsl.config.nix.settings.trusted-users;
       };
       expected = {
         nixos = [ "root" ];
-        wsl = [ "root" ];
+        wsl = [
+          "root"
+          "ukasha"
+        ];
       };
     };
     testNixdConfigReferencesLockedInputs = {
