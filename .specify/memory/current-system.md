@@ -69,15 +69,14 @@ Node.js, .NET, DuckDB, and the Vercel Skills CLI, plus direnv, editors, terminal
 tools, Codex, OpenCode, CodeGraph, and Spec Kit. Home Manager owns global skills through
 two mechanisms:
 
-- `programs.nix-skills` installs the selected curated Nix skills for the configured
-  agents. The current list is `nix-language`, `nix-workflow`, `nixpkgs-development`,
-  `nixos-operations`, `home-manager`, and `devenv-project` for Codex and OpenCode.
-- Other skills are declared with each agent's native Home Manager option, such as
-  `programs.codex.skills` and `programs.opencode.skills`. The Modern Web Guidance skill
-  source is pinned to GitHub release `v1.0.1` with a fixed hash in
-  `modules/home/default.nix`, then assigned to both options. To update it, change the
-  source revision and hash together; to add another shared skill, pin its source and
-  declare its skill directory for each target agent.
+- `programs.nix-skills` installs the selected curated Nix skills for Codex only. The
+  current list is `nix-language`, `nix-workflow`, `nixpkgs-development`,
+  `nixos-operations`, `home-manager`, and `devenv-project`.
+- Other global skills are declared with an agent's native Home Manager option.
+  `programs.codex.skills` includes Modern Web Guidance pinned to GitHub release `v1.0.1`
+  and the official Nuxt UI skill pinned to a Nuxt UI Git revision, both with fixed hashes
+  in `modules/home/default.nix`. OpenCode remains installed, but has no global skills
+  assigned. To update a skill, change its source revision and hash together.
 
 Home Manager links managed skill directories into agent-specific configuration paths;
 update them through their Nix source declarations rather than editing generated links.

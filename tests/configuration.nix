@@ -66,6 +66,42 @@ let
         internal.homeStateVersion
       ];
     };
+    testGlobalSkillTargetsAndSelection = {
+      expr =
+        map
+          (config: {
+            nixSkillAgents = config.programs.nix-skills.agents;
+            nixSkills = config.programs.nix-skills.skills;
+            codexSkills = builtins.attrNames config.programs.codex.skills;
+            opencodeSkills = builtins.attrNames config.programs.opencode.skills;
+          })
+          [
+            homeConfig
+            wslHomeConfig
+          ];
+      expected =
+        map
+          (_: {
+            nixSkillAgents = [ "codex" ];
+            nixSkills = [
+              "nix-language"
+              "nix-workflow"
+              "nixpkgs-development"
+              "nixos-operations"
+              "home-manager"
+              "devenv-project"
+            ];
+            codexSkills = [
+              "modern-web-guidance"
+              "nuxt-ui"
+            ];
+            opencodeSkills = [ ];
+          })
+          [
+            1
+            2
+          ];
+    };
     testThemeFlavor = {
       expr = homeConfig.catppuccin.flavor;
       expected = internal.themeFlavor;

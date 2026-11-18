@@ -20,6 +20,12 @@ let
     rev = "v1.0.1";
     hash = "sha256-6AKPHsrv7uP0clLZaezrCP8lHXY5EB0hJwQ3gnk4+UI=";
   };
+  nuxtUiSkill = pkgs.fetchFromGitHub {
+    owner = "nuxt";
+    repo = "ui";
+    rev = "550471d1a2c1178c9cc9593d8ff684cae7d64674";
+    hash = "sha256-ZPHOJpOU1jCFhTJMoiNPRWn8PqsIkVncDHWR/Cni/00=";
+  };
 in
 {
   imports = scanPaths ./.;
@@ -46,13 +52,12 @@ in
 
   config = {
     programs.codex.skills.modern-web-guidance = "${modernWebGuidance}/skills/modern-web-guidance";
-    programs.opencode.skills.modern-web-guidance = "${modernWebGuidance}/skills/modern-web-guidance";
+    programs.codex.skills.nuxt-ui = "${nuxtUiSkill}/skills/nuxt-ui";
 
     programs.nix-skills = {
       enable = true;
       agents = [
         "codex"
-        "opencode"
       ];
       skills = [
         "nix-language"
