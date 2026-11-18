@@ -45,11 +45,8 @@ in
   };
 
   config = {
-    home.file = {
-      ".agents/skills/modern-web-guidance".source = "${modernWebGuidance}/skills/modern-web-guidance";
-      ".config/opencode/skills/modern-web-guidance".source =
-        "${modernWebGuidance}/skills/modern-web-guidance";
-    };
+    programs.codex.skills.modern-web-guidance = "${modernWebGuidance}/skills/modern-web-guidance";
+    programs.opencode.skills.modern-web-guidance = "${modernWebGuidance}/skills/modern-web-guidance";
 
     programs.nix-skills = {
       enable = true;

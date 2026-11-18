@@ -72,8 +72,9 @@ tools, Codex, OpenCode, CodeGraph, Spec Kit, and six pinned Nix agent skills
 Codex and OpenCode through the `olafkfreund/nix-skills` Home Manager module. The Vercel
 Skills CLI remains available for project-specific discovery and use. Google Chrome
 Modern Web Guidance v1.0.1 skill files are fetched from a fixed-hash GitHub source and
-exposed by shared Home Manager defaults to both agents. This installs its instructions
-and guidance files without bundling the CLI or adding Node. Agents can follow the
+configured through Home Manager's native `programs.codex.skills` and
+`programs.opencode.skills` options. This installs its instructions and guidance files
+without bundling the CLI or adding Node. Agents can follow the
 upstream skill's CLI guidance when relevant. Global skills are owned by Home Manager;
 project-specific skills can be discovered and installed with the Vercel Skills CLI.
 Generated skill paths under the home directory are symlinks into the Nix store and must
