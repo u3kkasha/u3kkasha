@@ -14,3 +14,7 @@ When `.codegraph/` exists, use CodeGraph before text search to understand or loc
 code. Use Semble first for broad semantic searches, then Serena for precise symbol
 inspection and edits. Use the NixOS MCP for current Nix package, option, flake, and
 cache information.
+
+For NixOS-WSL-specific options, consult the upstream
+[NixOS-WSL options reference](https://nix-community.github.io/NixOS-WSL/options.html)
+and verify version-specific behavior against the flake-locked module source.
