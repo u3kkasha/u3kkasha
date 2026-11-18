@@ -172,13 +172,14 @@ nix build .#nixos-build .#nixos-wsl-build --no-link
 nix build .#vm-test-nixos .#vm-test-wsl-mock
 ```
 
-Formatting, Actionlint, focused internal-library and configuration-policy assertions, generated
-Codex merge behavior, and Gitleaks are flake checks. Actionlint is supplied by the pinned package
-set and validates the repository-root GitHub workflows; the pre-commit hook runs it beside
-formatting and Gitleaks. `unit-tests` is the quick target. `configuration-tests` evaluates both
-supported hosts and checks selected state, security, reproducibility, agent-source, Niri, and
-generated Codex behavior. It does not parse nixd's serialized JSON; host builds validate the
-generated nixd output. Configuration checks have medium-to-heavy evaluation cost.
+Formatting, Actionlint, exact module-discovery and unfree-policy assertions, configuration
+security and reproducibility policies, generated Codex merge behavior, and Gitleaks are flake
+checks. Actionlint is supplied by the pinned package set and validates the repository-root
+GitHub workflows; the pre-commit hook runs it beside formatting and Gitleaks. `unit-tests` is
+the quick target. `configuration-tests` evaluates both supported hosts and checks cache policy,
+trusted users, local MCP store commands, and generated Codex behavior. It does not mirror
+directly assigned options or inspect nixd's serialized JSON; host builds validate the generated
+nixd output. Configuration checks have medium-to-heavy evaluation cost.
 The pre-push hook runs formatting, Actionlint, unit tests, Gitleaks, and only the host build selected
 by `hostname` (`nixos` or `nixos-wsl`). Set `NIXOS_HOST` to one of those names to override detection.
 Cross-host configuration assertions and VM tests remain CI-oriented because of their cost.

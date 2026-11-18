@@ -7,94 +7,13 @@
 let
   inherit (nixosConfigurations) nixos nixos-wsl;
   homeConfig = nixos.config.home-manager.users.${internal.username};
-  wslHomeConfig = nixos-wsl.config.home-manager.users.${internal.username};
   mcpServers = homeConfig.programs.mcp.servers;
   localMcpServers = lib.filterAttrs (
     _: server: server ? command && server.command != null
   ) mcpServers;
   codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
-  expectedAgentInstructions = builtins.readFile ../modules/home/agent-instructions.md;
-  niriConfig = builtins.readFile homeConfig.xdg.configFile."niri-config".source;
-  hypridleConfig = builtins.readFile homeConfig.xdg.configFile."hypr/hypridle.conf".source;
 
   testResults = lib.runTests {
-    testSystemStateVersions = {
-      expr = map (host: host.config.system.stateVersion) [
-        nixos
-        nixos-wsl
-      ];
-      expected = [
-        internal.systemStateVersion
-        internal.systemStateVersion
-      ];
-    };
-    testHomeStateVersions = {
-      expr = map (config: config.home.stateVersion) [
-        homeConfig
-        wslHomeConfig
-      ];
-      expected = [
-        internal.homeStateVersion
-        internal.homeStateVersion
-      ];
-    };
-    testCuratedNixSkillsAndCodexSkillSources = {
-      expr =
-        map
-          (config: {
-            nixSkillAgents = config.programs.nix-skills.agents;
-            nixSkills = config.programs.nix-skills.skills;
-            codexHasPinnedSkills = builtins.all (name: builtins.hasAttr name config.programs.codex.skills) [
-              "modern-web-guidance"
-              "nuxt-ui"
-            ];
-            codexSkillsHaveInstructions = builtins.all (skill: builtins.pathExists "${skill}/SKILL.md") (
-              builtins.attrValues config.programs.codex.skills
-            );
-          })
-          [
-            homeConfig
-            wslHomeConfig
-          ];
-      expected =
-        map
-          (_: {
-            nixSkillAgents = [ "codex" ];
-            nixSkills = [
-              "nix-language"
-              "nix-workflow"
-              "nixpkgs-development"
-              "nixos-operations"
-              "home-manager"
-              "devenv-project"
-            ];
-            codexHasPinnedSkills = true;
-            codexSkillsHaveInstructions = true;
-          })
-          [
-            1
-            2
-          ];
-    };
-    testContainerRuntimeUsesDocker = {
-      expr = map (host: host.config.virtualisation.docker.enable) [
-        nixos
-        nixos-wsl
-      ];
-      expected = [
-        true
-        true
-      ];
-    };
-    testDockerGroupMembership = {
-      expr =
-        builtins.all (host: builtins.elem "docker" host.config.users.users.${internal.username}.extraGroups)
-          [
-            nixos
-            nixos-wsl
-          ];
-      expected = true;
-    };
     testNixCachePolicy = {
       expr =
         map
@@ -138,38 +57,6 @@ let
       expr = builtins.all (server: lib.hasPrefix "/nix/store/" server.command) (
         builtins.attrValues localMcpServers
       );
-      expected = true;
-    };
-    testSharedAgentInstructions = {
-      expr =
-        map
-          (config: {
-            codexContext = builtins.readFile config.programs.codex.context;
-            codexOutput = builtins.readFile config.home.file.".codex/AGENTS.md".source;
-          })
-          [
-            homeConfig
-            wslHomeConfig
-          ];
-      expected =
-        map
-          (_: {
-            codexContext = expectedAgentInstructions;
-            codexOutput = expectedAgentInstructions;
-          })
-          [
-            1
-            2
-          ];
-    };
-    testNiriResumeUsesNativeCommand = {
-      expr = lib.hasInfix "after_sleep_cmd = niri msg action power-on-monitors" hypridleConfig;
-      expected = true;
-    };
-    testNiriPhysicalOutputIsHostOwned = {
-      expr =
-        homeConfig.internal.niri.outputConfig != ""
-        && lib.hasInfix homeConfig.internal.niri.outputConfig niriConfig;
       expected = true;
     };
   };
