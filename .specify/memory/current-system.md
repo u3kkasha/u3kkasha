@@ -101,7 +101,10 @@ Agent applications are selected explicitly from the pinned `llm-agents.nix` inpu
 Packaged MCP servers come from `mcp-servers-nix`; hosted servers remain explicit registry
 entries. Local MCP commands resolve to Nix store binaries rather than `npx`, `uvx`, or
 similar runtime resolvers. GitHub credentials are obtained by the GitHub MCP wrapper from
-`gh auth token` instead of being exported at shell startup.
+`gh auth token` instead of being exported at shell startup. Managed Bash and Nushell
+shells also pass `gh auth token` to each `nix` invocation through process-scoped
+`NIX_CONFIG`; token lookup failure falls back to normal Nix execution, and existing
+`NIX_CONFIG` settings are preserved. The token is not stored in the flake or Nix store.
 
 Codex consumes the generated Home Manager MCP configuration through a tested merge path
 that keeps the user-owned `config.toml` writable. OpenCode consumes the central MCP
