@@ -74,14 +74,13 @@ two mechanisms:
   `nixos-operations`, `home-manager`, and `devenv-project`.
 - Other global skills are declared with an agent's native Home Manager option.
   `programs.codex.skills` includes every plugin skill with a `SKILL.md` from the official
-  `dotnet/skills` repository, pinned to commit
-  `2877c712edc20643b72f64e2983b168e6661d607` with a fixed source hash, plus Modern Web
-  Guidance pinned to GitHub release `v1.0.1` and the official Nuxt UI skill pinned to a
-  Nuxt UI Git revision with fixed hashes, all in `modules/home/default.nix`. .NET skill
-  links include the plugin name and are derived from the pinned catalog; plugin MCP
-  servers and host-specific agents are not installed. OpenCode remains installed, but has
-  no global skills assigned. To update a skill, change its source revision and hash
-  together.
+  `dotnet/skills` repository, Modern Web Guidance, and the official Nuxt UI skill. Their
+  repositories are non-flake inputs declared in `flake.nix` and pinned by `flake.lock`;
+  `nix-skills` is also a locked input. .NET skill links include the plugin name and are
+  derived from the pinned catalog; plugin MCP servers and host-specific agents are not
+  installed. The scheduled/manual flake lock updater can refresh all these sources in its
+  pull request, where normal CI evaluates both hosts. OpenCode remains installed, but has
+  no global skills assigned.
 
 Home Manager links managed skill directories into agent-specific configuration paths;
 update them through their Nix source declarations rather than editing generated links.
@@ -183,6 +182,8 @@ by `hostname` (`nixos` or `nixos-wsl`). Set `NIXOS_HOST` to one of those names t
 Cross-host configuration assertions and VM tests remain CI-oriented because of their cost.
 
 CI jobs have explicit timeouts, and the lock updater serializes access to its shared update branch.
+The weekly/manual lock update also refreshes all declared global skill-source inputs; normal
+pull-request checks evaluate those candidate sources for both hosts before merge.
 Required evaluation plus all four system/VM matrix builds feed the failure-aware `CI Gate` required
 by the default-branch ruleset. Automated lock-update PRs publish an `nvd` bare-metal closure diff in
 the run summary. CI also checks Spec Kit governance; the same full workflow can be started manually.

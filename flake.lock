@@ -74,6 +74,22 @@
         "type": "github"
       }
     },
+    "dotnet-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794468446,
+        "narHash": "sha256-CctE7eJNAGKET2VGJwHKczCeLeiUQyMPgm+AkE6DoeI=",
+        "owner": "dotnet",
+        "repo": "skills",
+        "rev": "2877c712edc20643b72f64e2983b168e6661d607",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dotnet",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -188,6 +204,22 @@
       "original": {
         "owner": "natsukium",
         "repo": "mcp-servers-nix",
+        "type": "github"
+      }
+    },
+    "modern-web-guidance": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794841069,
+        "narHash": "sha256-6AKPHsrv7uP0clLZaezrCP8lHXY5EB0hJwQ3gnk4+UI=",
+        "owner": "GoogleChrome",
+        "repo": "modern-web-guidance",
+        "rev": "64a6d708f5a43f2cd3fde5d4d7db3905ba1bdf65",
+        "type": "github"
+      },
+      "original": {
+        "owner": "GoogleChrome",
+        "repo": "modern-web-guidance",
         "type": "github"
       }
     },
@@ -443,14 +475,32 @@
         "type": "github"
       }
     },
+    "nuxt-ui-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794930248,
+        "narHash": "sha256-ZPHOJpOU1jCFhTJMoiNPRWn8PqsIkVncDHWR/Cni/00=",
+        "owner": "nuxt",
+        "repo": "ui",
+        "rev": "550471d1a2c1178c9cc9593d8ff684cae7d64674",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nuxt",
+        "repo": "ui",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "catppuccin": "catppuccin",
         "devshell": "devshell",
+        "dotnet-skills": "dotnet-skills",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "llm-agents": "llm-agents",
         "mcp-servers-nix": "mcp-servers-nix",
+        "modern-web-guidance": "modern-web-guidance",
         "niri-flake": "niri-flake",
         "nix-index-database": "nix-index-database",
         "nix-skills": "nix-skills",
@@ -458,6 +508,7 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_3",
         "noctalia": "noctalia",
+        "nuxt-ui-skills": "nuxt-ui-skills",
         "treefmt-nix": "treefmt-nix_2"
       }
     },

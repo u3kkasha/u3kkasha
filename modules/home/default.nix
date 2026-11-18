@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  inputs,
   lib,
   internal,
   osConfig ? null,
@@ -14,24 +15,9 @@ let
     scanPaths
     themeFlavor
     ;
-  modernWebGuidance = pkgs.fetchFromGitHub {
-    owner = "GoogleChrome";
-    repo = "modern-web-guidance";
-    rev = "v1.0.1";
-    hash = "sha256-6AKPHsrv7uP0clLZaezrCP8lHXY5EB0hJwQ3gnk4+UI=";
-  };
-  nuxtUiSkill = pkgs.fetchFromGitHub {
-    owner = "nuxt";
-    repo = "ui";
-    rev = "550471d1a2c1178c9cc9593d8ff684cae7d64674";
-    hash = "sha256-ZPHOJpOU1jCFhTJMoiNPRWn8PqsIkVncDHWR/Cni/00=";
-  };
-  dotnetSkillSource = pkgs.fetchFromGitHub {
-    owner = "dotnet";
-    repo = "skills";
-    rev = "2877c712edc20643b72f64e2983b168e6661d607";
-    hash = "sha256-CctE7eJNAGKET2VGJwHKczCeLeiUQyMPgm+AkE6DoeI=";
-  };
+  modernWebGuidance = inputs.modern-web-guidance;
+  nuxtUiSkill = inputs.nuxt-ui-skills;
+  dotnetSkillSource = inputs.dotnet-skills;
   dotnetSkillEntries = lib.concatMap (
     plugin:
     let

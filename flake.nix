@@ -3,6 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    dotnet-skills.url = "github:dotnet/skills";
+    dotnet-skills.flake = false;
+    modern-web-guidance.url = "github:GoogleChrome/modern-web-guidance";
+    modern-web-guidance.flake = false;
+    nuxt-ui-skills.url = "github:nuxt/ui";
+    nuxt-ui-skills.flake = false;
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
