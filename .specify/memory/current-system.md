@@ -44,7 +44,8 @@ Host entrypoints live under `systems/x86_64-linux/`:
   gaming, Docker, its physical Niri output, and its host-specific Noctalia Home Manager import.
 - `nixos-wsl` is the WSL host. It owns the upstream NixOS-WSL import, disables graphical
   Home Manager defaults, and enables WSL-specific user behavior including GNOME Keyring,
-  libsecret, and Seahorse.
+  libsecret, and Seahorse. It explicitly registers the `WSLInterop` binfmt handler so
+  Windows executables can run from Linux shells.
 
 The upstream WSL module is intentionally absent from the shared core.
 

@@ -18,6 +18,7 @@ in
   config = lib.mkIf cfg.enable {
     wsl.enable = true;
     wsl.defaultUser = username;
+    wsl.interop.register = true;
     wsl.interop.includePath = true;
     wsl.wslConf.interop.appendWindowsPath = true;
 
