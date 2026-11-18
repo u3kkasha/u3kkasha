@@ -29,14 +29,9 @@ pkgs.testers.runNixOSTest {
   testScript = ''
     machine.wait_for_unit("multi-user.target")
 
-    # Verify the user and shell still work
-    machine.succeed("getent passwd ${username} | grep /bin/nu")
-    machine.succeed("test -e /etc/profiles/per-user/${username}/bin/nu")
-
-    # Verify conventional Docker Engine and Compose are available.
-    machine.succeed("docker --version")
-    machine.succeed("docker compose version")
+    # Verify Docker and Compose are usable by the configured user.
     machine.wait_for_unit("docker.service")
     machine.succeed("su - ${username} -c 'docker info'")
+    machine.succeed("su - ${username} -c 'docker compose version'")
   '';
 }

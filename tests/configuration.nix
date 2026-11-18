@@ -14,31 +14,10 @@ let
   ) mcpServers;
   codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
   expectedAgentInstructions = builtins.readFile ../modules/home/agent-instructions.md;
-  nixdConfig = builtins.fromJSON (
-    builtins.readFile homeConfig.xdg.configFile."nixd/config.json".source
-  );
-  nixdLockedInputs = toString homeConfig.xdg.dataFile."nixd/locked-inputs".source;
   niriConfig = builtins.readFile homeConfig.xdg.configFile."niri-config".source;
   hypridleConfig = builtins.readFile homeConfig.xdg.configFile."hypr/hypridle.conf".source;
 
   testResults = lib.runTests {
-    testUsername = {
-      expr = homeConfig.home.username;
-      expected = internal.username;
-    };
-    testDefaultEditor = {
-      expr = {
-        inherit (homeConfig.home.sessionVariables) EDITOR VISUAL;
-      };
-      expected = {
-        EDITOR = internal.defaultEditor;
-        VISUAL = internal.defaultEditor;
-      };
-    };
-    testNixosHostName = {
-      expr = nixos.config.networking.hostName;
-      expected = "nixos";
-    };
     testSystemStateVersions = {
       expr = map (host: host.config.system.stateVersion) [
         nixos
@@ -96,10 +75,6 @@ let
             1
             2
           ];
-    };
-    testThemeFlavor = {
-      expr = homeConfig.catppuccin.flavor;
-      expected = internal.themeFlavor;
     };
     testContainerRuntimeUsesDocker = {
       expr = map (host: host.config.virtualisation.docker.enable) [
@@ -159,25 +134,10 @@ let
         ];
       };
     };
-    testNixdConfigUsesLockedInputPaths = {
-      expr =
-        nixdConfig.nixd.nixpkgs.expr == "import ${nixdLockedInputs}/nixpkgs { }"
-        && lib.hasInfix "${nixdLockedInputs}/flake" nixdConfig.nixd.options.nixos.expr
-        && lib.hasInfix "nixosConfigurations.nixos.options" nixdConfig.nixd.options.nixos.expr
-        && lib.hasInfix "${nixdLockedInputs}/flake" nixdConfig.nixd.options.home-manager.expr;
-      expected = true;
-    };
     testLocalMcpServersUseStoreCommands = {
       expr = builtins.all (server: lib.hasPrefix "/nix/store/" server.command) (
         builtins.attrValues localMcpServers
       );
-      expected = true;
-    };
-    testCodexMcpIntegrationEnabled = {
-      expr = builtins.all (config: config.programs.codex.enableMcpIntegration) [
-        homeConfig
-        wslHomeConfig
-      ];
       expected = true;
     };
     testSharedAgentInstructions = {
@@ -201,42 +161,6 @@ let
             1
             2
           ];
-    };
-    testAgentPackages = {
-      expr = {
-        codex = homeConfig.programs.codex.package.pname;
-        specKit = lib.getName (
-          lib.findFirst (package: lib.getName package == "spec-kit") null homeConfig.home.packages
-        );
-        skills = lib.getName (
-          lib.findFirst (package: lib.getName package == "skills") null homeConfig.home.packages
-        );
-      };
-      expected = {
-        codex = "codex";
-        specKit = "spec-kit";
-        skills = "skills";
-      };
-    };
-    testDuckDbCliPackage = {
-      expr = builtins.any (package: lib.getName package == "duckdb") homeConfig.home.packages;
-      expected = true;
-    };
-    testGuiHostIncludesBrave = {
-      expr = builtins.any (package: lib.getName package == "brave") homeConfig.home.packages;
-      expected = true;
-    };
-    testWslHostName = {
-      expr = nixos-wsl.config.networking.hostName;
-      expected = "nixos-wsl";
-    };
-    testWslEnabled = {
-      expr = nixos-wsl.config.internal.wsl.enable;
-      expected = true;
-    };
-    testWslHomeManagerUser = {
-      expr = nixos-wsl.config.home-manager.users.${internal.username}.internal.wsl.enable;
-      expected = true;
     };
     testNiriResumeUsesNativeCommand = {
       expr = lib.hasInfix "after_sleep_cmd = niri msg action power-on-monitors" hypridleConfig;

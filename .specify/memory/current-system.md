@@ -6,19 +6,19 @@ that evidence. Update it only when implemented behavior changes.
 
 ## Capability Status
 
-| Capability                    | Status            | Supported path                                                                               | Verification                                       |
-| ----------------------------- | ----------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| Bare-metal NixOS host         | Operational       | `nixosConfigurations.nixos`                                                                  | `nix build .#nixos-build`                          |
-| WSL NixOS host                | Operational       | `nixosConfigurations.nixos-wsl`                                                              | `nix build .#nixos-wsl-build`                      |
-| Shared Home Manager layer     | Operational       | Home Manager as a NixOS module for the configured user                                       | `nix build .#configuration-tests`                  |
-| Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees                                    | Exact discovered-path unit tests                   |
-| Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2                                            | Configuration assertions and both VM/build targets |
-| Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                                           | Generated-configuration unit assertions            |
-| Global Codex skills           | Operational       | Home Manager exposes pinned .NET, Modern Web Guidance, and Nuxt UI skills through Codex      | Both host configuration evaluations                |
-| Headroom integration          | Retired           | Intentionally removed; MCP server, proxy, and packages pruned                                | Removed from configuration                         |
-| Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt (excluding `.serena/**`), Actionlint, Gitleaks, and Git hooks | Targeted checks and host-specific pre-push build   |
-| VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                                                     | `nix build .#vm-test-nixos .#vm-test-wsl-mock`     |
-| Spec-driven change governance | Operational       | Spec Kit Codex skills, Nix templates, and system-memory hook                                 | `.specify/scripts/bash/validate-project.sh`        |
+| Capability                    | Status            | Supported path                                                                               | Verification                                      |
+| ----------------------------- | ----------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| Bare-metal NixOS host         | Operational       | `nixosConfigurations.nixos`                                                                  | `nix build .#nixos-build`                         |
+| WSL NixOS host                | Operational       | `nixosConfigurations.nixos-wsl`                                                              | `nix build .#nixos-wsl-build`                     |
+| Shared Home Manager layer     | Operational       | Home Manager as a NixOS module for the configured user                                       | Both host builds and focused configuration checks |
+| Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees                                    | Exact discovered-path unit tests                  |
+| Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2                                            | Both VM targets check configured-user access      |
+| Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                                           | Generated-configuration unit assertions           |
+| Global Codex skills           | Operational       | Home Manager exposes pinned .NET, Modern Web Guidance, and Nuxt UI skills through Codex      | Both host configuration evaluations               |
+| Headroom integration          | Retired           | Intentionally removed; MCP server, proxy, and packages pruned                                | Removed from configuration                        |
+| Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt (excluding `.serena/**`), Actionlint, Gitleaks, and Git hooks | Targeted checks and host-specific pre-push build  |
+| VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                                                     | `nix build .#vm-test-nixos .#vm-test-wsl-mock`    |
+| Spec-driven change governance | Operational       | Spec Kit Codex skills, Nix templates, and system-memory hook                                 | `.specify/scripts/bash/validate-project.sh`       |
 
 Status vocabulary: **Operational** is supported and verifiable; **Partial** works with a
 documented limitation; **Planned** is accepted but not implemented; **Retired** is
@@ -112,9 +112,9 @@ shells also pass `gh auth token` to each `nix` invocation through process-scoped
 
 Codex consumes the generated Home Manager MCP configuration through a tested merge path
 that keeps the user-owned `config.toml` writable. OpenCode consumes the central MCP
-registry through its Home Manager integration. nixd generates its locked-input configuration through a
-reference-bearing derivation, so the locked-input link farm is an explicit closure dependency;
-no string context is discarded.
+registry through its Home Manager integration. The nixd Home Manager module generates its
+configuration through a derivation that references the locked-input link farm; host builds
+carry the generated file and its referenced inputs.
 
 ## Configuration, Caching, and Trust
 
@@ -172,11 +172,13 @@ nix build .#nixos-build .#nixos-wsl-build --no-link
 nix build .#vm-test-nixos .#vm-test-wsl-mock
 ```
 
-Formatting, Actionlint, quick internal-library policy assertions, generated-configuration
-assertions, and Gitleaks are flake checks. Actionlint is supplied by the pinned package set and
-validates the repository-root GitHub workflows; the pre-commit hook runs it beside formatting and
-Gitleaks. `unit-tests` is the quick target. `configuration-tests` evaluates both supported hosts,
-generated files, package closures, and the Codex merge path, so it has medium-to-heavy closure cost.
+Formatting, Actionlint, focused internal-library and configuration-policy assertions, generated
+Codex merge behavior, and Gitleaks are flake checks. Actionlint is supplied by the pinned package
+set and validates the repository-root GitHub workflows; the pre-commit hook runs it beside
+formatting and Gitleaks. `unit-tests` is the quick target. `configuration-tests` evaluates both
+supported hosts and checks selected state, security, reproducibility, agent-source, Niri, and
+generated Codex behavior. It does not parse nixd's serialized JSON; host builds validate the
+generated nixd output. Configuration checks have medium-to-heavy evaluation cost.
 The pre-push hook runs formatting, Actionlint, unit tests, Gitleaks, and only the host build selected
 by `hostname` (`nixos` or `nixos-wsl`). Set `NIXOS_HOST` to one of those names to override detection.
 Cross-host configuration assertions and VM tests remain CI-oriented because of their cost.

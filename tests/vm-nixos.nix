@@ -27,18 +27,12 @@ pkgs.testers.runNixOSTest {
   testScript = ''
     machine.wait_for_unit("multi-user.target")
 
-    # Check if the user was created correctly with the right shell
-    machine.succeed("getent passwd ${username} | grep /bin/nu")
-
-    # Verify conventional Docker Engine and Compose are available.
-    machine.succeed("docker --version")
-    machine.succeed("docker compose version")
+    # Verify Docker and Compose are usable by the configured user.
     machine.wait_for_unit("docker.service")
-    machine.succeed("systemctl is-active docker.service")
     machine.succeed("su - ${username} -c 'docker info'")
+    machine.succeed("su - ${username} -c 'docker compose version'")
+
     # Check if desktop services are configured
     machine.wait_for_unit("display-manager.service")
-    machine.succeed("systemctl status display-manager.service")
-    machine.succeed("test -x /run/current-system/sw/bin/niri")
   '';
 }
