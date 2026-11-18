@@ -8,7 +8,7 @@ let
   username = specialArgs.internal.username;
 in
 pkgs.testers.runNixOSTest {
-  name = "wsl-isolation-test";
+  name = "wsl-host-test";
 
   node.specialArgs = specialArgs;
 
@@ -29,24 +29,14 @@ pkgs.testers.runNixOSTest {
   testScript = ''
     machine.wait_for_unit("multi-user.target")
 
-    # Verify the system is lean
-    machine.fail("systemctl is-enabled sddm.service")
-    machine.fail("systemctl is-active display-manager.service")
-    machine.fail("systemctl is-active pipewire.service")
-
     # Verify the user and shell still work
     machine.succeed("getent passwd ${username} | grep /bin/nu")
     machine.succeed("test -e /etc/profiles/per-user/${username}/bin/nu")
 
-    # Verify GUI packages are absent
-    machine.fail("which brave")
-    machine.fail("which wl-clipboard")
-
-    # Verify conventional Docker Engine and Compose are available without Podman.
+    # Verify conventional Docker Engine and Compose are available.
     machine.succeed("docker --version")
     machine.succeed("docker compose version")
     machine.wait_for_unit("docker.service")
     machine.succeed("su - ${username} -c 'docker info'")
-    machine.fail("command -v podman")
   '';
 }

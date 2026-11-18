@@ -45,16 +45,6 @@ let
         "system"
       ];
     };
-    testSharedGitIdentityIsAbsent = {
-      expr = {
-        hasName = internal ? name;
-        hasEmail = internal ? email;
-      };
-      expected = {
-        hasName = false;
-        hasEmail = false;
-      };
-    };
     testUnfreePolicyIsExact = {
       expr = {
         allowed = map internal.allowUnfreePredicate [

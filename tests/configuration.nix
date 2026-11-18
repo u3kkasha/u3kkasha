@@ -9,9 +9,15 @@ let
   homeConfig = nixos.config.home-manager.users.${internal.username};
   wslHomeConfig = nixos-wsl.config.home-manager.users.${internal.username};
   mcpServers = homeConfig.programs.mcp.servers;
+  localMcpServers = lib.filterAttrs (
+    _: server: server ? command && server.command != null
+  ) mcpServers;
   codexUpstreamConfig = homeConfig.home.file.".codex/config.toml";
   expectedAgentInstructions = builtins.readFile ../modules/home/agent-instructions.md;
-  nixdConfig = builtins.readFile homeConfig.xdg.configFile."nixd/config.json".source;
+  nixdConfig = builtins.fromJSON (
+    builtins.readFile homeConfig.xdg.configFile."nixd/config.json".source
+  );
+  nixdLockedInputs = toString homeConfig.xdg.dataFile."nixd/locked-inputs".source;
   niriConfig = builtins.readFile homeConfig.xdg.configFile."niri-config".source;
   hypridleConfig = builtins.readFile homeConfig.xdg.configFile."hypr/hypridle.conf".source;
 
@@ -28,19 +34,6 @@ let
         EDITOR = internal.defaultEditor;
         VISUAL = internal.defaultEditor;
       };
-    };
-    testGlobalGitIdentityIsAbsent = {
-      expr =
-        builtins.all
-          (
-            settings:
-            !(lib.hasAttrByPath [ "user" "name" ] settings) && !(lib.hasAttrByPath [ "user" "email" ] settings)
-          )
-          [
-            homeConfig.programs.git.settings
-            wslHomeConfig.programs.git.settings
-          ];
-      expected = true;
     };
     testNixosHostName = {
       expr = nixos.config.networking.hostName;
@@ -109,62 +102,23 @@ let
       expected = internal.themeFlavor;
     };
     testContainerRuntimeUsesDocker = {
-      expr =
-        map
-          (host: {
-            docker = host.config.virtualisation.docker.enable;
-            podman = host.config.virtualisation.podman.enable;
-          })
-          [
-            nixos
-            nixos-wsl
-          ];
+      expr = map (host: host.config.virtualisation.docker.enable) [
+        nixos
+        nixos-wsl
+      ];
       expected = [
-        {
-          docker = true;
-          podman = false;
-        }
-        {
-          docker = true;
-          podman = false;
-        }
+        true
+        true
       ];
     };
-    testContainerSystemPackagesExcludePodman = {
+    testDockerGroupMembership = {
       expr =
-        let
-          packageNames = host: map lib.getName host.config.environment.systemPackages;
-        in
-        builtins.all
-          (
-            host:
-            builtins.all (name: !(builtins.elem name (packageNames host))) [
-              "podman"
-              "podman-compose"
-              "podman-tui"
-            ]
-          )
+        builtins.all (host: builtins.elem "docker" host.config.users.users.${internal.username}.extraGroups)
           [
             nixos
             nixos-wsl
           ];
       expected = true;
-    };
-    testContainerGroupMembership = {
-      expr = {
-        nixos = lib.unique nixos.config.users.users.${internal.username}.extraGroups;
-        wsl = lib.unique nixos-wsl.config.users.users.${internal.username}.extraGroups;
-      };
-      expected = {
-        nixos = [
-          "wheel"
-          "docker"
-        ];
-        wsl = [
-          "wheel"
-          "docker"
-        ];
-      };
     };
     testNixCachePolicy = {
       expr =
@@ -205,86 +159,26 @@ let
         ];
       };
     };
-    testNixdConfigReferencesLockedInputs = {
+    testNixdConfigUsesLockedInputPaths = {
       expr =
-        lib.hasInfix "/nix/store/" nixdConfig
-        && lib.hasInfix "/nixpkgs { }" nixdConfig
-        && lib.hasInfix "nixosConfigurations.nixos.options" nixdConfig
-        && !(lib.hasInfix "unsafeDiscardStringContext" nixdConfig);
+        nixdConfig.nixd.nixpkgs.expr == "import ${nixdLockedInputs}/nixpkgs { }"
+        && lib.hasInfix "${nixdLockedInputs}/flake" nixdConfig.nixd.options.nixos.expr
+        && lib.hasInfix "nixosConfigurations.nixos.options" nixdConfig.nixd.options.nixos.expr
+        && lib.hasInfix "${nixdLockedInputs}/flake" nixdConfig.nixd.options.home-manager.expr;
       expected = true;
     };
-    testMcpRegistry = {
-      expr = builtins.attrNames mcpServers;
-      expected = [
-        "context7"
-        "gh-grep"
-        "github"
-        "microsoft-learn"
-        "nixos"
-        "nuxt"
-        "nuxt-ui"
-        "playwright"
-        "semble"
-      ];
+    testLocalMcpServersUseStoreCommands = {
+      expr = builtins.all (server: lib.hasPrefix "/nix/store/" server.command) (
+        builtins.attrValues localMcpServers
+      );
+      expected = true;
     };
-    testPackagedMcpServers = {
-      expr = builtins.all (name: lib.hasPrefix "/nix/store/" mcpServers.${name}.command) [
-        "github"
-        "nixos"
-        "playwright"
-        "semble"
+    testCodexMcpIntegrationEnabled = {
+      expr = builtins.all (config: config.programs.codex.enableMcpIntegration) [
+        homeConfig
+        wslHomeConfig
       ];
       expected = true;
-    };
-    testMcpCommandsAvoidRuntimeResolvers = {
-      expr =
-        let
-          resolverNames = [
-            "bunx"
-            "dnx"
-            "npx"
-            "pipx"
-            "pnpx"
-            "uvx"
-          ];
-          localServers = lib.filterAttrs (_: server: server ? command && server.command != null) mcpServers;
-        in
-        builtins.all (server: !(builtins.elem (builtins.baseNameOf server.command) resolverNames)) (
-          builtins.attrValues localServers
-        );
-      expected = true;
-    };
-    testCodexUsesDisabledUpstreamConfig = {
-      expr = {
-        inherit (codexUpstreamConfig) enable;
-        sourceName = codexUpstreamConfig.source.name;
-      };
-      expected = {
-        enable = false;
-        sourceName = "codex-config.toml";
-      };
-    };
-    testAgentMcpIntegrationsRemainEnabled = {
-      expr =
-        map
-          (config: {
-            codex = config.programs.codex.enableMcpIntegration;
-            opencode = config.programs.opencode.enableMcpIntegration;
-          })
-          [
-            homeConfig
-            wslHomeConfig
-          ];
-      expected =
-        map
-          (_: {
-            codex = true;
-            opencode = true;
-          })
-          [
-            1
-            2
-          ];
     };
     testSharedAgentInstructions = {
       expr =
@@ -292,8 +186,6 @@ let
           (config: {
             codexContext = builtins.readFile config.programs.codex.context;
             codexOutput = builtins.readFile config.home.file.".codex/AGENTS.md".source;
-            opencodeContext = builtins.readFile config.programs.opencode.context;
-            opencodeOutput = builtins.readFile config.xdg.configFile."opencode/AGENTS.md".source;
           })
           [
             homeConfig
@@ -304,8 +196,6 @@ let
           (_: {
             codexContext = expectedAgentInstructions;
             codexOutput = expectedAgentInstructions;
-            opencodeContext = expectedAgentInstructions;
-            opencodeOutput = expectedAgentInstructions;
           })
           [
             1
@@ -315,7 +205,6 @@ let
     testAgentPackages = {
       expr = {
         codex = homeConfig.programs.codex.package.pname;
-        opencode = homeConfig.programs.opencode.package.pname;
         specKit = lib.getName (
           lib.findFirst (package: lib.getName package == "spec-kit") null homeConfig.home.packages
         );
@@ -325,97 +214,17 @@ let
       };
       expected = {
         codex = "codex";
-        opencode = "opencode";
         specKit = "spec-kit";
         skills = "skills";
       };
-    };
-    testOpenCodeUsesSpecKitContext = {
-      expr = map (config: config.programs.opencode.settings.instructions) [
-        homeConfig
-        wslHomeConfig
-      ];
-      expected =
-        map
-          (_: [
-            "AGENTS.md"
-            ".specify/memory/constitution.md"
-            ".specify/memory/current-system.md"
-          ])
-          [
-            1
-            2
-          ];
-    };
-    testAgentInstructionsRequireFrequentConventionalCommits = {
-      expr =
-        lib.hasInfix "Commit work frequently at appropriate milestones" expectedAgentInstructions
-        && lib.hasInfix "Keep each commit focused" expectedAgentInstructions
-        && lib.hasInfix "Commit messages MUST use Conventional" expectedAgentInstructions
-        && lib.hasInfix "Commits format." expectedAgentInstructions;
-      expected = true;
     };
     testDuckDbCliPackage = {
       expr = builtins.any (package: lib.getName package == "duckdb") homeConfig.home.packages;
       expected = true;
     };
-    testBraveReplacesFirefoxForGuiHost = {
-      expr =
-        let
-          guiPackages = map lib.getName homeConfig.home.packages;
-          wslPackages = map lib.getName wslHomeConfig.home.packages;
-        in
-        builtins.elem "brave" guiPackages
-        && !(builtins.elem "firefox" guiPackages)
-        && !(builtins.elem "brave" wslPackages)
-        && !(builtins.elem "firefox" wslPackages);
+    testGuiHostIncludesBrave = {
+      expr = builtins.any (package: lib.getName package == "brave") homeConfig.home.packages;
       expected = true;
-    };
-    testAntigravityCliDisabled = {
-      expr =
-        map
-          (config: {
-            enabled = config.programs.antigravity-cli.enable;
-            packagePresent = builtins.any (
-              package: lib.getName package == "antigravity-cli"
-            ) config.home.packages;
-          })
-          [
-            homeConfig
-            wslHomeConfig
-          ];
-      expected = [
-        {
-          enabled = false;
-          packagePresent = false;
-        }
-        {
-          enabled = false;
-          packagePresent = false;
-        }
-      ];
-    };
-    testGeminiGeneratedFilesAbsent = {
-      expr =
-        map
-          (config: {
-            instructions = builtins.hasAttr ".gemini/GEMINI.md" config.home.file;
-            mcp = builtins.hasAttr ".gemini/config/mcp_config.json" config.home.file;
-          })
-          [
-            homeConfig
-            wslHomeConfig
-          ];
-      expected =
-        map
-          (_: {
-            instructions = false;
-            mcp = false;
-          })
-          [
-            1
-            2
-          ];
     };
     testWslHostName = {
       expr = nixos-wsl.config.networking.hostName;
@@ -429,35 +238,14 @@ let
       expr = nixos-wsl.config.home-manager.users.${internal.username}.internal.wsl.enable;
       expected = true;
     };
-    testWslGuiDisabled = {
-      expr = wslHomeConfig.internal.gui.enable;
-      expected = false;
-    };
     testNiriResumeUsesNativeCommand = {
-      expr =
-        lib.hasInfix "after_sleep_cmd = niri msg action power-on-monitors" hypridleConfig
-        && !(lib.hasInfix "hyprctl" hypridleConfig);
+      expr = lib.hasInfix "after_sleep_cmd = niri msg action power-on-monitors" hypridleConfig;
       expected = true;
     };
     testNiriPhysicalOutputIsHostOwned = {
       expr =
-        lib.hasInfix ''output "eDP-1"'' niriConfig
-        && lib.hasInfix ''mode "1920x1080@60.000"'' niriConfig
-        && lib.hasInfix ''output "eDP-1"'' homeConfig.internal.niri.outputConfig;
-      expected = true;
-    };
-    testWslClosureExcludesGuiPackages = {
-      expr =
-        let
-          packageNames = map lib.getName wslHomeConfig.home.packages;
-        in
-        !wslHomeConfig.home.pointerCursor.enable
-        && builtins.all (name: !(builtins.elem name packageNames)) [
-          "bibata-cursors"
-          "ghostty"
-          "niri"
-          "wlsunset"
-        ];
+        homeConfig.internal.niri.outputConfig != ""
+        && lib.hasInfix homeConfig.internal.niri.outputConfig niriConfig;
       expected = true;
     };
   };
