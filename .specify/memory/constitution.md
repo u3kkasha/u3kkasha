@@ -14,9 +14,10 @@ dependency resolvers are not acceptable for persistent configuration.
 
 Reusable modules MUST remain independent of physical-host details. Host-specific
 hardware, display, boot, WSL, or filesystem choices belong under `systems/`. The
-`scanPaths` auto-discovery contract MUST remain deterministic, and every change to a
-discovered module tree MUST update its exact-list unit test. WSL-only upstream modules
-MUST remain scoped to the WSL host rather than the shared core.
+`scanPaths` auto-discovery contract MUST remain deterministic, and its tests MUST cover
+the inclusion and exclusion rules without requiring a complete snapshot of live module
+paths. WSL-only upstream modules MUST remain scoped to the WSL host rather than the
+shared core.
 
 ### III. State Compatibility Is Deliberate
 
@@ -104,4 +105,4 @@ to affected templates and current-system policy. MAJOR removes or redefines a pr
 MINOR adds or materially expands one, and PATCH clarifies wording without changing its
 meaning.
 
-**Version**: 1.0.0 | **Ratified**: 2026-08-13 | **Last Amended**: 2026-08-13
+**Version**: 1.1.0 | **Ratified**: 2026-08-13 | **Last Amended**: 2026-11-18

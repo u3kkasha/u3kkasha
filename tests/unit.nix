@@ -4,46 +4,25 @@
   internal,
 }:
 let
-  discoveredPaths =
-    root:
-    lib.sort builtins.lessThan (
-      map (path: lib.removePrefix "${toString root}/" (toString path)) (internal.scanPaths root)
-    );
+  discoveryFixture = ./fixtures/scan-paths;
+  discoveredFixturePaths = internal.scanPaths discoveryFixture;
+  discovers = name: builtins.elem (discoveryFixture + "/${name}") discoveredFixturePaths;
   testResults = lib.runTests {
-    testHomeScanPathsDiscoversModules = {
-      expr = discoveredPaths ../modules/home;
-      expected = [
-        "bash.nix"
-        "cli.nix"
-        "codegraph.nix"
-        "codex.nix"
-        "devtools.nix"
-        "direnv.nix"
-        "ghostty.nix"
-        "git.nix"
-        "helix.nix"
-        "mcp.nix"
-        "niri.nix"
-        "nixd.nix"
-        "nushell.nix"
-        "opencode.nix"
-        "snip.nix"
-        "spec-kit.nix"
-        "utils.nix"
-        "wlsunset.nix"
-        "wsl.nix"
-        "yazi.nix"
-        "zellij.nix"
-      ];
-    };
-    testNixosScanPathsDiscoversModules = {
-      expr = discoveredPaths ../modules/nixos;
-      expected = [
-        "desktop"
-        "docker"
-        "gaming"
-        "system"
-      ];
+    testScanPathsContract = {
+      expr = {
+        includesNixFile = discovers "eligible-module.nix";
+        includesDirectoryWithDefault = discovers "with-default";
+        excludesRootDefault = !(discovers "default.nix");
+        excludesNonNixFile = !(discovers "notes.txt");
+        excludesDirectoryWithoutDefault = !(discovers "without-default");
+      };
+      expected = {
+        includesNixFile = true;
+        includesDirectoryWithDefault = true;
+        excludesRootDefault = true;
+        excludesNonNixFile = true;
+        excludesDirectoryWithoutDefault = true;
+      };
     };
     testUnfreePolicyIsExact = {
       expr = {

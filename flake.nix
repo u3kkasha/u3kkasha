@@ -113,6 +113,7 @@
             lib = inputs.nixpkgs.lib;
             inherit (inputs.self) nixosConfigurations;
           };
+          tokenWrapperTests = import ./tests/token-wrapper.nix { inherit pkgs; };
         in
         {
           formatter = treefmt.config.build.wrapper;
@@ -156,6 +157,7 @@
                   .#checks.${system}.formatting \
                   .#checks.${system}.actionlint \
                   .#checks.${system}.unit-tests \
+                  .#checks.${system}.token-wrapper-tests \
                   .#checks.${system}.gitleaks \
                   "$hostBuild" \
                   --no-link
@@ -188,8 +190,10 @@
             };
             # Quick internal-library policy assertions.
             unit-tests = unitTests;
-            # Generated host configuration and closure assertions (medium/heavy).
+            # Host policy evaluation and Codex merge behavior (medium/heavy).
             configuration-tests = configurationTests;
+            # Repository-owned shell wrapper behavior with stub commands.
+            token-wrapper-tests = tokenWrapperTests;
           };
           checks = {
             formatting = treefmt.config.build.check inputs.self;
@@ -204,8 +208,10 @@
                 '';
             # Quick internal-library policy assertions.
             unit-tests = unitTests;
-            # Generated host configuration and closure assertions (medium/heavy).
+            # Host policy evaluation and Codex merge behavior (medium/heavy).
             configuration-tests = configurationTests;
+            # Repository-owned shell wrapper behavior with stub commands.
+            token-wrapper-tests = tokenWrapperTests;
             gitleaks =
               pkgs.runCommand "gitleaks"
                 {

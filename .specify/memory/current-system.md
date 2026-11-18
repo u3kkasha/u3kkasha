@@ -11,9 +11,9 @@ that evidence. Update it only when implemented behavior changes.
 | Bare-metal NixOS host         | Operational       | `nixosConfigurations.nixos`                                                                  | `nix build .#nixos-build`                         |
 | WSL NixOS host                | Operational       | `nixosConfigurations.nixos-wsl`                                                              | `nix build .#nixos-wsl-build`                     |
 | Shared Home Manager layer     | Operational       | Home Manager as a NixOS module for the configured user                                       | Both host builds and focused configuration checks |
-| Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees                                    | Exact discovered-path unit tests                  |
+| Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees                                    | Fixture-based discovery contract check            |
 | Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2                                            | Both VM targets check configured-user access      |
-| Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                                           | Generated-configuration unit assertions           |
+| Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                                           | Both host policy evaluations                      |
 | Global Codex skills           | Operational       | Home Manager exposes pinned .NET, Modern Web Guidance, and Nuxt UI skills through Codex      | Both host configuration evaluations               |
 | Headroom integration          | Retired           | Intentionally removed; MCP server, proxy, and packages pruned                                | Removed from configuration                        |
 | Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt (excluding `.serena/**`), Actionlint, Gitleaks, and Git hooks | Targeted checks and host-specific pre-push build  |
@@ -52,8 +52,9 @@ The upstream WSL module is intentionally absent from the shared core.
 
 `lib.internal.scanPaths` imports all `.nix` files except `default.nix` plus directories
 containing a `default.nix`. Both `modules/nixos/default.nix` and
-`modules/home/default.nix` use this helper. Unit tests freeze the complete discovered
-lists, so adding or removing a module requires an explicit expected-list update.
+`modules/home/default.nix` use this helper. Unit tests cover the inclusion and exclusion
+rules with a fixture; adding an eligible module does not require a full live-path inventory
+update.
 
 `lib/internal/default.nix` owns the configured username, default editor and terminal,
 theme flavor, cache projection, exact unfree-package policy, system and Home Manager state
@@ -168,19 +169,22 @@ nix build .#checks.x86_64-linux.formatting --no-link
 nix build .#checks.x86_64-linux.actionlint --no-link
 nix build .#unit-tests --no-link
 nix build .#configuration-tests --no-link
+nix build .#token-wrapper-tests --no-link
 nix build .#nixos-build .#nixos-wsl-build --no-link
 nix build .#vm-test-nixos .#vm-test-wsl-mock
 ```
 
-Formatting, Actionlint, exact module-discovery and unfree-policy assertions, configuration
-security and reproducibility policies, generated Codex merge behavior, and Gitleaks are flake
-checks. Actionlint is supplied by the pinned package set and validates the repository-root
-GitHub workflows; the pre-commit hook runs it beside formatting and Gitleaks. `unit-tests` is
-the quick target. `configuration-tests` evaluates both supported hosts and checks cache policy,
-trusted users, local MCP store commands, and generated Codex behavior. It does not mirror
-directly assigned options or inspect nixd's serialized JSON; host builds validate the generated
-nixd output. Configuration checks have medium-to-heavy evaluation cost.
-The pre-push hook runs formatting, Actionlint, unit tests, Gitleaks, and only the host build selected
+Formatting, Actionlint, module-discovery contract and unfree-policy assertions, configuration
+security and reproducibility policies, generated Codex merge behavior, shell token-wrapper
+behavior, and Gitleaks are flake checks. Actionlint is supplied by the pinned package set and
+validates the repository-root GitHub workflows; the pre-commit hook runs it beside formatting
+and Gitleaks. `unit-tests` is the quick target. `configuration-tests` evaluates both supported
+hosts and checks cache policy, trusted users, local MCP store commands, and the repository's
+Codex merge behavior. `token-wrapper-tests` exercises the Bash and Nushell wrappers with stub
+commands and no real credentials. These checks do not mirror directly assigned options or
+inspect nixd's serialized JSON; host builds validate the generated nixd output. Configuration
+checks have medium-to-heavy evaluation cost.
+The pre-push hook runs formatting, Actionlint, unit tests, token-wrapper tests, Gitleaks, and only the host build selected
 by `hostname` (`nixos` or `nixos-wsl`). Set `NIXOS_HOST` to one of those names to override detection.
 Cross-host configuration assertions and VM tests remain CI-oriented because of their cost.
 

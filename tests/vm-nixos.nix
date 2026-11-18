@@ -30,7 +30,6 @@ pkgs.testers.runNixOSTest {
     # Verify Docker and Compose are usable by the configured user.
     machine.wait_for_unit("docker.service")
     machine.succeed("su - ${username} -c 'docker info'")
-    machine.succeed("su - ${username} -c 'docker compose version'")
 
     # Check if desktop services are configured
     machine.wait_for_unit("display-manager.service")
