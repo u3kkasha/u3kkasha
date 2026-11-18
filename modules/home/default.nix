@@ -14,6 +14,12 @@ let
     scanPaths
     themeFlavor
     ;
+  modernWebGuidance = pkgs.fetchFromGitHub {
+    owner = "GoogleChrome";
+    repo = "modern-web-guidance";
+    rev = "v1.0.1";
+    hash = "sha256-6AKPHsrv7uP0clLZaezrCP8lHXY5EB0hJwQ3gnk4+UI=";
+  };
 in
 {
   imports = scanPaths ./.;
@@ -39,6 +45,12 @@ in
   };
 
   config = {
+    home.file = {
+      ".agents/skills/modern-web-guidance".source = "${modernWebGuidance}/skills/modern-web-guidance";
+      ".config/opencode/skills/modern-web-guidance".source =
+        "${modernWebGuidance}/skills/modern-web-guidance";
+    };
+
     programs.nix-skills = {
       enable = true;
       agents = [

@@ -14,6 +14,7 @@ that evidence. Update it only when implemented behavior changes.
 | Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees                                    | Exact discovered-path unit tests                   |
 | Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2                                            | Configuration assertions and both VM/build targets |
 | Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                                           | Generated-configuration unit assertions            |
+| Modern Web Guidance skill     | Operational       | Home Manager exposes pinned `GoogleChrome/modern-web-guidance` v1.0.1 skill to both agents   | Both host configuration evaluations                |
 | Headroom integration          | Retired           | Intentionally removed; MCP server, proxy, and packages pruned                                | Removed from configuration                         |
 | Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt (excluding `.serena/**`), Actionlint, Gitleaks, and Git hooks | Targeted checks and host-specific pre-push build   |
 | VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                                                     | `nix build .#vm-test-nixos .#vm-test-wsl-mock`     |
@@ -69,7 +70,14 @@ tools, Codex, OpenCode, CodeGraph, Spec Kit, and six pinned Nix agent skills
 (`nix-language`, `nix-workflow`,
 `nixpkgs-development`, `nixos-operations`, `home-manager`, and `devenv-project`) for
 Codex and OpenCode through the `olafkfreund/nix-skills` Home Manager module. The Vercel
-Skills CLI remains available for project-specific discovery and use. The central MCP
+Skills CLI remains available for project-specific discovery and use. Google Chrome
+Modern Web Guidance v1.0.1 skill files are fetched from a fixed-hash GitHub source and
+exposed by shared Home Manager defaults to both agents. This installs its instructions
+and guidance files without bundling the CLI or adding Node. Agents can follow the
+upstream skill's CLI guidance when relevant. Global skills are owned by Home Manager;
+project-specific skills can be discovered and installed with the Vercel Skills CLI.
+Generated skill paths under the home directory are symlinks into the Nix store and must
+be updated through their package/module source. The central MCP
 integration provides agent tools. Git is installed and configured by the shared Home
 Manager `programs.git` module for the configured user.
 The shared Home Manager layer configures identical global instructions for Codex at
