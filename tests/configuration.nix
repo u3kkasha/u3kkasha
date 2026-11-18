@@ -66,14 +66,19 @@ let
         internal.homeStateVersion
       ];
     };
-    testGlobalSkillTargetsAndSelection = {
+    testCuratedNixSkillsAndCodexSkillSources = {
       expr =
         map
           (config: {
             nixSkillAgents = config.programs.nix-skills.agents;
             nixSkills = config.programs.nix-skills.skills;
-            codexSkills = builtins.attrNames config.programs.codex.skills;
-            opencodeSkills = builtins.attrNames config.programs.opencode.skills;
+            codexHasPinnedSkills = builtins.all (name: builtins.hasAttr name config.programs.codex.skills) [
+              "modern-web-guidance"
+              "nuxt-ui"
+            ];
+            codexSkillsHaveInstructions = builtins.all (skill: builtins.pathExists "${skill}/SKILL.md") (
+              builtins.attrValues config.programs.codex.skills
+            );
           })
           [
             homeConfig
@@ -91,11 +96,8 @@ let
               "home-manager"
               "devenv-project"
             ];
-            codexSkills = [
-              "modern-web-guidance"
-              "nuxt-ui"
-            ];
-            opencodeSkills = [ ];
+            codexHasPinnedSkills = true;
+            codexSkillsHaveInstructions = true;
           })
           [
             1
