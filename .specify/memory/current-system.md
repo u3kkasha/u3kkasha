@@ -66,19 +66,24 @@ release-note-informed state migration is specified.
 Home Manager owns user configuration and treats generated runtime files as read-only.
 Shared defaults enable shells, command-line utilities, development tools including `uv`,
 Node.js, .NET, DuckDB, and the Vercel Skills CLI, plus direnv, editors, terminal/session
-tools, Codex, OpenCode, CodeGraph, Spec Kit, and six pinned Nix agent skills
-(`nix-language`, `nix-workflow`,
-`nixpkgs-development`, `nixos-operations`, `home-manager`, and `devenv-project`) for
-Codex and OpenCode through the `olafkfreund/nix-skills` Home Manager module. The Vercel
-Skills CLI remains available for project-specific discovery and use. Google Chrome
-Modern Web Guidance v1.0.1 skill files are fetched from a fixed-hash GitHub source and
-configured through Home Manager's native `programs.codex.skills` and
-`programs.opencode.skills` options. This installs its instructions and guidance files
-without bundling the CLI or adding Node. Agents can follow the
-upstream skill's CLI guidance when relevant. Global skills are owned by Home Manager;
-project-specific skills can be discovered and installed with the Vercel Skills CLI.
-Generated skill paths under the home directory are symlinks into the Nix store and must
-be updated through their package/module source. The central MCP
+tools, Codex, OpenCode, CodeGraph, and Spec Kit. Home Manager owns global skills through
+two mechanisms:
+
+- `programs.nix-skills` installs the selected curated Nix skills for the configured
+  agents. The current list is `nix-language`, `nix-workflow`, `nixpkgs-development`,
+  `nixos-operations`, `home-manager`, and `devenv-project` for Codex and OpenCode.
+- Other skills are declared with each agent's native Home Manager option, such as
+  `programs.codex.skills` and `programs.opencode.skills`. The Modern Web Guidance skill
+  source is pinned to GitHub release `v1.0.1` with a fixed hash in
+  `modules/home/default.nix`, then assigned to both options. To update it, change the
+  source revision and hash together; to add another shared skill, pin its source and
+  declare its skill directory for each target agent.
+
+Home Manager links managed skill directories into agent-specific configuration paths;
+update them through their Nix source declarations rather than editing generated links.
+The Vercel Skills CLI remains available for project-level skill discovery and use. The
+Modern Web Guidance skill installs its instructions and guides without bundling the CLI
+or adding Node; agents can follow its upstream CLI guidance when relevant. The central MCP
 integration provides agent tools. Git is installed and configured by the shared Home
 Manager `programs.git` module for the configured user.
 The shared Home Manager layer configures identical global instructions for Codex at
