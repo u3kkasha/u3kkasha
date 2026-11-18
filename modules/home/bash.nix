@@ -28,11 +28,11 @@ in
             command nix "$@"
             return $?
           fi
-          nix_config="${NIX_CONFIG-}"
+          nix_config="''${NIX_CONFIG-}"
           if [[ -n "$nix_config" ]]; then
             nix_config+=$'\n'
           fi
-          NIX_CONFIG="${nix_config}access-tokens = github.com=$token" command nix "$@"
+          NIX_CONFIG="''${nix_config}access-tokens = github.com=$token" command nix "$@"
         }
       '';
       shellAliases = { };
