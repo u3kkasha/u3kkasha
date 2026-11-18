@@ -14,7 +14,7 @@ that evidence. Update it only when implemented behavior changes.
 | Automatic module discovery    | Operational       | `lib.internal.scanPaths` for NixOS and Home Manager trees                                    | Exact discovered-path unit tests                   |
 | Docker container runtime      | Operational       | Conventional rootful Docker Engine and Compose v2                                            | Configuration assertions and both VM/build targets |
 | Central MCP registry          | Operational       | `programs.mcp.servers` shared by MCP-aware clients                                           | Generated-configuration unit assertions            |
-| Modern Web Guidance skill     | Operational       | Home Manager exposes pinned `GoogleChrome/modern-web-guidance` v1.0.1 skill to both agents   | Both host configuration evaluations                |
+| Global Codex skills           | Operational       | Home Manager exposes pinned .NET, Modern Web Guidance, and Nuxt UI skills through Codex      | Both host configuration evaluations                |
 | Headroom integration          | Retired           | Intentionally removed; MCP server, proxy, and packages pruned                                | Removed from configuration                         |
 | Local developer workflow      | Operational       | Flake dev shell, `nh`, treefmt (excluding `.serena/**`), Actionlint, Gitleaks, and Git hooks | Targeted checks and host-specific pre-push build   |
 | VM integration verification   | Operational in CI | Bare-metal and WSL-mock test derivations                                                     | `nix build .#vm-test-nixos .#vm-test-wsl-mock`     |
@@ -73,10 +73,15 @@ two mechanisms:
   current list is `nix-language`, `nix-workflow`, `nixpkgs-development`,
   `nixos-operations`, `home-manager`, and `devenv-project`.
 - Other global skills are declared with an agent's native Home Manager option.
-  `programs.codex.skills` includes Modern Web Guidance pinned to GitHub release `v1.0.1`
-  and the official Nuxt UI skill pinned to a Nuxt UI Git revision, both with fixed hashes
-  in `modules/home/default.nix`. OpenCode remains installed, but has no global skills
-  assigned. To update a skill, change its source revision and hash together.
+  `programs.codex.skills` includes every plugin skill with a `SKILL.md` from the official
+  `dotnet/skills` repository, pinned to commit
+  `2877c712edc20643b72f64e2983b168e6661d607` with a fixed source hash, plus Modern Web
+  Guidance pinned to GitHub release `v1.0.1` and the official Nuxt UI skill pinned to a
+  Nuxt UI Git revision with fixed hashes, all in `modules/home/default.nix`. .NET skill
+  links include the plugin name and are derived from the pinned catalog; plugin MCP
+  servers and host-specific agents are not installed. OpenCode remains installed, but has
+  no global skills assigned. To update a skill, change its source revision and hash
+  together.
 
 Home Manager links managed skill directories into agent-specific configuration paths;
 update them through their Nix source declarations rather than editing generated links.

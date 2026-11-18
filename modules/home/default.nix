@@ -26,6 +26,32 @@ let
     rev = "550471d1a2c1178c9cc9593d8ff684cae7d64674";
     hash = "sha256-ZPHOJpOU1jCFhTJMoiNPRWn8PqsIkVncDHWR/Cni/00=";
   };
+  dotnetSkillSource = pkgs.fetchFromGitHub {
+    owner = "dotnet";
+    repo = "skills";
+    rev = "2877c712edc20643b72f64e2983b168e6661d607";
+    hash = "sha256-CctE7eJNAGKET2VGJwHKczCeLeiUQyMPgm+AkE6DoeI=";
+  };
+  dotnetSkillEntries = lib.concatMap (
+    plugin:
+    let
+      pluginSkills = "${dotnetSkillSource}/plugins/${plugin}/skills";
+    in
+    if builtins.pathExists pluginSkills then
+      map
+        (skill: {
+          name = "${plugin}-${skill}";
+          value = "${pluginSkills}/${skill}";
+        })
+        (
+          builtins.filter (skill: builtins.pathExists "${pluginSkills}/${skill}/SKILL.md") (
+            builtins.attrNames (builtins.readDir pluginSkills)
+          )
+        )
+    else
+      [ ]
+  ) (builtins.attrNames (builtins.readDir "${dotnetSkillSource}/plugins"));
+  dotnetSkills = builtins.listToAttrs dotnetSkillEntries;
 in
 {
   imports = scanPaths ./.;
@@ -51,8 +77,10 @@ in
   };
 
   config = {
-    programs.codex.skills.modern-web-guidance = "${modernWebGuidance}/skills/modern-web-guidance";
-    programs.codex.skills.nuxt-ui = "${nuxtUiSkill}/skills/nuxt-ui";
+    programs.codex.skills = dotnetSkills // {
+      modern-web-guidance = "${modernWebGuidance}/skills/modern-web-guidance";
+      nuxt-ui = "${nuxtUiSkill}/skills/nuxt-ui";
+    };
 
     programs.nix-skills = {
       enable = true;
